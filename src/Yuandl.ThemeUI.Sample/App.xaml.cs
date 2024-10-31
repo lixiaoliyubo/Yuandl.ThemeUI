@@ -58,10 +58,6 @@ public partial class App : Application
                 // App Host
                 _ = services.AddHostedService<ApplicationHostService>();
 
-                // Page resolver service
-                _ = services.AddSingleton<IPageService, PageService>();
-                _ = services.AddSingleton<INavigationService, NavigationService>();
-
                 // Theme manipulation
                 _ = services.AddSingleton<IThemeService, ThemeService>();
                 _ = services.AddSingleton<ITaskBarService, TaskBarService>();

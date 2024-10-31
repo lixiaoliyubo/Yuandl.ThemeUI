@@ -46,6 +46,11 @@ public partial class MainWindow : IWindow
         }
     }
 
+    public void GoBack()
+    {
+        RootNavigation.GoBack();
+    }
+
     public void Navigate(Type pageType)
     {
         object content = _serviceProvider.GetService(pageType);

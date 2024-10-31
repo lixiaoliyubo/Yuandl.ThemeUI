@@ -10,5 +10,7 @@ public interface IWindow
 
     void Show();
 
+    void GoBack();
+
     void Navigate(Type pageType);
 }

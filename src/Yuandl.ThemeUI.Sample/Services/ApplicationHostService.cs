@@ -14,13 +14,11 @@ namespace Yuandl.ThemeUI.Services;
 public class ApplicationHostService : IHostedService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly INavigationService _navigationService;
     private readonly IThemeService _themeService;
 
-    public ApplicationHostService(IServiceProvider serviceProvider, INavigationService navigationService, IThemeService themeService)
+    public ApplicationHostService(IServiceProvider serviceProvider, IThemeService themeService)
     {
         _serviceProvider = serviceProvider;
-        _navigationService = navigationService;
         _themeService = themeService;
     }
 

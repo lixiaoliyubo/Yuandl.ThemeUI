@@ -6,22 +6,22 @@ namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
 public partial class NavigatePageViewModel : ObservableObject
 {
-    private readonly INavigationService _navigationService;
+    private readonly IWindow _window;
 
-    public NavigatePageViewModel(INavigationService navigationService)
+    public NavigatePageViewModel(IWindow window)
     {
-        _navigationService = navigationService;
+        _window = window;
     }
 
     [RelayCommand]
     private void NavigateForward(Type type)
     {
-        _ = _navigationService.Navigate(type);
+        _window.Navigate(type);
     }
 
     [RelayCommand]
     private void NavigateBack()
     {
-        _ = _navigationService.GoBack();
+        _window.GoBack();
     }
 }

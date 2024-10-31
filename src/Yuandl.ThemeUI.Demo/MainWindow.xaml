@@ -8,10 +8,10 @@
     xmlns:local="clr-namespace:Yuandl.ThemeUI.Demo"
     mc:Ignorable="d" Loaded="Window_Loaded"
     Title="ThemeUI - Simple Demo" Height="450" Width="800"
-    ui:Design.Background="{DynamicResource ApplicationFillBrush}"
-    ui:Design.Foreground="{DynamicResource ApplicationTextColorBrush}"
+    ui:Design.Background="{ui:ThemeResource ApplicationFillBrush}"
+    ui:Design.Foreground="{ui:ThemeResource ApplicationTextColorBrush}"
     ExtendsContentIntoTitleBar="True"
-    Foreground="{DynamicResource ApplicationTextColorBrush}"
+    Foreground="{ui:ThemeResource ApplicationTextColorBrush}"
     WindowBackdropType="Mica"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen">

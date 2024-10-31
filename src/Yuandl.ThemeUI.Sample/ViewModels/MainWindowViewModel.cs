@@ -6,19 +6,11 @@ namespace Yuandl.ThemeUI.Sample.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    private readonly INavigationService _navigationService;
 
     [ObservableProperty]
     private string pageTitle = "源动力 ThemeUI";
 
-    public MainWindowViewModel(INavigationService navigationService)
+    public MainWindowViewModel()
     {
-        _navigationService = navigationService;
-    }
-
-    [RelayCommand]
-    private void OnBackBtn(object sender)
-    {
-        _ = _navigationService.GoBack();
     }
 }

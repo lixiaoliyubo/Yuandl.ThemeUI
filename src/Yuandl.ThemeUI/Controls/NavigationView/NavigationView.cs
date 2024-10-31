@@ -4,10 +4,8 @@
 
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Reflection;
 using Yuandl.ThemeUI.ElementAssist;
-using Yuandl.ThemeUI.Services;
 
 namespace Yuandl.ThemeUI.Controls;
 
@@ -343,7 +341,6 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     }
 
     private IServiceProvider? _serviceProvider;
-    private IPageService? _pageService;
 
     /// <inheritdoc />
     public IPageViewItem? SelectedItem { get; private set; }
@@ -360,9 +357,6 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 
     /// <inheritdoc />
     public bool CanGoBack => Journal.Count > 1 && _currentIndexInJournal >= 0;
-
-    /// <inheritdoc />
-    public void SetPageService(IPageService pageService) => _pageService = pageService;
 
     /// <inheritdoc />
     public void SetServiceProvider(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
@@ -458,14 +452,6 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
             );
         }
 
-        if (_pageService is not null)
-        {
-            return _pageService.GetPage(NavViewItem.PageType)
-                ?? throw new InvalidOperationException(
-                    $"{nameof(_pageService)}.{nameof(_pageService.GetPage)} returned null for type {NavViewItem.PageType}."
-                );
-        }
-
         return _cache.Remember(
                 NavViewItem.PageType,
                 NavViewItem.CacheMode,
@@ -491,12 +477,6 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
                 ?? throw new InvalidOperationException(
                     $"{nameof(_serviceProvider.GetService)} returned null"
                 );
-        }
-
-        if (_pageService is not null)
-        {
-            return _pageService.GetPage(NavViewItem.PageType)
-                ?? throw new InvalidOperationException($"{nameof(_pageService.GetPage)} returned null");
         }
 
         return InvokeElementConstructor(NavViewItem.PageType, NavViewItem.DataContent)
