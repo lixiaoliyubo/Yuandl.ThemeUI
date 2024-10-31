@@ -1,49 +1,49 @@
 name: Bug report
 description: Create a report to help us improve
 title: "Bug title"
-labels: [bug]
+labels: [bug, ui-issue] # Added a secondary label for better categorization
 body:
   - type: textarea
     validations:
       required: true
     attributes:
       label: Describe the bug
-      description: A clear and concise description of what the bug is
+      description: "A clear and concise description of what the bug is. How does the bug manifest?"
   - type: textarea
     validations:
       required: true
     attributes:
       label: To Reproduce
-      description: Steps to reproduce the behavior
+      description: "Steps to reproduce the behavior. Please be as detailed as possible."
   - type: textarea
-    validations:
+ations:
       required: true
     attributes:
       label: Expected behavior
-      description: A clear and concise description of what you expected to happen
+      description: "A clear and concise description of what you expected to happen."
   - type: textarea
     attributes:
       label: Screenshots
-      description: If applicable, add screenshots to help explain your problem
-  - type: textarea
+      description: "If applicable, add screenshots to help explain your problem."
+  - type: text
     validations:
       required: true
     attributes:
       label: OS version
-      description: Which OS versions did you see the issue on? 
-  - type: textarea
+      description: "Which OS versions did you see the issue on? (e.g. Windows 10, macOS Big Sur)"
+  - type: text
     validations:
       required: true
     attributes:
       label: .NET version
-      description: Which .NET versions did you see the issue on?
-  - type: textarea
+      description: "Which .NET versions did you see the issue on? (e.g. .NET Core 3.1, .NET 5)"
+  - type: text
     validations:
       required: true
     attributes:
       label: Yuandl.ThemeUI NuGet version
-      description: Which Yuandl.ThemeUI NuGet versions did you see the issue on?
+      description: "Which Yuandl.ThemeUI NuGet versions did you see the issue on? (e.g. v1.0.0, v1.2.3)"
   - type: textarea
     attributes:
       label: Additional context
-      description: Add any other context about the problem here
+      description: "Add any other context about the problem here. For example, did the problem start happening recently or has it always been there? Any relevant logs or error messages?"

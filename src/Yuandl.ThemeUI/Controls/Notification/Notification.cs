@@ -7,11 +7,11 @@ using Yuandl.ThemeUI.Helpers;
 
 namespace Yuandl.ThemeUI.Controls;
 
-[TemplatePart(Name = nameof(pART_ContentRoot), Type = typeof(Border))]
+[TemplatePart(Name = nameof(PART_ContentRoot), Type = typeof(Border))]
 public partial class Notification : InfoBar
 {
-    private readonly string pART_ContentRoot = "ContentRoot";
-    private Border _BorderRoot;
+    private readonly string PART_ContentRoot = "ContentRoot";
+    private Border _borderRoot;
 
     private DispatcherTimer timer;
     private Func<object, RoutedEventArgs, bool>? confirmButtonClicked;
@@ -60,14 +60,14 @@ public partial class Notification : InfoBar
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        _BorderRoot = (Border)GetTemplateChild(pART_ContentRoot);
-        if (_BorderRoot != null)
+        _borderRoot = (Border)GetTemplateChild(PART_ContentRoot);
+        if (_borderRoot != null)
         {
             var transform = new TranslateTransform
             {
                 X = FlowDirection == FlowDirection.LeftToRight ? MaxWidth : -MaxWidth
             };
-            _BorderRoot.RenderTransform = transform;
+            _borderRoot.RenderTransform = transform;
             transform.BeginAnimation(TranslateTransform.XProperty, AnimationHelper.CreateAnimation(0));
         }
     }
@@ -130,7 +130,7 @@ public partial class Notification : InfoBar
 
         var transform = new TranslateTransform();
 
-        _BorderRoot.RenderTransform = transform;
+        _borderRoot.RenderTransform = transform;
 
         System.Windows.Media.Animation.DoubleAnimation animation = AnimationHelper.CreateAnimation(FlowDirection == FlowDirection.LeftToRight ? ActualWidth : -ActualWidth);
         animation.Completed += (s, e) =>
@@ -276,7 +276,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty DateTimeProperty =
-        DependencyProperty.Register("DateTime", typeof(string), typeof(Notification), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(DateTime), typeof(string), typeof(Notification), new PropertyMetadata(null));
 
     public Visibility ShowDateTime
     {
@@ -285,7 +285,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty ShowDateTimeProperty =
-        DependencyProperty.Register("ShowDateTime", typeof(Visibility), typeof(Notification), new PropertyMetadata(Visibility.Collapsed));
+        DependencyProperty.Register(nameof(ShowDateTime), typeof(Visibility), typeof(Notification), new PropertyMetadata(Visibility.Collapsed));
 
     public Visibility ShowConfirmButton
     {
@@ -294,7 +294,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty ShowConfirmButtonProperty =
-        DependencyProperty.Register("ShowConfirmButton", typeof(Visibility), typeof(Notification), new PropertyMetadata(Visibility.Collapsed));
+        DependencyProperty.Register(nameof(ShowConfirmButton), typeof(Visibility), typeof(Notification), new PropertyMetadata(Visibility.Collapsed));
 
     public Visibility ShowCloseButton
     {
@@ -303,7 +303,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty ShowCloseButtonProperty =
-        DependencyProperty.Register("ShowCloseButton", typeof(Visibility), typeof(Notification), new PropertyMetadata(Visibility.Collapsed));
+        DependencyProperty.Register(nameof(ShowCloseButton), typeof(Visibility), typeof(Notification), new PropertyMetadata(Visibility.Collapsed));
 
     public string ConfirmButtonText
     {
@@ -312,7 +312,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty ConfirmButtonTextProperty =
-        DependencyProperty.Register("ConfirmButtonText", typeof(string), typeof(Notification), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(ConfirmButtonText), typeof(string), typeof(Notification), new PropertyMetadata(null));
 
     public string CloseButtonText
     {
@@ -321,7 +321,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty CloseButtonTextProperty =
-        DependencyProperty.Register("CloseButtonText", typeof(string), typeof(Notification), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(CloseButtonText), typeof(string), typeof(Notification), new PropertyMetadata(null));
 
     public Thickness RootGridMargin
     {
@@ -330,7 +330,7 @@ public partial class Notification : InfoBar
     }
 
     public static readonly DependencyProperty RootGridMarginProperty =
-        DependencyProperty.Register("RootGridMargin", typeof(Thickness), typeof(Notification), new PropertyMetadata(new Thickness(10, 10, 10, 10)));
+        DependencyProperty.Register(nameof(RootGridMargin), typeof(Thickness), typeof(Notification), new PropertyMetadata(new Thickness(10, 10, 10, 10)));
 
     public static string GetToken(DependencyObject obj)
     {
