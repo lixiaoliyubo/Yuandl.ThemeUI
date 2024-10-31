@@ -36,13 +36,13 @@
 *.py    text=auto
 *.rb    text=auto
 *.java  text=auto
-*.html  text=csharp
+*.html  text=auto
 *.htm   text=auto
 *.css   text=auto
 *.scss  text=auto
 *.sass  text=auto
 *.less  text=auto
-*.js    text=csharp
+*.js    text=auto
 *.lisp  text=auto
 *.clj   text=auto
 *.sql   text=auto

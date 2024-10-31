@@ -1,0 +1,49 @@
+release:
+  - base-branch: 'master'
+
+PR:
+  - base-branch: [ 'master', 'development' ]
+
+github_actions:
+- changed-files:
+  - any-glob-to-any-file: '.github/workflows/**'
+
+documentation:
+- changed-files:
+  - any-glob-to-any-file: 'docs/**'
+
+dotnet:
+- changed-files:
+  - any-glob-to-any-file: '**/*.cs'
+
+update:
+- changed-files:
+  - any-glob-to-any-file: 'src/Directory.Build.props'
+
+NuGet:
+- changed-files:
+  - any-glob-to-any-file: 'src/Directory.Packages.props'
+
+dependencies:
+- changed-files:
+  - any-glob-to-any-file: [ 'src/Directory.Packages.props', 'branding/package.json' ]
+
+styles:
+- changed-files:
+  - any-glob-to-any-file: 'src/Yuandl.ThemeUI/**/*.xaml'
+
+controls:
+- changed-files:
+  - any-glob-to-any-file: 'src/Yuandl.ThemeUI/Controls/**'
+
+navigation:
+- changed-files:
+  - any-glob-to-any-file: 'src/Yuandl.ThemeUI/Controls/NavigationView/**'
+
+sample:
+- changed-files:
+  - any-glob-to-any-file: 'src/Yuandl.ThemeUI.Sample/**'
+
+icons:
+- changed-files:
+  - any-glob-to-any-file: [ 'src/Yuandl.ThemeUI/Resources/Fonts/**', 'src/Yuandl.ThemeUI/Controls/IconSource/*', 'src/Yuandl.ThemeUI/Controls/IconElement/*' ]
