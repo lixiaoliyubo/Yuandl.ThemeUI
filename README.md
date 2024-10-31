@@ -44,7 +44,7 @@ Install-Package Yuandl.ThemeUI
 ```
 ###  首先，您的应用程序需要加载自定义样式，将节点添加到 App.xaml;
 ``` XML
-xmlns:ui="https://github.com/lixiaoliyubo/Yuandl.ThemeUI"
+xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml"
 ```
 ``` XML
 <Application.Resources>
@@ -72,7 +72,7 @@ public partial class MainWindow
 ``` XML
 <ui:FluentWindow
   ...
-  xmlns:ui="https://github.com/lixiaoliyubo/Yuandl.ThemeUI">
+  xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml">
   <StackPanel>
       <ui:TitleBar Title="Yuandl ThemeUI"/>
       <ui:Card Margin="8">
