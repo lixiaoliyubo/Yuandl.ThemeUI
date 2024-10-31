@@ -1,0 +1,92 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Window 
+    x:Class="Yuandl.ThemeUI.Sample.Views.AboutWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+    xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views"
+    mc:Ignorable="d"
+    Title="AboutWindow" Height="300" Width="400" 
+    AllowsTransparency="True"
+    ShowInTaskbar="False"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="6*" />
+        </Grid.RowDefinitions>
+        <Grid Background="{ui:ThemeResource SystemAccentColorBrush}">
+            <ui:TitleBar 
+                Grid.Row="0"
+                FlowDirection="LeftToRight" 
+                CacheMode="BitmapCache" 
+                InputScope="AddressCountryName" 
+                VerticalAlignment="Top"
+                VerticalContentAlignment="Center"
+                Title="关于"
+                ShowClose="True"
+                ShowHelp="False"
+                ShowMaximize="False"
+                ShowMinimize="False"
+                Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}">
+                <ui:TitleBar.Icon>
+                    <Image Source="pack://application:,,,/Yuandl.ThemeUI.Sample;component/app_icon.ico" Stretch="Uniform" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+        </Grid>
+        <Rectangle Width="50">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="pack://application:,,,/Yuandl.ThemeUI.Sample;component/app_icon.ico" Stretch="Uniform" />
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid Grid.Row="1" Margin="0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Padding="0,4"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                FontSize="20"
+                Text="Yuandl.ThemeUI" />
+            <TextBlock
+                Grid.Row="1"
+                Padding="0,4"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Text="微信号公众号:yuandlcn" />
+            <TextBlock
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                FontSize="11">
+                <Hyperlink NavigateUri="https://github.com/lixiaoliyubo/Yuandl.ThemeUI.git" RequestNavigate="GithubHyperlink_RequestNavigate">Github 源码</Hyperlink>
+                <Run />
+                <Run />
+                <Run />
+                <Hyperlink NavigateUri="https://gitee.com/lixiaoliyubo/Yuandl.ThemeUI.git" RequestNavigate="GiteeHyperlink_RequestNavigate">码云源码</Hyperlink>
+
+            </TextBlock>
+            <TextBlock
+                Grid.Row="4"
+                Padding="0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                FontSize="11"
+                Text="Copyright ©  2024 Yuandl.ThemeUI. All rights reserved." />
+        </Grid>
+    </Grid>
+</Window>

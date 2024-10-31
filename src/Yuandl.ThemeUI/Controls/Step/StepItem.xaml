@@ -1,0 +1,108 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
+    xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters">
+    <converters:StepIndexConverter x:Key="StepIndexConverter" />
+    <converters:OrientationConverter x:Key="OrientationConverter" />
+    <Style x:Key="DefaultStepItemStyle" TargetType="{x:Type controls:StepItem}">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CircleElevationBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="0,6,0,0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:StepItem}">
+                    <StackPanel Orientation="{Binding Orientation, RelativeSource={RelativeSource AncestorType=controls:Step}, Converter={StaticResource OrientationConverter}}">
+                        <Grid>
+                            <Ellipse
+                                Name="PART_Ellipse"
+                                Width="45"
+                                Height="30" Opacity="1"
+                                HorizontalAlignment="Center"
+                                Fill="{DynamicResource ApplicationFillBrush}" />
+
+                            <Border
+                                Width="30"
+                                Height="30"
+                                HorizontalAlignment="Center"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="15">
+                                <Grid>
+                                    <TextBlock
+                                        Name="PART_Index"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="{TemplateBinding FontSize}"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:StepItem}}, Converter={StaticResource StepIndexConverter}}" />
+                                    <Path
+                                        Name="PART_PathComplete"
+                                        Width="12"
+                                        Height="12"
+                                        Data="M384 690l452-452 60 60-512 512-238-238 60-60z"
+                                        Fill="{TemplateBinding Foreground}"
+                                        Stretch="Uniform"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            ContentTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource AncestorType=controls:Step}}"
+                            TextElement.FontWeight="Black"
+                            TextElement.Foreground="{DynamicResource ControlTextColorBrush}" />
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=controls:Step}}" Value="Vertical">
+                            <Setter TargetName="PART_Ellipse" Property="Width" Value="30" />
+                            <Setter TargetName="PART_Ellipse" Property="Height" Value="45" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="6,0,0,0" />
+                        </DataTrigger>
+                        <Trigger Property="Status" Value="Waiting">
+                            <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
+                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_Index" Property="Visibility" Value="Visible" />
+                            <Setter Property="Background" Value="{DynamicResource ControlFillColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="Status" Value="InProgress">
+                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_Index" Property="Visibility" Value="Visible" />
+                            <Setter Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="Status" Value="Complete">
+                            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentSecondaryColorBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource SystemAccentTertiaryColorBrush}" />
+                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_Index" Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
+                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{DynamicResource ControlTextSecondaryColorBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style BasedOn="{StaticResource DefaultStepItemStyle}" TargetType="{x:Type controls:StepItem}" />
+</ResourceDictionary>

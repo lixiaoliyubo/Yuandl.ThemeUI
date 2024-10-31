@@ -1,0 +1,80 @@
+﻿<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.NotificationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:Notification}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="NotificationPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="NotificationSample1" Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <StackPanel MinWidth="340"
+                                ui:Notification.NotificationParent="True"  ui:Notification.NotificationEnterTransition="TranslateTransform"/>
+                    <StackPanel MinWidth="340"
+                                ui:Notification.NotificationParent="True"
+                                ui:Notification.Token="Test" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="10" Background="{DynamicResource ControlFillColorBrush}">
+                    <Button x:Name="Button"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonCommand, Mode=OneWay}"
+                                Content="Notification (Without Token)"  Margin="10"/>
+                    <Button x:Name="ButtonInfo"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonInfoCommand, Mode=OneWay}"
+                                Content="Notification with GrowlInfo (Without Token)"  Margin="10"/>
+                    <Button x:Name="ButtonToken"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonTokenCommand, Mode=OneWay}"
+                                Content="Notification (with Token)"  Margin="10"/>
+                    <Button x:Name="ButtonInfoToken"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonInfoTokenCommand, Mode=OneWay}"
+                                Content="Notification with GrowlInfo (with Token)"  Margin="10"/>
+                    <Button x:Name="ButtonClearAll"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonClearAllCommand, Mode=OneWay}"
+                                Content="Clear All"  Margin="10"/>
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="NotificationSample2" Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <ui:InfoBar Title="Notification will be shown outside the app"
+                             IsClosable="False"
+                             IsOpen="True"
+                             Appearance="Info" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="10" HorizontalAlignment="Left" Background="{DynamicResource ControlFillColorBrush}">
+                    <Button x:Name="ButtonGlobal"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonGlobalCommand, Mode=OneWay}"
+                                Content="Notification Global" Margin="10"/>
+                    <Button x:Name="ButtonInfoGlobal"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonInfoGlobalCommand, Mode=OneWay}"
+                                Content="Notification Global with GrowlInfo"  Margin="10"/>
+                    <Button x:Name="btnClearGlobalAll"  HorizontalAlignment="Left"
+                                Command="{Binding ButtonClearGlobalAllCommand, Mode=OneWay}"
+                                Content="Clear All"  Margin="10"/>
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

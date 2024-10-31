@@ -1,0 +1,53 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.TagPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:Tag}"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="TagPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="TagSample1" Margin="20" Tag="Different uses/can be closed">
+            <WrapPanel>
+                <ui:Tag Margin="5" Selectable="True" Content="Tag 2"/>
+                <ui:Tag Margin="5" ShowCloseButton="False" Content="Tag 3" CornerRadius="5"/>
+                <ui:Tag Margin="5" Content="Tag 4" IsEnabled="False"/>
+                <ui:Tag Margin="5" IsSelected="True" Selectable="True" ShowCloseButton="False" Content="Tag 5"/>
+                <ui:Tag Margin="5" Content="Tag 6" />
+                <ui:Tag Margin="5" ShowCloseButton="False" Content="Tag 7">
+                    <ui:Tag.Header>
+                        <Image Source="/Resources/Img/Avatar.jpg" Stretch="Fill"/>
+                    </ui:Tag.Header>
+                </ui:Tag>
+                <ui:Tag Margin="5" IsSelected="True" Selectable="True" Content="Tag 8">
+                    <ui:Tag.Header>
+                        <Image Source="/Resources/Img/Avatar.jpg"/>
+                    </ui:Tag.Header>
+                </ui:Tag>
+            </WrapPanel>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="TagSample2" Margin="20" Tag="Different theme choices">
+            <WrapPanel>
+                <ui:Tag Background="Red" Foreground="White" Margin="5" Content="Custom" Appearance="Custom"/>
+                <ui:Tag Margin="5" Content="Primary" Appearance="Primary"/>
+                <ui:Tag Margin="5" Content="Success" Appearance="Success"/>
+                <ui:Tag Margin="5" Content="Info" Appearance="Info"/>
+                <ui:Tag Margin="5" Content="Error" Appearance="Error"/>
+                <ui:Tag Margin="5" Content="Warning" Appearance="Warning" IsSelected="True"/>
+                <ui:Tag Margin="5" Content="Transparent" Appearance="Transparent"/>
+            </WrapPanel>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

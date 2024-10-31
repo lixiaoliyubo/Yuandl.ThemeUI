@@ -1,0 +1,132 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.ColorPickerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:ColorPicker}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ColorPickerPage">
+
+    <Page.Resources>
+        <ui:ColorToStringConverter x:Key="ColorToStringConverter" />
+        <ui:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+    </Page.Resources>
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="ColorPickerSample1" Margin="20" Tag="Color picker control">
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Padding="0,0,0,15">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <ui:ColorPicker x:Name="ColorPickerBackground" />
+                        <TextBlock Text="Background" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <ui:ColorPicker x:Name="ColorPickerForeground" />
+                        <TextBlock Text="Foreground" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <ui:ColorPicker x:Name="ColorPickerBorder"/>
+                        <TextBlock Text="Border"  HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
+                    <ui:ColorPicker x:Name="ColorPickerEffect" />
+                        <TextBlock Text="Effect" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
+                    <ui:ColorPicker x:Name="ColorPickerMouseOver" />
+                        <TextBlock Text="MouseOver" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
+                    <ui:ColorPicker x:Name="ColorPickerPressed" />
+                        <TextBlock Text="MousePressed" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical"  HorizontalAlignment="Center">
+                        <ui:ColorPicker x:Name="ColorPickerEnabled" />
+                        <TextBlock Text="Enabled" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+            </ScrollViewer>
+        </smtx:XamlDisplay>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Width="400" Height="200" Margin="10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="{Binding ElementName=ColorPickerBackground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToBrushConverter}}" />
+                        <Setter Property="Foreground" Value="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToBrushConverter}}" />
+                        <Setter Property="BorderBrush" Value="{Binding ElementName=ColorPickerBorder, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToBrushConverter}}" />
+                    <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <Border.Effect>
+                                            <DropShadowEffect 
+                                                Color="{Binding ElementName=ColorPickerEffect, Path=Color}" 
+                                                ShadowDepth="1" 
+                                                BlurRadius="5"
+                                                Direction="0"
+                                                Opacity="1"/>
+                                        </Border.Effect>
+                                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"></ContentPresenter>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{Binding ElementName=ColorPickerMouseOver, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToBrushConverter}}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="{Binding ElementName=ColorPickerEnabled, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToBrushConverter}}" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="{Binding ElementName=ColorPickerPressed, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToBrushConverter}}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                </Button.Style>
+                <ui:UniformGrid Columns="4" Orientation="Vertical">
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerBackground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerBorder, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerEffect, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerMouseOver, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerPressed, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+                    <TextBlock 
+                        Margin="10" Foreground="{Binding ElementName=ColorPickerForeground, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                        Text="{Binding ElementName=ColorPickerEnabled, Path=Color, Mode=TwoWay,Converter={StaticResource ColorToStringConverter}}" 
+                    />
+            </ui:UniformGrid>
+        </Button>
+        </StackPanel>
+    </StackPanel>
+</Page>

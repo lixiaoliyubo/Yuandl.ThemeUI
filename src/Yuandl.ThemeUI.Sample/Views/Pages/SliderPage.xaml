@@ -1,0 +1,160 @@
+﻿<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.SliderPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SliderPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="SliderSample1" Margin="20" Tag="A simple disabled slider.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider
+                    Width="200"
+                    Margin="0"  IsEnabled="False"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Maximum="100"
+                    Minimum="0"
+                    Value="{Binding SimpleSliderValue, Mode=TwoWay}" />
+                <Grid Grid.Column="1">
+                    <StackPanel Margin="10,0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Output:" />
+                        <TextBlock Text="{Binding SimpleSliderValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="SliderSample2" Margin="20" Tag="A slider with steps and range specified.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider
+                    Width="200"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    IsSnapToTickEnabled="True"
+                    Maximum="1000"
+                    Minimum="500"
+                    TickFrequency="20" 
+                    Value="{Binding RangeSliderValue, Mode=TwoWay}" />
+                <Grid Grid.Column="1">
+                    <StackPanel Margin="10,0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Output:" />
+                        <TextBlock Text="{Binding RangeSliderValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="SliderSample3" Margin="20" Tag="A slider with tick marks.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider
+                    Width="200"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    IsSnapToTickEnabled="True"
+                    Maximum="100"
+                    Minimum="0"
+                    TickFrequency="20"
+                    TickPlacement="Both"
+                    Value="{Binding MarksSliderValue, Mode=TwoWay}" />
+                <Grid Grid.Column="1">
+                    <StackPanel Margin="10,0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Output:" />
+                        <TextBlock Text="{Binding MarksSliderValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="SliderSample4" Margin="20" Tag="A vertical slider with range and tick marks specified.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider
+                    Width="200"
+                    Margin="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    IsSnapToTickEnabled="True"
+                    Maximum="100"
+                    Minimum="0"
+                    Orientation="Vertical"
+                    TickFrequency="20"
+                    TickPlacement="Both"
+                    Value="{Binding VerticalSliderValue, Mode=TwoWay}" />
+                <Grid Grid.Column="1">
+                    <StackPanel Margin="10,0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Output:" />
+                        <TextBlock Text="{Binding VerticalSliderValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="SliderSample5" Margin="20" Tag="A slider with gradient.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider
+                    Margin="0"
+                    Width="200"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" IsMoveToPointEnabled="True"
+                    Value="{Binding SimpleSliderValue, Mode=TwoWay}" ui:SilderAssist.IsGradient="True"/>
+                <Grid Grid.Column="1">
+                    <StackPanel Margin="10,0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Output:" />
+                        <TextBlock Text="{Binding SimpleSliderValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="SliderSample6" Margin="20" Tag="A vertical gradient slider.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider
+                    Margin="0"
+                    Height="200"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Value="{Binding SimpleSliderValue, Mode=TwoWay}" ui:SilderAssist.IsGradient="True"/>
+                <Grid Grid.Column="1">
+                    <StackPanel Margin="10,0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Output:" />
+                        <TextBlock Text="{Binding SimpleSliderValue, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

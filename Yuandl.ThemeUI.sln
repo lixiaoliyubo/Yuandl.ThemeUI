@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34825.169
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2309DE76-409E-4248-AFA4-89397E61D2DB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		Directory.Packages.props = Directory.Packages.props
+		nuget.config = nuget.config
+		README.en.md = README.en.md
+		README.md = README.md
+		Settings.XamlStyler = Settings.XamlStyler
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yuandl.ThemeUI.Sample", "src\Yuandl.ThemeUI.Sample\Yuandl.ThemeUI.Sample.csproj", "{EC9196B9-EFFD-4BBC-AC34-B8EEFC86EE03}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yuandl.ThemeUI", "src\Yuandl.ThemeUi\Yuandl.ThemeUI.csproj", "{28010C21-A781-48BB-B977-3A52206A2226}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "src\ConsoleApp1\ConsoleApp1.csproj", "{FEF25A57-F8E9-4600-84A3-013A182BEF8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuandl.ThemeUI.Demo", "src\Yuandl.ThemeUI.Demo\Yuandl.ThemeUI.Demo.csproj", "{44599396-8912-4B9D-8F9D-7EEB2E5C406E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC9196B9-EFFD-4BBC-AC34-B8EEFC86EE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC9196B9-EFFD-4BBC-AC34-B8EEFC86EE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC9196B9-EFFD-4BBC-AC34-B8EEFC86EE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC9196B9-EFFD-4BBC-AC34-B8EEFC86EE03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28010C21-A781-48BB-B977-3A52206A2226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28010C21-A781-48BB-B977-3A52206A2226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28010C21-A781-48BB-B977-3A52206A2226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28010C21-A781-48BB-B977-3A52206A2226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEF25A57-F8E9-4600-84A3-013A182BEF8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEF25A57-F8E9-4600-84A3-013A182BEF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEF25A57-F8E9-4600-84A3-013A182BEF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEF25A57-F8E9-4600-84A3-013A182BEF8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44599396-8912-4B9D-8F9D-7EEB2E5C406E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44599396-8912-4B9D-8F9D-7EEB2E5C406E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44599396-8912-4B9D-8F9D-7EEB2E5C406E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44599396-8912-4B9D-8F9D-7EEB2E5C406E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {965250F8-B50A-48B0-9CFB-6C925CCCEE72}
+	EndGlobalSection
+EndGlobal

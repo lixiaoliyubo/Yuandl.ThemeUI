@@ -1,0 +1,52 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.CarouselPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:Carousel}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CarouselPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="CarouselSample1" Margin="20" Tag="Basic usage">
+            <Grid>
+                <ui:Carousel x:Name="carousel"  Margin="32" IsCenter="True" AutoRun="True" MaxWidth="600" Height="300" VerticalAlignment="Center">
+                    <Grid Width="600" Background="SeaGreen" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <TextBlock Text="carousel 3" FontSize="100" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Width="600" Background="Orange" Height="300">
+                        <TextBlock Text="carousel 3" FontSize="100" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Width="600" Height="300" Background="Gray">
+                        <TextBlock Text="carousel 3" FontSize="100" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="Black" BlurRadius="10"></DropShadowEffect>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </Grid>
+                    <Grid Width="600" Background="YellowGreen" Height="300">
+                        <TextBlock Text="carousel 3" FontSize="100" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Width="600" Background="OrangeRed" Height="300">
+                        <TextBlock Text="carousel 3" FontSize="100" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </ui:Carousel>
+                <Grid HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <Label>当前页：</Label>
+                        <TextBlock Text="{Binding PageIndex,ElementName=carousel,Mode=OneWay}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

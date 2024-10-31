@@ -1,0 +1,59 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.ThemeBrushPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml"
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls"  
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ThemeBrushPage">
+    <Page.Resources>
+    </Page.Resources>
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="ThemeBrushSample1" Margin="20">
+            <WrapPanel x:Name="stackPanel" Orientation="Horizontal">
+                <ItemsControl ItemsSource="{Binding Items, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:ThemeColorEntity}">
+                            <ui:CardAction
+                                Margin="4"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Background="{Binding ColorBrush}"
+                                MaxWidth="{Binding ItemSize.Width, RelativeSource={RelativeSource AncestorType=ui:VirtualizingWrapPanel}}"
+                                MaxHeight="{Binding ItemSize.Height, RelativeSource={RelativeSource AncestorType=ui:VirtualizingWrapPanel}}"
+                                Command="{Binding TemplateButtonCommand}"
+                                CommandParameter="{Binding Name, Mode=OneTime}"
+                                IsChevronVisible="True">
+                                <ui:TextBlock
+                                            Margin="0"
+                                            FontTypography="BodyStrong"
+                                            Text="{Binding Name, Mode=OneTime}"
+                                            TextWrapping="WrapWithOverflow" />
+                            </ui:CardAction>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ui:VirtualizingWrapPanel
+                                    IsItemsHost="True"
+                                    ItemSize="250,60"
+                                    Orientation="Vertical"
+                                    SpacingMode="Uniform"
+                                    StretchItems="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </WrapPanel>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

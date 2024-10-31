@@ -1,0 +1,110 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.ScrollBarPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:DynamicScrollViewer}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ScrollBarPage">
+    <Page.Resources>
+        <Style x:Key="ItemContainerStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource DefaultListBoxItemStyle}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Page.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <smtx:XamlDisplay Grid.Row="0" UniqueKey="ScrollBarSample1" Margin="0,0,0,20" Tag="A ThemeUI DynamicScrollViewer control">
+            <Border BorderThickness="1" Width="500" BorderBrush="{DynamicResource ControlDisabledBorderColorBrush}" Height="100" Background="{DynamicResource ControlFillColorBrush}">
+                <ui:DynamicScrollViewer Padding="15" AllowDrop="True" OpacityMask="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" SnapsToDevicePixels="True">
+                    <TextBlock VerticalAlignment="Center" FontSize="14" Text="{Binding ScrollValue}" />
+                </ui:DynamicScrollViewer>
+            </Border>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay Grid.Row="1" UniqueKey="ScrollBarSample2" Margin="0,0,0,20" Tag="A ThemeUI DynamicScrollBar control">
+            <StackPanel Width="500">
+                <ui:DynamicScrollBar x:Name="dynamicScrollBar" Value="0" IsScrolling="True" Maximum="10">
+                </ui:DynamicScrollBar>
+                <TextBlock VerticalAlignment="Center" FontSize="14" Text="{Binding ElementName=dynamicScrollBar, Path=Value}" />
+            </StackPanel>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay Grid.Row="2" UniqueKey="ScrollBarSample3" Margin="0,0,0,20" Tag="A native ScrollViewer control">
+            <Border BorderThickness="1" Width="500" BorderBrush="{DynamicResource ControlDisabledBorderColorBrush}" Height="100" Background="{DynamicResource ControlFillColorBrush}">
+                <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                    <TextBlock VerticalAlignment="Center" FontSize="14" Text="{Binding ScrollValue}" />
+                </ScrollViewer>
+            </Border>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay Grid.Row="3" UniqueKey="ScrollBarSample4" Margin="0,0,0,20" Tag="A native ScrollBar control">
+            <Border BorderThickness="1" BorderBrush="{DynamicResource ControlDisabledBorderColorBrush}" Height="100" Background="{DynamicResource ControlFillColorBrush}">
+                <StackPanel Width="500">
+                    <ScrollBar x:Name="ScrollBar1" Margin="10" Orientation="Horizontal" Width ="400" Minimum="1" Maximum="100"/>
+                    <ScrollBar x:Name="ScrollBar2" Margin="10" Orientation="Vertical" Height="200"  Minimum="1" Maximum="100" SmallChange="10"/>
+                    <TextBlock>
+                        <Run>&#160;ScrollBar1的值为：</Run>
+                        <Run Text="{Binding ElementName=ScrollBar1, Path=Value}"></Run>
+                        <Run Text="&#13;"></Run>
+                        <Run>ScrollBar2的值为：</Run>
+                        <Run Text="{Binding ElementName=ScrollBar2, Path=Value}"></Run>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay Grid.Row="4" UniqueKey="ScrollBarSample5" Margin="0,0,0,20" Tag="A ThemeUI VirtualizingItemsControl control">
+            <Border BorderThickness="1" Width="500" BorderBrush="{DynamicResource ControlDisabledBorderColorBrush}" Height="100" Background="{DynamicResource ControlFillColorBrush}">
+                <ui:VirtualizingItemsControl Padding="15">
+                    <TextBlock VerticalAlignment="Center" FontSize="14" Text="{Binding ScrollValue}" />
+                </ui:VirtualizingItemsControl>
+            </Border>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay Grid.Row="5" UniqueKey="ScrollBarSample6" Margin="0,0,0,20" Tag="A ThemeUI VirtualizingWrapPanel control">
+            <Border BorderThickness="1" Width="500" BorderBrush="{DynamicResource ControlDisabledBorderColorBrush}" Height="100" Background="{DynamicResource ControlFillColorBrush}">
+                <ListBox ItemsSource="{Binding ScrollBarItems}"
+                        VirtualizingPanel.CacheLengthUnit="Page"
+                        VirtualizingPanel.CacheLength="1,1"
+                        VirtualizingPanel.ScrollUnit="Pixel"
+                        VirtualizingPanel.VirtualizationMode="Recycling"
+                        ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        ItemContainerStyle="{StaticResource ItemContainerStyle}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                                <ui:TextBlock Appearance="Primary" Text="{Binding}" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ui:VirtualizingWrapPanel
+                                    Orientation="Vertical"
+                                    SpacingMode="Uniform"
+                                    StretchItems="True"                                    
+                                    ScrollLineDelta="16"
+                                    MouseWheelDelta="48"
+                                    ScrollLineDeltaItem="16"
+                                    MouseWheelDeltaItem="48"
+                                    ItemSize="100,80" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Border>
+        </smtx:XamlDisplay>
+    </Grid>
+</Page>

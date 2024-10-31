@@ -1,0 +1,61 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.UniformGridPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:UniformGrid}"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AnchorPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="UniformGridSample1" Margin="20" Tag="UniformGrid Example Demonstration">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <ui:UniformGrid ColumnSpacing="{Binding Value, ElementName=columnSpacing,Mode=OneWay}" Columns="5" RowSpacing="{Binding Value, ElementName=rowSpacing,Mode=OneWay}">
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                        <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
+                    </ui:UniformGrid>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="10" Orientation="Vertical" Width="200" Background="{ui:ThemeResource ControlFillColorBrush}">
+                    <TextBlock Text="ColumnSpacing Value" Margin="15"/>
+                    <Slider x:Name="columnSpacing" Orientation="Horizontal" Value="10" Maximum="50"/>
+                    <TextBlock Text="RowSpacing Value" Margin="15"/>
+                    <Slider x:Name="rowSpacing" Orientation="Horizontal" Value="10" Maximum="50"/>
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

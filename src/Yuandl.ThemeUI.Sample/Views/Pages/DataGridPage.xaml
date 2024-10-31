@@ -1,0 +1,102 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.DataGridPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:DataGrid}"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DataGridPage">
+
+    <StackPanel Orientation="Vertical">
+        <FrameworkElement x:Name="DataContextProxy" DataContext="{Binding}" />
+        <smtx:XamlDisplay UniqueKey="DataGridSample1" Margin="20" Tag="Using the native GridGrid style">
+            <DataGrid CanUserAddRows="False"  Height="400" Background="{DynamicResource ControlFillColorBrush}"
+                ItemsSource="{Binding Items1}"
+                SelectionMode="Extended"
+                SelectionUnit="Cell" />
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="DataGridSample2" Margin="20" Tag="Use default GridGrid">
+            <ui:DataGrid CanUserAddRows="False"  Height="400" ItemsSource="{Binding Items2}" ColumnHeaderPadding="10,8">
+            </ui:DataGrid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="DataGridSample3" Margin="20" Tag="Use custom GridGrid style">
+            <StackPanel>
+                <ComboBox x:Name="selectionUnitComboBox" VerticalAlignment="Center"  ItemsSource="{Binding SelectionUnits}" SelectedIndex="0" Margin="10"/>
+                <ui:DataGrid AutoGenerateColumns="False" Height="400" GridLinesVisibility="Horizontal"
+                    CanUserAddRows="True"
+                    HeadersVisibility="All"
+                    ItemsSource="{Binding Items3}"
+                    SelectionUnit="{Binding ElementName=selectionUnitComboBox, Path=SelectedValue}">
+                    <ui:DataGrid.Columns>
+                        <ui:DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
+                            <ui:DataGridCheckBoxColumn.Header>
+                                <Border Background="Transparent">
+                                    <CheckBox IsChecked="{Binding DataContext.IsAllItems1Selected, Source={x:Reference DataContextProxy}}" />
+                                </Border>
+                            </ui:DataGridCheckBoxColumn.Header>
+                            <ui:DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                </Style>
+                            </ui:DataGridCheckBoxColumn.ElementStyle>
+                        </ui:DataGridCheckBoxColumn>
+
+                        <ui:DataGridTextColumn Binding="{Binding Code}" Header="Code" />
+                        <ui:DataGridTextColumn Header="Name">
+                            <ui:DataGridTextColumn.Binding>
+                                <Binding Path="Name">
+                                    <Binding.ValidationRules>
+                                        <models:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </ui:DataGridTextColumn.Binding>
+                        </ui:DataGridTextColumn>
+                        <ui:DataGridTextColumn Header="Description">
+                            <ui:DataGridTextColumn.Binding>
+                                <Binding Path="Description">
+                                    <Binding.ValidationRules>
+                                        <models:NotEmptyValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </ui:DataGridTextColumn.Binding>
+                        </ui:DataGridTextColumn>
+                        <ui:DataGridComboBoxColumn Width="100"
+                                                     Header="Food with long header"
+                                                     IsEditable="True"
+                                                     ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Foods}"
+                                                     SelectedValueBinding="{Binding Food}">
+
+                        </ui:DataGridComboBoxColumn>
+                        <ui:DataGridComboBoxColumn Header="ComboBox with long list" BorderThickness="1"
+                                                     ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.Files}"
+                                                     SelectedValueBinding="{Binding Files}" />
+
+                        <ui:DataGridTemplateColumn Header="Template Column">
+                            <ui:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type models:SelectableViewModel}">
+                                    <TextBlock FontSize="14" FontStyle="Italic" Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ui:DataGridTemplateColumn.CellTemplate>
+                            <ui:DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate DataType="{x:Type models:SelectableViewModel}">
+                                    <TextBox Foreground="{DynamicResource SecondaryHueMidBrush}" Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ui:DataGridTemplateColumn.CellEditingTemplate>
+                        </ui:DataGridTemplateColumn>
+                    </ui:DataGrid.Columns>
+                </ui:DataGrid>
+            </StackPanel>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

@@ -1,0 +1,67 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.ChartsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ChartsPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="ChartsSample1" Margin="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:ChartBar Grid.Column="0" Datas="{Binding BarDatas, Mode=OneWay}" Height="400" Width="500" HorizontalAlignment="Left"/>
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="10"
+                    Command="{Binding BarButtonClickCommand, Mode=OneWay}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                    Content="刷新" />
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ChartsSample2" Margin="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:ChartLine Grid.Column="0" Datas="{Binding LineDatas, Mode=OneWay}" Height="400" Width="500" HorizontalAlignment="Left"/>
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="10"
+                    Command="{Binding LineButtonClickCommand, Mode=OneWay}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                    Content="刷新"/>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ChartsSample3" Margin="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:ChartRadar Grid.Column="0" Datas="{Binding RadarDatas, Mode=OneWay}" Height="500" Width="500"/>
+                <ui:Button
+                    Grid.Column="1"
+                    Margin="10"
+                    Command="{Binding RadarButtonClickCommand, Mode=OneWay}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                    Content="刷新" />
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

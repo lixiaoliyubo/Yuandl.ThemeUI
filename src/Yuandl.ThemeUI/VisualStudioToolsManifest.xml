@@ -1,0 +1,59 @@
+<FileList>
+  <File Reference="Yuandl.ThemeUI.dll">
+    <ToolboxItems UIFramework="WPF" VSCategory="WPF UI" BlendCategory="WPF UI">
+      <Item Type="Yuandl.ThemeUI.Controls.Anchor" />
+      <Item Type="Yuandl.ThemeUI.Controls.AutoSuggestBox" />
+      <Item Type="Yuandl.ThemeUI.Controls.Badge" />
+      <Item Type="Yuandl.ThemeUI.Controls.BreadcrumbBar" />
+      <Item Type="Yuandl.ThemeUI.Controls.BreadcrumbBarItem" />
+      <Item Type="Yuandl.ThemeUI.Controls.Button" />
+      <Item Type="Yuandl.ThemeUI.Controls.ColorPicker" />
+      <Item Type="Yuandl.ThemeUI.Controls.Card" />
+      <Item Type="Yuandl.ThemeUI.Controls.CardAction" />
+      <Item Type="Yuandl.ThemeUI.Controls.CardColor" />
+      <Item Type="Yuandl.ThemeUI.Controls.CardControl" />
+      <Item Type="Yuandl.ThemeUI.Controls.CardExpander" />
+      <Item Type="Yuandl.ThemeUI.Controls.ClientAreaBorder" />
+      <Item Type="Yuandl.ThemeUI.Controls.ContentDialog" />
+      <Item Type="Yuandl.ThemeUI.Controls.DataGrid" />
+      <Item Type="Yuandl.ThemeUI.Controls.DropDownButton" />
+      <Item Type="Yuandl.ThemeUI.Controls.DynamicScrollBar" />
+      <Item Type="Yuandl.ThemeUI.Controls.DynamicScrollViewer" />
+      <Item Type="Yuandl.ThemeUI.Controls.FluentWindow" />
+      <Item Type="Yuandl.ThemeUI.Controls.Flyout" />
+      <Item Type="Yuandl.ThemeUI.Controls.FontIcon" />
+      <Item Type="Yuandl.ThemeUI.Controls.HyperlinkButton" />
+      <Item Type="Yuandl.ThemeUI.Controls.Image" />
+      <Item Type="Yuandl.ThemeUI.Controls.ImageIcon" />
+      <Item Type="Yuandl.ThemeUI.Controls.InfoBar" />
+      <Item Type="Yuandl.ThemeUI.Controls.InfoBadge" />
+      <Item Type="Yuandl.ThemeUI.Controls.ListView" />
+      <Item Type="Yuandl.ThemeUI.Controls.MenuItem" />
+      <Item Type="Yuandl.ThemeUI.Controls.MessageBox" />
+      <Item Type="Yuandl.ThemeUI.Controls.NavigationView" />
+      <Item Type="Yuandl.ThemeUI.Controls.NavigationViewBreadcrumb" />
+      <Item Type="Yuandl.ThemeUI.Controls.NavigationViewContentPresenter" />
+      <Item Type="Yuandl.ThemeUI.Controls.NavigationViewItem" />
+      <Item Type="Yuandl.ThemeUI.Controls.NavigationViewItemHeader" />
+      <Item Type="Yuandl.ThemeUI.Controls.NavigationViewItemSeparator" />
+      <Item Type="Yuandl.ThemeUI.Controls.NumberBox" />
+      <Item Type="Yuandl.ThemeUI.Controls.PasswordBox" />
+      <Item Type="Yuandl.ThemeUI.Controls.ProgressRing" />
+      <Item Type="Yuandl.ThemeUI.Controls.RatingControl" />
+      <Item Type="Yuandl.ThemeUI.Controls.RichTextBox" />
+      <Item Type="Yuandl.ThemeUI.Controls.Snackbar" />
+      <Item Type="Yuandl.ThemeUI.Controls.SplitButton" />
+      <Item Type="Yuandl.ThemeUI.Controls.SymbolIcon" />
+      <Item Type="Yuandl.ThemeUI.Controls.TextBlock" />
+      <Item Type="Yuandl.ThemeUI.Controls.TextBox" />
+      <Item Type="Yuandl.ThemeUI.Controls.ThumbRate" />
+      <Item Type="Yuandl.ThemeUI.Controls.TitleBar" />
+      <Item Type="Yuandl.ThemeUI.Controls.ToggleSwitch" />
+      <Item Type="Yuandl.ThemeUI.Controls.TreeGrid" />
+      <Item Type="Yuandl.ThemeUI.Controls.TreeGridItem" />
+      <Item Type="Yuandl.ThemeUI.Controls.VirtualizingGridView" />
+      <Item Type="Yuandl.ThemeUI.Controls.VirtualizingItemsControl" />
+      <Item Type="Yuandl.ThemeUI.Controls.VirtualizingWrapPanel" />
+    </ToolboxItems>
+  </File>
+</FileList>

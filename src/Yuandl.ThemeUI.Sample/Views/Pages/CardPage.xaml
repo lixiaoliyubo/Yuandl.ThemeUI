@@ -1,0 +1,58 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.CardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:Card}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CardPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="CardSample1" Margin="20">
+            <ui:Card AllowDrop="True" Margin="15" ui:ElevationAssist.Elevation="Dp3">
+                <ui:Card.Header>
+                    <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card Header" />
+                </ui:Card.Header>
+                <Grid>
+                    <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card面板" />
+                </Grid>
+                <ui:Card.Footer>
+                    <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card Footer" />
+                </ui:Card.Footer>
+            </ui:Card>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="CardSample2" Margin="20" Tag="A card control with an icon, a header, a description, and a control">
+            <ui:CardControl  Margin="15" Icon="{ui:ImageIcon 'pack://application:,,,/Yuandl.ThemeUI.Sample;component/app_icon.ico'}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <ui:TextBlock
+                                Margin="0"
+                                FontTypography="BodyStrong"
+                                Text="This is the header text"
+                                TextWrapping="WrapWithOverflow" />
+                        <ui:TextBlock
+                                Appearance="Secondary"
+                                Text="This is a description text."
+                                TextWrapping="WrapWithOverflow" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="CardControl面板" />
+            </ui:CardControl>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="CardSample3" Margin="20" Tag="A CardAction with an icon, a header and a description.">
+            <ui:CardAction  Margin="15" Icon="{ui:SymbolIcon DocumentEdit20, FontSize=43, Filled=False}">
+                <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="CardAction面板" />
+            </ui:CardAction>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

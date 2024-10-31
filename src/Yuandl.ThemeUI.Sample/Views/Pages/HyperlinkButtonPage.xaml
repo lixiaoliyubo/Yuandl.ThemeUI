@@ -1,0 +1,59 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.HyperlinkButtonPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:HyperlinkButton}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HyperlinkButtonPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="HyperlinkButtonSample1" Margin="20" Tag="ThemeUI hyperlink.">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:HyperlinkButton
+                    Grid.Column="0"
+                    Content="ThemeUI hyperlink"
+                    Icon="{ui:SymbolIcon Link24}"
+                    IsEnabled="{Binding IsHyperlinkEnabled,  Mode=OneWay}"
+                    NavigateUri="https://themeui.yuandl.cn/" />
+                <CheckBox
+                    Grid.Column="1"
+                    Command="{Binding HyperlinkCheckboxCheckedCommand, Mode=OneWay}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                    Content="Disable hyperlink" />
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="HyperlinkButtonSample2" Margin="20" Tag="ThemeUI hyperlink with FontIcon.">
+            <ui:HyperlinkButton
+                Margin="10"
+                Grid.Column="0"
+                Content="ThemeUI hyperlink"
+                Icon="{ui:FontIcon '&#x1F308;'}"
+                IsEnabled="{Binding IsHyperlinkEnabled, Mode=OneWay}"
+                NavigateUri="https://themeui.yuandl.cn/" />
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="HyperlinkButtonSample3" Margin="20" Tag="ThemeUI hyperlink with ImageIcon.">
+            <ui:HyperlinkButton
+                Margin="10"
+                Grid.Column="0"
+                Content="ThemeUI hyperlink"
+                Icon="{ui:ImageIcon 'pack://application:,,,/app_icon.ico'}"
+                IsEnabled="{Binding IsHyperlinkEnabled, Mode=OneWay}"
+                NavigateUri="https://themeui.yuandl.cn/" />
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

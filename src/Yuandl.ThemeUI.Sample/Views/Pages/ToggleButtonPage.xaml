@@ -1,0 +1,51 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.ToggleButtonPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ToggleButtonPage">
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="ToggleButtonSample1" Margin="20" Tag="Toggle Button Group.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:ButtonGroup CornerRadius="5" Orientation="Horizontal" HorizontalAlignment="Left" IsEnabled="{Binding IsChecked,ElementName=ToggleButtonGroupCheckBox, Mode=OneWay}">
+                    <ToggleButton Content="ToggleButton 1" HorizontalAlignment="Stretch" />
+                    <ToggleButton Content="ToggleButton 2" HorizontalAlignment="Stretch" IsChecked="True"/>
+                    <ToggleButton Content="ToggleButton 3"  HorizontalAlignment="Stretch"/>
+                    <ToggleButton Content="ToggleButton 4"  HorizontalAlignment="Stretch"/>
+                </ui:ButtonGroup>
+                <CheckBox  Grid.Column="1" Margin="10" x:Name="ToggleButtonGroupCheckBox" Content="Enable Toggle Button Group"  IsChecked="True"/>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ToggleButtonSample2" Margin="20" Tag="Standard Toggle Button.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton
+                    Grid.Column="0"
+                    Margin="10"
+                    Content="Standard ToggleButton"
+                    IsEnabled="{Binding IsChecked,ElementName=ToggleButtonCheckBox, Mode=OneWay}"/>
+                <CheckBox  Grid.Column="1" Margin="10" x:Name="ToggleButtonCheckBox" Content="Enable Toggle Button Group" IsChecked="True"/>
+            </Grid>
+        </smtx:XamlDisplay>
+
+    </StackPanel>
+</Page>

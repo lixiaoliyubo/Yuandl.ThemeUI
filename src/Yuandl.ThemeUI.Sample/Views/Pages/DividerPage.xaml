@@ -1,0 +1,84 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.DividerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:converters="clr-namespace:Yuandl.ThemeUI.Sample.Converters" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:Divider}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DividerPage">
+    <Page.Resources>
+        <ResourceDictionary>
+            <converters:IntToColorConverter x:Key="IntToColorConverter"/>
+            <converters:IntToOrientationConverter x:Key="IntToOrientationConverter"/>
+            <converters:IntToHorizontalAlignmentConverter x:Key="IntToHorizontalAlignmentConverter"/>
+            <converters:IntToDoubleCollectionConverter x:Key="IntToDoubleCollectionConverter"/>
+        </ResourceDictionary>
+    </Page.Resources>
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="DividerSample1" Margin="20" Tag="An example demonstration of an adjustable Diver control">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="10" VerticalAlignment="Top">
+                    <ui:Divider ContentPadding="10">
+                        <Button Content="More" />
+                    </ui:Divider>
+                    <ui:Divider 
+                        Content="Title" 
+                        Orientation="{Binding SelectedIndex,ElementName=orientation,Converter={StaticResource IntToOrientationConverter}, Mode=OneWay}" 
+                        HorizontalContentAlignment="{Binding SelectedIndex,ElementName=horizontalAlignment,Converter={StaticResource IntToHorizontalAlignmentConverter}}" 
+                        LineStroke="{Binding Value,ElementName=lineStroke,Converter={StaticResource IntToColorConverter}}" 
+                        LineStrokeDashArray="{Binding Value,ElementName=lineStrokeDashArray,Converter={StaticResource IntToDoubleCollectionConverter}}" 
+                        LineStrokeThickness="{Binding Value,ElementName=lineStrokeThickness}" />
+                </StackPanel>
+                <ui:Card Grid.Column="1" Margin="10" VerticalAlignment="Top">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Center">
+                            <Label Content="LineStroke" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Slider x:Name="lineStroke" Orientation="Horizontal" Value="1" Maximum="360" ui:SilderAssist.IsGradient="True"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Center">
+                            <Label Content="LineStrokeDashArray" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Slider x:Name="lineStrokeDashArray" Orientation="Horizontal" Value="2" Maximum="20" />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Center">
+                            <Label Content="LineStrokeThickness" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <Slider x:Name="lineStrokeThickness" Orientation="Horizontal" Value="2" Maximum="20" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Center">
+                            <Label Content="Orientation" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <ComboBox x:Name="orientation" SelectedIndex="0">
+                                <ComboBoxItem Content="Horizontal"/>
+                                <ComboBoxItem Content="Vertical" />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="20">
+                            <Label Content="Horizontal Alignment"/>
+                            <ComboBox x:Name="horizontalAlignment" SelectedIndex="1">
+                                <ComboBoxItem Content="Left" />
+                                <ComboBoxItem Content="Center" />
+                                <ComboBoxItem Content="Right" />
+                                <ComboBoxItem Content="Stretch" />
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

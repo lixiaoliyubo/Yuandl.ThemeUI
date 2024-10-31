@@ -1,0 +1,64 @@
+<ui:FluentWindow  
+    x:Class="Yuandl.ThemeUI.Demo.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml"
+    xmlns:local="clr-namespace:Yuandl.ThemeUI.Demo"
+    mc:Ignorable="d" Loaded="Window_Loaded"
+    Title="ThemeUI - Simple Demo" Height="450" Width="800"
+    ui:Design.Background="{DynamicResource ApplicationFillBrush}"
+    ui:Design.Foreground="{DynamicResource ApplicationTextColorBrush}"
+    ExtendsContentIntoTitleBar="True"
+    Foreground="{DynamicResource ApplicationTextColorBrush}"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="Round"
+    WindowStartupLocation="CenterScreen">
+
+    <Grid x:Name="MainGrid" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Image Source="pack://application:,,,/Yuandl.ThemeUI.Demo;component/app_icon.ico" Width="20" Height="20" Stretch="Uniform" Margin="10"/>
+                <TextBlock Text="Yuandl.ThemeUI.Demo"  Margin="10"/>
+            </StackPanel>
+            <Grid Grid.Column="2">
+                <ui:TitleBar/>
+            </Grid>
+        </Grid>
+        <ui:NavigationView Grid.Row="1" x:Name="RootNavigation" Margin="0" OpenPaneLength="230" FrameMargin="0" Padding="15">
+            <ui:NavigationView.Sidebar>
+                <ui:SidebarMenu
+                    x:Name="SidebarMenu"
+                    Width="210"
+                    Margin="0"
+                    Title="SidebarMenu" IsOpen="True" BorderThickness="0"
+                    Padding="42,0,42,0"
+                    IsToggleVisible="True"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{Binding MenuItems, Mode=OneWay}"
+                    Opened="SidebarMenu_OnOpened"
+                    Closed="SidebarMenu_OnClosed"
+                    ItemClick="SidebarMenu_ItemClick">
+                    <ui:SidebarMenu.AutoSuggestBox>
+                        <ui:AutoSuggestBox PlaceholderText="Search" Margin="10">
+                            <ui:AutoSuggestBox.Icon>
+                                <ui:IconSourceElement>
+                                    <ui:SymbolIconSource Symbol="Search24" />
+                                </ui:IconSourceElement>
+                            </ui:AutoSuggestBox.Icon>
+                        </ui:AutoSuggestBox>
+                    </ui:SidebarMenu.AutoSuggestBox>
+                </ui:SidebarMenu>
+            </ui:NavigationView.Sidebar>
+        </ui:NavigationView>
+    </Grid>
+</ui:FluentWindow>

@@ -1,0 +1,104 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.InfoBarPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:InfoBar}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="InfoBarPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="InfoBarSample1" Margin="20" Tag="A closable InfoBar.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:InfoBar
+                    Title="Title"
+                    Grid.Column="0"
+                    Icon="Accessibility16"
+                    IsOpen="{Binding IsShortInfoBarOpened, Mode=TwoWay}"
+                    Message="Essential app message."
+                    Appearance="{Binding ShortInfoBarSeverity, Mode=OneWay}" 
+                    Closed="InfoBar_Closed"
+                    Closing="InfoBar_Closing"/>
+                <Grid Grid.Column="1" Margin="12,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CheckBox
+                        Grid.Row="0"
+                        MinWidth="0"
+                        Content="Is open"
+                        IsChecked="{Binding IsShortInfoBarOpened, Mode=TwoWay}" />
+                    <ComboBox
+                        Grid.Row="1"
+                        MinWidth="140"
+                        Margin="0,8,0,0"
+                        SelectedIndex="{Binding ShortInfoBarSeverityComboBoxSelectedIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="Custom" />
+                        <ComboBoxItem Content="Primary" />
+                        <ComboBoxItem Content="Warning" />
+                        <ComboBoxItem Content="Info" />
+                        <ComboBoxItem Content="Error" />
+                        <ComboBoxItem Content="Success" />
+                        <ComboBoxItem Content="Transparent" />
+                    </ComboBox>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="InfoBarSample2" Margin="20" Tag="A closable InfoBar with a long message.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:InfoBar
+                    Title="Title"
+                    Grid.Column="0"
+                    IsOpen="{Binding IsLongInfoBarOpened, Mode=TwoWay}"
+                    Message="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                    Appearance="{Binding LongInfoBarSeverity, Mode=OneWay}" 
+                    Closed="InfoBar_Closed"
+                    Closing="InfoBar_Closing"/>
+                <Grid Grid.Column="1" Margin="12,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CheckBox
+                        Grid.Row="0"
+                        MinWidth="0"
+                        Content="Is open"
+                        IsChecked="{Binding IsLongInfoBarOpened, Mode=TwoWay}" />
+                    <ComboBox
+                        Grid.Row="1"
+                        MinWidth="140"
+                        Margin="0,8,0,0"
+                        SelectedIndex="{Binding LongInfoBarSeverityComboBoxSelectedIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="Custom" />
+                        <ComboBoxItem Content="Primary" />
+                        <ComboBoxItem Content="Warning" />
+                        <ComboBoxItem Content="Info" />
+                        <ComboBoxItem Content="Error" />
+                        <ComboBoxItem Content="Success" />
+                        <ComboBoxItem Content="Transparent" />
+                    </ComboBox>
+                </Grid>
+            </Grid>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

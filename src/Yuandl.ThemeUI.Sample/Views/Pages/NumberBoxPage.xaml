@@ -1,0 +1,51 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.NumberBoxPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:NumberBox}"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="NumberBoxPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="NumberBoxSample1" Margin="20" Tag="ThemeUI NumberBox.">
+            <ui:NumberBox PlaceholderText="Enter your age" Width="200" Margin="10"/>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="NumberBoxSample2" Margin="20" Tag="ThemeUI NumberBox with icon.">
+            <ui:NumberBox
+                Margin="10"
+                Width="200"
+                Icon="{ui:SymbolIcon NumberSymbolSquare24}"
+                LargeChange="2.25"
+                Maximum="10"
+                Minimum="-10"
+                PlaceholderText="Enter your age"
+                SmallChange="0.25"
+                SpinButtonPlacementMode="Hidden"
+                Value="1.50" />
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="NumberBoxSample3" Margin="20" Tag="ThemeUI NumberBox without decimal places.">
+            <ui:NumberBox
+                Margin="10"
+                Width="200"
+                Icon="{ui:SymbolIcon NumberSymbolSquare24}"
+                MaxDecimalPlaces="0"
+                Maximum="100"
+                Minimum="0"
+                PlaceholderText="Enter your age"
+                SmallChange="1"
+                Value="12" />
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

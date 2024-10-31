@@ -1,0 +1,88 @@
+﻿<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
+    xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
+    xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist" 
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <converters:ShadowConverter x:Key="ShadowConverter" />
+
+    <Thickness x:Key="GroupBoxMargin">15,10</Thickness>
+    <Thickness x:Key="GroupBoxPadding">15,10</Thickness>
+    <Thickness x:Key="GroupBoxBorderThickness">0,1,0,0</Thickness>
+    <system:Double x:Key="GroupBoxMinHeight">24</system:Double>
+
+    <Style x:Key="DefaultHeaderedContentControl" TargetType="{x:Type HeaderedContentControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
+                    <StackPanel>
+                        <controls:ColorZone>
+                            <ContentPresenter ContentSource="Header" />
+                        </controls:ColorZone>
+                        <ContentPresenter />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="DefaultGroupBoxStyle" TargetType="{x:Type GroupBox}">
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderColorBrush}" />
+        <Setter Property="Padding" Value="15,10" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GroupBox}">
+                    <Grid x:Name="OuterGrid">
+                        <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Effect="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(assist:ElevationAssist.Elevation), Converter={x:Static converters:ShadowConverter.Instance}}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0"  Background="{DynamicResource ControlFillColorBrush}" 
+                                        BorderBrush="{DynamicResource SystemAccentColorBrush}"
+                                        BorderThickness="3,0,0,0"
+                                        />
+                                <Border Grid.Row="0"
+                                        BorderBrush="{DynamicResource ControlBorderColorBrush}"
+                                        BorderThickness="0,0,0,1"
+                                        />
+                                <ContentPresenter Grid.Row="0" ContentSource="Header" Margin="{StaticResource GroupBoxPadding}"
+                                    ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                    RecognizesAccessKey="True"
+                                    TextElement.Foreground="{TemplateBinding Foreground}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <ContentPresenter Grid.Row="1" Margin="{TemplateBinding Padding}"
+                                    ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="assist:ElevationAssist.Elevation" Value="Dp0" />
+    </Style>
+
+    <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource DefaultGroupBoxStyle}" />
+</ResourceDictionary>

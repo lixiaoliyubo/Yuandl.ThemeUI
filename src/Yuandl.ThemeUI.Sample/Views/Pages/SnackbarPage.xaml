@@ -1,0 +1,47 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.SnackbarPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:Snackbar}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SnackbarPage">
+
+    <Grid>
+        <smtx:XamlDisplay UniqueKey="SnackbarSample1" Margin="20" Tag="Global ThemeUI Snackbar inside NavigationView content.">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button Grid.Row="1" VerticalAlignment="Center" Command="{Binding OpenSnackbarCommand,  Mode=OneWay}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}" Content="Show snackbar" />
+                <StackPanel Grid.Row="0" VerticalAlignment="Center">
+                    <ComboBox  MinWidth="140"  Margin="10" VerticalAlignment="Center"  SelectedIndex="{Binding SnackbarAppearanceComboBoxSelectedIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="Custom" />
+                        <ComboBoxItem Content="Primary" />
+                        <ComboBoxItem Content="Warning" />
+                        <ComboBoxItem Content="Info" />
+                        <ComboBoxItem Content="Error" />
+                        <ComboBoxItem Content="Success" />
+                        <ComboBoxItem Content="Transparent" />
+                    </ComboBox>
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <Label Margin="10" Content="Timeout:" />
+                        <Label  Margin="10" Content="{Binding SnackbarTimeout, Mode=TwoWay}" />
+                        <Slider Margin="10" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="0" IsSnapToTickEnabled="True" Maximum="10" Minimum="1" TickFrequency="1" TickPlacement="BottomRight" Value="{Binding SnackbarTimeout, Mode=TwoWay}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+    </Grid>
+</Page>

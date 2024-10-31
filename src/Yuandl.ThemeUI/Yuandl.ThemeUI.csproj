@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net462;net47;net48;net5.0-windows;net6.0-windows;net8.0-windows</TargetFrameworks>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace>Yuandl.ThemeUI</RootNamespace>
+	<AssemblyName>Yuandl.ThemeUI</AssemblyName>
+	<PackageId>Yuandl.ThemeUI</PackageId>
+	<Product>Yuandl.ThemeUI</Product>
+	<Title>Yuandl.ThemeUI</Title>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>源动力</Company>
+    <Copyright>Copyright (C) 2024 yuandl.cn</Copyright>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Audio\shake.wav" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+    <Resource Include="app_icon.ico" />
+    <Resource Include="Resources\Audio\shake.wav" />
+    <Resource Include="Resources\Fonts\FluentSystemIcons-Filled.ttf" />
+    <Resource Include="Resources\Fonts\FluentSystemIcons-Regular.ttf" />
+  </ItemGroup>
+
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+		<PackageReference Include="System.ValueTuple" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="PolySharp">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="StyleCop.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="WpfAnalyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="License - Fluent System Icons.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="License - Microsoft.Ui.Xaml.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="License - VirtualizingWrapPanel.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="License - Windows Presentation Foundation.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="README.md">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>

@@ -1,0 +1,98 @@
+﻿<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.PinBoxPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:converters="clr-namespace:Yuandl.ThemeUI.Sample.Converters" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:PinBox}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PinBoxPage">
+
+    <Page.Resources>
+        <converters:IntToHorizontalAlignmentConverter x:Key="IntToHorizontalAlignmentConverter" />
+        <converters:IntToOrientationConverter x:Key="IntToOrientationConverter" />
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <smtx:XamlDisplay Grid.Column="0" UniqueKey="PinBoxSample1" Margin="20" Tag="An example demonstration of an adjustable PinBox control">
+            <StackPanel Margin="10">
+                <ui:PinBox x:Name="pinBox"
+                        ItemSpacing="{Binding Value,ElementName=Slider, Mode=OneWay}"
+                        HorizontalAlignment="{Binding SelectedIndex,ElementName=cmbHorizontalAlignment,Converter={StaticResource IntToHorizontalAlignmentConverter}, Mode=OneWay}"
+                        Description="{Binding Text,ElementName=txtDesc, Mode=OneWay}"
+                        FocusMode="{Binding SelectedIndex,ElementName=cmbFocusMode, Mode=OneWay}"
+                        Header="{Binding Text,ElementName=txtHeader, Mode=OneWay}"
+                        Orientation="{Binding SelectedIndex,ElementName=cmbOrientation,Converter={StaticResource IntToOrientationConverter}, Mode=OneWay}"
+                        PasswordChar="{Binding Text,ElementName=txtPassChar, Mode=OneWay}"
+                        PasswordRevealMode="{Binding SelectedIndex,ElementName=cmbPassReveal, Mode=OneWay}"
+                        PlaceholderText="{Binding Text, ElementName=txtPlaceholder, Mode=OneWay}" />
+            </StackPanel>
+        </smtx:XamlDisplay>
+        <StackPanel Grid.Column="1" Margin="10">
+            
+            <Label Content="Header"/>
+            <ui:TextBox x:Name="txtHeader" PlaceholderText="Header" Margin="0,0,0,10"/>
+            
+            <Label Content="Description"/>
+            <ui:TextBox x:Name="txtDesc" PlaceholderText="Description"  Margin="0,0,0,10"/>
+            
+            <Label Content="Password Char"/>
+            <ui:TextBox x:Name="txtPassChar" PlaceholderText="Password Char"  Text="●" Margin="0,0,0,10"/>
+            
+            <Label Content="Placeholder Text"/>
+            <ui:TextBox x:Name="txtPlaceholder" PlaceholderText="Placeholder Text" Margin="0,0,0,10"/>
+            
+            <Label Content="Password Length"/>
+            <ui:NumberBox Minimum="1"  SpinButtonPlacementMode="Inline" ValueChanged="NumberBox_ValueChanged" Value="4"  Margin="0,0,0,10"/>
+            <Slider x:Name="Slider"  Maximum="100" Minimum="0" Value="12" />
+            <UniformGrid Columns="2">
+                <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Center">
+                <Label Content="Orientation" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <ComboBox x:Name="cmbOrientation" SelectedIndex="0">
+                        <ComboBoxItem Content="Horizontal" />
+                        <ComboBoxItem Content="Vertical" />
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="20">
+                <Label Content="Horizontal Alignment"/>
+                <ComboBox x:Name="cmbHorizontalAlignment" SelectedIndex="0">
+                    <ComboBoxItem Content="Left" />
+                    <ComboBoxItem Content="Center" />
+                    <ComboBoxItem Content="Right" />
+                    <ComboBoxItem Content="Stretch" />
+                </ComboBox>
+            </StackPanel>
+            <!--<StackPanel Orientation="Vertical" Margin="20">
+                <Label Content="Password Reveal Mode"/>
+                <ComboBox x:Name="cmbPassReveal" SelectedIndex="0">
+                    <ComboBoxItem Content="Hidden" />
+                    <ComboBoxItem Content="Peek" />
+                    <ComboBoxItem Content="Visible" />
+                </ComboBox>
+            </StackPanel>-->
+             <!--<StackPanel Orientation="Vertical" Margin="10">
+                <Label Content="Show Success"/>
+                <ui:ToggleSwitch x:Name="tgShowSuccess"  />
+            </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10">
+                <Label Content="Show Error"/>
+                <ui:ToggleSwitch x:Name="tgShowError"/>
+                </StackPanel>-->
+            </UniformGrid>
+        </StackPanel>
+    </Grid>
+</Page>

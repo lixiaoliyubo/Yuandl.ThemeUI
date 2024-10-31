@@ -1,0 +1,159 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.ProgressPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProgressPage">
+
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="ProgressSample1" Margin="20" Tag="An indeterminate progress bar.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <ProgressBar IsIndeterminate="{Binding IsChecked, ElementName=tgActive1, Mode=OneWay}" Value="20" Margin="10" Orientation="Horizontal"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <ui:ToggleSwitch x:Name="tgActive1"  Content="IsIndeterminate"  IsChecked="True" />
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ProgressSample2" Margin="20" Tag="An indeterminate ThemeUI progress ring.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Left" Width="400">
+                    <ui:UniformGrid Columns="1" ColumnSpacing="10" RowSpacing="10">
+                        <ProgressBar Value="20" Style="{StaticResource ProgressBarPrimary}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="40" Style="{StaticResource ProgressBarSuccess}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="60" Style="{StaticResource ProgressBarInfo}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="80" Style="{StaticResource ProgressBarWarning}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="100" Style="{StaticResource ProgressBarDanger}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="20" Maximum="200" Style="{StaticResource ProgressBarStripePrimary}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="40" Maximum="200" Style="{StaticResource ProgressBarStripeSuccess}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="60" Maximum="200" Style="{StaticResource ProgressBarStripeInfo}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="80" Maximum="200" Style="{StaticResource ProgressBarStripeWarning}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                        <ProgressBar Value="100" Maximum="200" Style="{StaticResource ProgressBarStripeDanger}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}"/>
+                    </ui:UniformGrid>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Left">
+                    <ui:UniformGrid Rows="1" ColumnSpacing="20" RowSpacing="10" Height="300" Width="400">
+                        <ProgressBar Value="20" Width="20" Style="{StaticResource ProgressBarPrimary}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="40" Width="20" Style="{StaticResource ProgressBarSuccess}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="60" Width="20" Style="{StaticResource ProgressBarInfo}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="80" Width="20" Style="{StaticResource ProgressBarWarning}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="100" Width="20" Style="{StaticResource ProgressBarDanger}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="20" Width="20" Maximum="200" Style="{StaticResource ProgressBarStripePrimary}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="40" Width="20" Maximum="200" Style="{StaticResource ProgressBarStripeSuccess}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="60" Width="20" Maximum="200" Style="{StaticResource ProgressBarStripeInfo}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="80" Width="20" Maximum="200" Style="{StaticResource ProgressBarStripeWarning}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                        <ProgressBar Value="100" Width="20" Maximum="200" Style="{StaticResource ProgressBarStripeDanger}" IsIndeterminate="{Binding IsChecked, ElementName=tgActive2, Mode=OneWay}" Orientation="Vertical"/>
+                    </ui:UniformGrid>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <ui:ToggleSwitch x:Name="tgActive2"  Content="IsIndeterminate"  IsChecked="True" />
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ProgressSample3" Margin="20" Tag="An indeterminate ThemeUI progress ring.">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <ui:ProgressRing IsIndeterminate="{Binding IsChecked, ElementName=tgActive3, Mode=OneWay}" Margin="10"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <ui:ToggleSwitch x:Name="tgActive3"  Content="IsIndeterminate"  IsChecked="True" />
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ProgressSample4" Margin="20" Tag="A different style of LoadingIndicator">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <ui:UniformGrid ColumnSpacing="10" Columns="5" RowSpacing="10">
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="Arcs" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="ArcsRing" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="DoubleBounce" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="FlipPlane" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="Pulse" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="Ring" />
+                        <ui:LoadingIndicator IsActive="{Binding IsChecked, ElementName=tgActive4, Mode=OneWay}" Mode="ThreeDots" />
+                    </ui:UniformGrid>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <ui:ToggleSwitch x:Name="tgActive4"  Content="IsActive"  IsChecked="True" />
+                </StackPanel>
+            </Grid>
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="ProgressSample5" Margin="20" Tag="An indeterminate ThemeUI progress ring.">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="150" Height="150" Margin="15" x:Name="cmdGrow" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <RotateTransform x:Name="MyRotate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Effect>
+                        <DropShadowEffect Color="#03000000" ShadowDepth="0" BlurRadius="25" Opacity="0.5" Direction="30"/>
+                    </Grid.Effect>
+                    <ui:Arc EndAngle="-60" StartAngle="0" Stroke="Blue" StrokeThickness="20" />
+                    <ui:Arc EndAngle="-120" StartAngle="-60" Stroke="{ui:ThemeResource SystemAccentColorBrush}" StrokeThickness="20" />
+                    <ui:Arc EndAngle="-180" StartAngle="-120" Stroke="Yellow" StrokeThickness="20" />
+                    <ui:Arc EndAngle="60" StartAngle="0" Stroke="Red" StrokeThickness="20" />
+                    <ui:Arc EndAngle="120" StartAngle="60" Stroke="Orange" StrokeThickness="20" />
+                    <ui:Arc EndAngle="180" StartAngle="120" Stroke="Green" StrokeThickness="20" />
+                    <Grid Width="60" Height="60" Margin="15">
+                        <ui:Arc EndAngle="350" StartAngle="0" Stroke="{ui:ThemeResource SystemAccentColorBrush}" StrokeThickness="30"/>
+                        <Grid.Effect>
+                            <DropShadowEffect x:Name="effect"  Color="#03000000" ShadowDepth="0" BlurRadius="25" Opacity="0.5" Direction="30"/>
+                        </Grid.Effect>
+                    </Grid>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Grid.Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="MyRotate"
+                                            Storyboard.TargetProperty="Angle"
+                                            From="0" To="360"
+                                            Duration="0:0:2"
+                                            RepeatBehavior="Forever"/>
+                                        <DoubleAnimation
+                                            AutoReverse="True"
+                                            Storyboard.TargetName="effect"
+                                            Storyboard.TargetProperty="BlurRadius"
+                                            From="5" To="40"
+                                            Duration="0:0:1"
+                                            RepeatBehavior="Forever"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+            </StackPanel>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

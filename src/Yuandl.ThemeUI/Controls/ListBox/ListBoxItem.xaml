@@ -1,0 +1,115 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
+    xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist">
+
+    <converters:BrushRoundConverter x:Key="BrushRoundConverter" />
+    <converters:BrushToColorConverter x:Key="BrushToColorConverter" />
+    <converters:BrushOpacityConverter x:Key="BrushOpacityConverter" />
+
+    <Style x:Key="DefaultListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderColorBrush}" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="6" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Border.CornerRadius" Value="0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="assist:ListBoxItemAssist.HoverBackground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.1}" />
+        <Setter Property="assist:ListBoxItemAssist.SelectedFocusedBackground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.18}" />
+        <Setter Property="assist:ListBoxItemAssist.SelectedUnfocusedBackground" Value="{Binding Foreground, RelativeSource={RelativeSource Self}, Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.09}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border 
+                        x:Name="Border" 
+                        Margin="{TemplateBinding Margin}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        ClipToBounds="{TemplateBinding ClipToBounds}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.3" To="Normal">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CircleEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState Name="Normal" />
+                                <VisualState Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="MouseOverBorder" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Disabled" />
+                            </VisualStateGroup>
+                            <VisualStateGroup Name="SelectionStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.6" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState Name="Selected">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SelectedBorder" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Unselected" />
+                                <VisualState Name="SelectedUnfocused">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="SelectedUnfocusedBorder" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid>
+                            <Border x:Name="MouseOverBorder" Background="{Binding Path=(assist:ListBoxItemAssist.HoverBackground), RelativeSource={RelativeSource TemplatedParent}}" Opacity="0" />
+                            <Border x:Name="SelectedBorder" Background="{Binding Path=(assist:ListBoxItemAssist.SelectedFocusedBackground), RelativeSource={RelativeSource TemplatedParent}}" Opacity="0" />
+                            <Border x:Name="SelectedUnfocusedBorder" Background="{Binding Path=(assist:ListBoxItemAssist.SelectedUnfocusedBackground), RelativeSource={RelativeSource TemplatedParent}}" Opacity="0" />
+                            <assist:Ripple x:Name="Ripple"
+                              Padding="{TemplateBinding Padding}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                              Feedback="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"
+                              Focusable="False"
+                              RecognizesAccessKey="False"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                            <Setter  TargetName="Border" Property="Background" Value="{DynamicResource ControlFillSecondaryColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value=".56" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            <Setter TargetName="Border" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(assist:ListBoxItemAssist.ShowSelection)}" Value="False">
+                            <Setter TargetName="MouseOverBorder" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Ripple" Property="Feedback" Value="Transparent" />
+                            <Setter TargetName="SelectedBorder" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="SelectedUnfocusedBorder" Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style BasedOn="{StaticResource DefaultListBoxItemStyle}" TargetType="{x:Type ListBoxItem}" />
+
+</ResourceDictionary>

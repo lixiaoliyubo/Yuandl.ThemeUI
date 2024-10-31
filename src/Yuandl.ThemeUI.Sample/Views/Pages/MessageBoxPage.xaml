@@ -1,0 +1,33 @@
+<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<Page x:Class="Yuandl.ThemeUI.Sample.Views.Pages.MessageBoxPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample.Views.Pages" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml" 
+      xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls" 
+      xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
+      controls:PageControlDocumentation.DocumentationType="{x:Type ui:MessageBox}"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MessageBoxPage">
+    <StackPanel Orientation="Vertical">
+        <smtx:XamlDisplay UniqueKey="MessageBoxSample1" Margin="20" Tag="Standard MessageBox.">
+            <Button Margin="10"
+                Command="{Binding OpenStandardMessageBoxCommand, Mode=OneWay}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                Content="Open standard MessageBox" />
+        </smtx:XamlDisplay>
+        <smtx:XamlDisplay UniqueKey="MessageBoxSample2" Margin="20" Tag="Theme UI MessageBox.">
+            <Button Margin="10"
+                Command="{Binding OpenCustomMessageBoxCommand, Mode=OneWay}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                Content="Open custom MessageBox"/>
+        </smtx:XamlDisplay>
+    </StackPanel>
+</Page>

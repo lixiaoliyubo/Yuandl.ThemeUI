@@ -1,0 +1,80 @@
+﻿<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
+    xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/PasswordBox/PasswordBox.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <system:Double x:Key="PinBoxMinHeight">32</system:Double>
+    <system:Double x:Key="PinBoxMinWidth">42</system:Double>
+    <Thickness x:Key="PasswordBoxTopHeaderMargin">0,0,0,8</Thickness>
+
+
+    <Style x:Key="PinBoxPasswordBoxStyle" BasedOn="{StaticResource DefaultPasswordBoxStyle}" TargetType="{x:Type PasswordBox}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="MinHeight" Value="{StaticResource PinBoxMinHeight}" />
+        <Setter Property="MinWidth" Value="{StaticResource PinBoxMinWidth}" />
+        <!--<Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+    <Style TargetType="{x:Type controls:PinBox}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource ControlFillColorBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderColorBrush}" />
+        <Setter Property="ItemWidth" Value="50" />
+        <Setter Property="ItemSpacing" Value="10" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="PlaceholderText" Value="*" />
+        <Setter Property="Border.CornerRadius" Value="{StaticResource ControlCornerRadius}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:PinBox}">
+                    <Grid>
+                        <Grid.Resources>
+                            <Style BasedOn="{StaticResource PinBoxPasswordBoxStyle}" TargetType="{x:Type PasswordBox}" />
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ContentPresenter x:Name="HeaderContentPresenter"
+                                          Grid.Row="0"
+                                          Margin="{StaticResource PasswordBoxTopHeaderMargin}"
+                                          VerticalAlignment="Top"
+                                          Content="{TemplateBinding Header}"
+                                          TextElement.FontWeight="Normal"
+                                          TextElement.Foreground="{DynamicResource ControlTextColorBrush}"
+                                          />
+                        <controls:UniformGrid x:Name="PART_Panel"
+                                           Grid.Row="1"
+                                           Rows="1"
+                                           Orientation="{TemplateBinding Orientation}" />
+                        <ContentPresenter x:Name="DescriptionPresenter"
+                                          Grid.Row="2"
+                                          Content="{TemplateBinding Description}"
+                                          TextElement.Foreground="{DynamicResource ControlTextColorBrush}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

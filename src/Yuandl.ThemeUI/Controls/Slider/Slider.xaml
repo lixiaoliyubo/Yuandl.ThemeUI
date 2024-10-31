@@ -1,0 +1,298 @@
+﻿<!--
+    This Source Code Form is subject to the terms of the MIT License.
+    If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
+    Copyright (C) Yuandl ThemeUI. All Rights Reserved.
+-->
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
+    xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist">
+
+    <converters:HsbToColorConverter x:Key="HsbToColorConverter" />
+
+
+    <LinearGradientBrush x:Key="HorizontalGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#FF0000" />
+        <GradientStop Offset="0.166" Color="#FFFF00" />
+        <GradientStop Offset="0.333" Color="#00FF00" />
+        <GradientStop Offset="0.5" Color="#00FFFF" />
+        <GradientStop Offset="0.666" Color="#0000FF" />
+        <GradientStop Offset="0.833" Color="#FF00FF" />
+        <GradientStop Offset="1.0" Color="#FF0000" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="VerticalGradientBrush" StartPoint="1,1" EndPoint="0,0">
+        <GradientStop Offset="0" Color="#FF0000" />
+        <GradientStop Offset="0.166" Color="#FFFF00" />
+        <GradientStop Offset="0.333" Color="#00FF00" />
+        <GradientStop Offset="0.5" Color="#00FFFF" />
+        <GradientStop Offset="0.666" Color="#0000FF" />
+        <GradientStop Offset="0.833" Color="#FF00FF" />
+        <GradientStop Offset="1.0" Color="#FF0000" />
+    </LinearGradientBrush>
+
+
+    <ControlTemplate x:Key="ColorSliderThumb" TargetType="{x:Type Thumb}">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" UseLayoutRounding="True">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grip" Storyboard.TargetProperty="RenderTransform.ScaleX">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.3" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grip" Storyboard.TargetProperty="RenderTransform.ScaleY">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.3" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grip" Storyboard.TargetProperty="RenderTransform.ScaleX">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.3" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grip" Storyboard.TargetProperty="RenderTransform.ScaleY">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1.3" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grip" Storyboard.TargetProperty="RenderTransform.ScaleX">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1.3">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grip" Storyboard.TargetProperty="RenderTransform.ScaleY">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1.3">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Ellipse Width="20" Height="20" Fill="{DynamicResource TextFillColorPrimaryBrush}" Stroke="{DynamicResource ControlBorderColorBrush}" RenderTransformOrigin=".5,.5" UseLayoutRounding="True" />
+            <Ellipse x:Name="shadow" Width="24" Height="24" Margin="-12" Fill="{TemplateBinding Foreground}" Opacity=".0" UseLayoutRounding="True" />
+            <Ellipse x:Name="grip" Width="16" Height="16" Fill="{TemplateBinding Foreground}" RenderTransformOrigin=".5,.5" UseLayoutRounding="True">
+                <Ellipse.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                </Ellipse.RenderTransform>
+            </Ellipse>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity" To=".26"  Duration="0:0:0.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="shadow" Storyboard.TargetProperty="Opacity" To=".0" Duration="0:0:0.2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="grip" Property="Fill" Value="{DynamicResource ControlDisabledFillColorBrush}" />
+                <Setter TargetName="grip" Property="Stroke" Value="{DynamicResource ControlDisabledBorderColorBrush}" />
+            </Trigger>
+            <DataTrigger Binding="{Binding Path=(assist:SilderAssist.IsGradient), RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                <Setter Property="Foreground">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource HsbToColorConverter}">
+                            <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" />
+                            <Binding>
+                                <Binding.Source>
+                                    <system:Double>1</system:Double>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>
+                                    <system:Double>1</system:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <Style x:Key="UiSliderButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UiSliderThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlElevationBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{DynamicResource ControlSolidFillColorDefaultBrush}" />
+        <Setter Property="Template" Value="{StaticResource ColorSliderThumb}"/>
+    </Style>
+
+    <!--  Template when the orientation of the Slider is Horizontal.  -->
+    <ControlTemplate x:Key="UiHorizontalSlider" TargetType="{x:Type Slider}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TickBar x:Name="TopTick" Grid.Row="0" Height="6" Fill="{DynamicResource ControlBorderColorBrush}" Placement="Top" SnapsToDevicePixels="True" Visibility="Collapsed" />
+            <Border x:Name="TrackBackground" Grid.Row="1" Height="4" Margin="0" Background="{DynamicResource ControlBorderColorBrush}" BorderThickness="0" CornerRadius="2" />
+            <Track x:Name="PART_Track" Grid.Row="1">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UiSliderButtonStyle}" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb x:Name="Thumb" Style="{StaticResource UiSliderThumbStyle}">
+                    </Thumb>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderButtonStyle}" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <TickBar x:Name="BottomTick" Grid.Row="2" Height="6" Fill="{DynamicResource ControlBorderColorBrush}" Placement="Bottom" SnapsToDevicePixels="True" Visibility="Collapsed" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="TickPlacement" Value="TopLeft">
+                <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="BottomRight">
+                <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="Both">
+                <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource ControlBorderColorBrush}" />
+            </Trigger>
+            <Trigger Property="assist:SilderAssist.IsGradient" Value="True">
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource HorizontalGradientBrush}" />
+                <Setter Property="Maximum" Value="360" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Thumb" Property="Foreground" Value="{DynamicResource ControlDisableTextColorBrush}" />
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource ControlDisabledFillColorBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--  Template when the orientation of the Slider is Vertical.  -->
+    <ControlTemplate x:Key="UiVerticalSlider" TargetType="{x:Type Slider}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TickBar x:Name="TopTick" Width="6" Fill="Transparent" Placement="Left" SnapsToDevicePixels="True" Visibility="Collapsed" />
+            <Border x:Name="TrackBackground" Grid.Column="1" Width="4" Margin="0" Background="{DynamicResource ControlBorderColorBrush}" BorderThickness="0" CornerRadius="2" />
+            <Track x:Name="PART_Track" Grid.Column="1">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UiSliderButtonStyle}" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb x:Name="Thumb" Style="{StaticResource UiSliderThumbStyle}"> </Thumb>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UiSliderButtonStyle}" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <TickBar x:Name="BottomTick" Grid.Column="2" Width="6" Fill="Transparent" Placement="Right" SnapsToDevicePixels="True" Visibility="Collapsed" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="TickPlacement" Value="TopLeft">
+                <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="BottomRight">
+                <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="TickPlacement" Value="Both">
+                <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource ControlBorderColorBrush}" />
+            </Trigger>
+            <Trigger Property="assist:SilderAssist.IsGradient" Value="True">
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource VerticalGradientBrush}"/>
+                <Setter Property="Maximum" Value="360" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Thumb" Property="Foreground" Value="{DynamicResource ControlDisableTextColorBrush}" />
+                <Setter TargetName="TrackBackground" Property="Background" Value="{DynamicResource ControlDisabledFillColorBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type Slider}">
+        <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="assist:SilderAssist.IsGradient" Value="False" />
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="MinWidth" Value="104" />
+                <Setter Property="MinHeight" Value="21" />
+                <Setter Property="Maximum" Value="360" />
+                <Setter Property="Template" Value="{StaticResource UiHorizontalSlider}" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="MinWidth" Value="21" />
+                <Setter Property="MinHeight" Value="104" />
+                <Setter Property="Template" Value="{StaticResource UiVerticalSlider}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
