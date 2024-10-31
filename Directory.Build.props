@@ -26,8 +26,8 @@
     <RepositoryUrl>https://github.com/lixiaoliyubo/Yuandl.ThemeUI</RepositoryUrl>
     <RepositoryBranch>master</RepositoryBranch>
     <RepositoryType>git</RepositoryType>
-    <Description>Yuandl.ThemeUI是一款面向Microsoft.Ui.Xaml的现代化UI组件库，提供了丰富的ui组件，拥有最直观、丰富，简洁的主题设计️，让您在开发WPF中毫不费力.</Description>
-    <PackageTags>Yuandl.ThemeUI是一款面向Microsoft.Ui.Xaml的现代化UI组件库，提供了丰富的ui组件，拥有最直观、丰富，简洁的主题设计️，让您在开发WPF中毫不费力</PackageTags>
+    <Description>Yuandl.ThemeUI是一款面向WinUi3的现代化UI组件库，提供了丰富的ui组件，拥有最直观、丰富，简洁的主题设计️,让您在开发WPF中毫不费力.</Description>
+    <PackageTags>Yuandl.ThemeUI是一款面向WinUi3的现代化UI组件库，提供了丰富的ui组件，拥有最直观、丰富，简洁的主题设计️,让您在开发WPF中毫不费力</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
