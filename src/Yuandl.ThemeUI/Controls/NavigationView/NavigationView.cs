@@ -390,7 +390,13 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
             return Navigate(navigationViewItem, dataContext);
         }
 
-        return false;
+        navigationViewItem = new PageViewItem() { PageType = PageType, PageTag = Guid.NewGuid().ToString(), DataContent = dataContext };
+
+        PageIdOrTargetTagNavigationViewsDictionary.Add(navigationViewItem.PageTag, navigationViewItem);
+
+        _ = NavigationPages.TryAdd(PageType, navigationViewItem);
+
+        return Navigate(navigationViewItem, dataContext);
     }
 
     /// <inheritdoc />
@@ -408,11 +414,6 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         _ = UpdateContent(pageInstance, dataContext);
 
         AddToJournal(viewItem, isBackwardsNavigated);
-
-        if (Sidebar?.SelectedItem != viewItem && Sidebar != null)
-        {
-            Sidebar?.OnNavigationViewItemClick(viewItem);
-        }
 
         SelectedItem = viewItem;
 
