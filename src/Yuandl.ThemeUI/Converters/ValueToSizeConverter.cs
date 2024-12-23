@@ -9,12 +9,12 @@ public class ValueToSizeConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (int.Parse(value?.ToString() ?? "0") <= 0 && int.Parse(parameter?.ToString() ?? "0") < 0)
+        if (double.Parse(value?.ToString() ?? "0") <= 0 && double.Parse(parameter?.ToString() ?? "0") < 0)
         {
             return 0;
         }
 
-        return int.Parse(value?.ToString() ?? "0") + int.Parse(parameter?.ToString() ?? "0");
+        return double.Parse(value?.ToString() ?? "0") + double.Parse(parameter?.ToString() ?? "0");
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
