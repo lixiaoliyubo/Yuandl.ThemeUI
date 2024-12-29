@@ -25,7 +25,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="DialogMaxHeight" Value="850" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Padding" Value="24" />
+        <Setter Property="Padding" Value="15" />
         <Setter Property="DialogMaxWidth" Value="1000" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -69,32 +69,52 @@
                                 <Border Background="{DynamicResource ControlFillColorBrush}" CornerRadius="{StaticResource DialogOverlayCornerRadius}" />
                                 <Grid
                                     Grid.Row="0"
-                                    Margin="24,10"
+                                    Margin="0"
                                     Focusable="False">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter
+                                            Margin="20,20,0,0"
+                                            Content="{TemplateBinding Title}"
+                                            ContentTemplate="{TemplateBinding TitleTemplate}"
+                                            TextBlock.FontSize="20"
+                                            TextBlock.FontWeight="SemiBold">
+                                            <ContentPresenter.Resources>
+                                                <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+                                                </Style>
+                                            </ContentPresenter.Resources>
+                                        </ContentPresenter>
 
-                                    <ContentPresenter
-                                        Grid.Row="0"
-                                        Margin="0,12,0,0"
-                                        Content="{TemplateBinding Title}"
-                                        ContentTemplate="{TemplateBinding TitleTemplate}"
-                                        TextBlock.FontSize="20"
-                                        TextBlock.FontWeight="SemiBold">
-                                        <ContentPresenter.Resources>
-                                            <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
-                                                <Setter Property="TextWrapping" Value="WrapWithOverflow" />
-                                            </Style>
-                                        </ContentPresenter.Resources>
-                                    </ContentPresenter>
+                                        <controls:Button
+                                            Grid.Column="1"
+                                            BorderThickness="0"
+                                            Padding="5"
+                                            HorizontalAlignment="Stretch"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:ContentDialog}}, Mode=OneTime, Path=TemplateButtonCommand}"
+                                            CommandParameter="{x:Static controls:ContentDialogButton.Close}"
+                                            IsCancel="True">
+                                            <controls:Button.Icon>
+                                                <controls:SymbolIcon
+                                                    Filled="True"
+                                                    FontSize="26"
+                                                    Symbol="Dismiss24" />
+                                            </controls:Button.Icon>
+                                        </controls:Button>
+                                    </Grid>
 
                                     <controls:PassiveScrollViewer
                                         x:Name="PART_ContentScroll"
                                         Grid.Row="1"
                                         Margin="0,20"
-                                        Padding="0,0,12,0"
+                                        Padding="{TemplateBinding Padding}"
                                         CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}"
                                         HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                         IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
@@ -118,7 +138,7 @@
 
                                 <Border
                                     Grid.Row="1"
-                                    Padding="{TemplateBinding Padding}"
+                                    Padding="10"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Bottom"
                                     BorderBrush="{DynamicResource ControlBorderColorBrush}"

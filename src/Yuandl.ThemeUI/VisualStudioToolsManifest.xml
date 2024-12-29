@@ -54,6 +54,7 @@
       <Item Type="Yuandl.ThemeUI.Controls.VirtualizingGridView" />
       <Item Type="Yuandl.ThemeUI.Controls.VirtualizingItemsControl" />
       <Item Type="Yuandl.ThemeUI.Controls.VirtualizingWrapPanel" />
+      <Item Type="Yuandl.ThemeUI.Controls.FormItem" />
     </ToolboxItems>
   </File>
 </FileList>

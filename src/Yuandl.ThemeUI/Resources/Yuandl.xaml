@@ -29,6 +29,7 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/DropDownButton/DropDownButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/HyperlinkButton/HyperlinkButton.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Anchor/Anchor.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/FormItem/FormItem.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Tag/Tag.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Carousel/Carousel.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ColorPicker/ColorPicker.xaml" />
