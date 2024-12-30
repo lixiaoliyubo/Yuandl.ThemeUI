@@ -433,14 +433,14 @@ public partial class PinBox : System.Windows.Controls.Control
             {
                 case Orientation.Vertical:
                     _uniformGrid.Rows = PasswordLength;
-                    _uniformGrid.RowSpacing = ItemSpacing;
+                    _uniformGrid.RowSpacing = (int)ItemSpacing;
                     _uniformGrid.Columns = 1;
                     break;
                 case Orientation.Horizontal:
 
                     _uniformGrid.Rows = 1;
                     _uniformGrid.Columns = PasswordLength;
-                    _uniformGrid.ColumnSpacing = ItemSpacing;
+                    _uniformGrid.ColumnSpacing = (int)ItemSpacing;
                     break;
             }
         }

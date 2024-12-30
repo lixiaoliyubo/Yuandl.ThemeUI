@@ -39,6 +39,7 @@
       <Item Type="Yuandl.ThemeUI.Controls.NumberBox" />
       <Item Type="Yuandl.ThemeUI.Controls.PasswordBox" />
       <Item Type="Yuandl.ThemeUI.Controls.ProgressRing" />
+      <Item Type="Yuandl.ThemeUI.Controls.UniformGrid" />
       <Item Type="Yuandl.ThemeUI.Controls.RatingControl" />
       <Item Type="Yuandl.ThemeUI.Controls.RichTextBox" />
       <Item Type="Yuandl.ThemeUI.Controls.Snackbar" />
