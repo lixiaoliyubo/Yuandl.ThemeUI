@@ -9,7 +9,7 @@ namespace Yuandl.ThemeUI.Services;
 /// <summary>
 /// A service that provides methods related to navigation.
 /// </summary>
-public partial class NavigationService() : INavigationService
+public partial class NavigationService : INavigationService
 {
     /// <summary>
     /// Gets or sets the control representing navigation.
