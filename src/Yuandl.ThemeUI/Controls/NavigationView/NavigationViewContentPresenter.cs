@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
+using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Yuandl.ThemeUI.ElementAssist;
@@ -177,47 +178,38 @@ public class NavigationViewContentPresenter : Frame
 
     private static void NotifyContentAboutNavigatingTo(object content)
     {
-        if (content is INavigationAware navigationAwareNavigationContent)
-        {
-            navigationAwareNavigationContent.OnNavigatedTo();
-        }
-
-        if (
-            content is INavigableView<object>
-            {
-                ViewModel: INavigationAware navigationAwareNavigableViewViewModel
-            }
-        )
-        {
-            navigationAwareNavigableViewViewModel.OnNavigatedTo();
-        }
-
-        if (content is FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent })
-        {
-            navigationAwareCurrentContent.OnNavigatedTo();
-        }
+        NotifyContentAboutNavigating(content, navigationAware => navigationAware.OnNavigatedToAsync());
     }
 
     private static void NotifyContentAboutNavigatingFrom(object content)
     {
-        if (content is INavigationAware navigationAwareNavigationContent)
-        {
-            navigationAwareNavigationContent.OnNavigatedFrom();
-        }
+        NotifyContentAboutNavigating(content, navigationAware => navigationAware.OnNavigatedFromAsync());
+    }
 
-        if (
-            content is INavigableView<object>
-            {
-                ViewModel: INavigationAware navigationAwareNavigableViewViewModel
-            }
-        )
+    private static void NotifyContentAboutNavigating(object content, Func<INavigationAware, Task> function)
+    {
+        switch (content)
         {
-            navigationAwareNavigableViewViewModel.OnNavigatedFrom();
-        }
+            // The order in which the OnNavigatedToAsync/OnNavigatedFromAsync methods of View and ViewModel are called
+            // is not guaranteed
+            case INavigationAware navigationAwareNavigationContent:
+                _ = Task.Run(() => function(navigationAwareNavigationContent)).ConfigureAwait(false);
+                if (
+                    navigationAwareNavigationContent
+                        is FrameworkElement { DataContext: INavigationAware viewModel }
+                    && !ReferenceEquals(viewModel, navigationAwareNavigationContent)
+                )
+                {
+                    _ = Task.Run(() => function(viewModel)).ConfigureAwait(false);
+                }
 
-        if (content is FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent })
-        {
-            navigationAwareCurrentContent.OnNavigatedFrom();
+                break;
+            case INavigableView<object> { ViewModel: INavigationAware navigationAwareNavigableViewViewModel }:
+                _ = Task.Run(() => function(navigationAwareNavigableViewViewModel)).ConfigureAwait(false);
+                break;
+            case FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent }:
+                _ = Task.Run(() => function(navigationAwareCurrentContent)).ConfigureAwait(false);
+                break;
         }
     }
 }

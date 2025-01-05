@@ -231,7 +231,6 @@ public partial class SidebarMenu : System.Windows.Controls.Control
     internal static SidebarMenu? GetNavigationParent(DependencyObject navigationItem) =>
         navigationItem.GetValue(NavigationParentProperty) as SidebarMenu;
 
-
     private readonly ObservableCollection<string> _autoSuggestBoxItems = [];
     private static readonly Thickness AutoSuggestBoxMarginDefault = new(8, 8, 8, 16);
 

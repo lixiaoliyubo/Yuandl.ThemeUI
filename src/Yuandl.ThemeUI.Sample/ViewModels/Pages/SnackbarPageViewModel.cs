@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class SnackbarPageViewModel : ObservableObject
+public partial class SnackbarPageViewModel : ViewModel
 {
     private readonly ISnackbarService _snackbarService;
 

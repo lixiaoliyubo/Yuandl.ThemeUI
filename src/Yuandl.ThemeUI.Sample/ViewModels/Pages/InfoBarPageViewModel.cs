@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class InfoBarPageViewModel : ObservableObject
+public partial class InfoBarPageViewModel : ViewModel
 {
     [ObservableProperty]
     private bool _isShortInfoBarOpened = true;

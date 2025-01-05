@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ImagePageViewModel : ObservableObject
+public partial class ImagePageViewModel : ViewModel
 {
 }

@@ -8,7 +8,7 @@ using Yuandl.ThemeUI.Sample.Views.Pages;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class SidebarMenuPageViewModel : ObservableObject
+public partial class SidebarMenuPageViewModel : ViewModel
 {
     public SidebarMenuPageViewModel()
     {

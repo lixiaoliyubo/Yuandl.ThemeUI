@@ -3,6 +3,6 @@
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ColorZonePageViewModel : ObservableObject
+public partial class ColorZonePageViewModel : ViewModel
 {
 }

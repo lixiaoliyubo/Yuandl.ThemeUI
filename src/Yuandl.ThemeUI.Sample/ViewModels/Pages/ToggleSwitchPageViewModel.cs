@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ToggleSwitchPageViewModel : ObservableObject
+public partial class ToggleSwitchPageViewModel : ViewModel
 {
     [ObservableProperty]
     private bool _isToggleSwitchEnabled = true;

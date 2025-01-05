@@ -6,7 +6,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class IconsPageViewModel : ObservableObject
+public partial class IconsPageViewModel : ViewModel
 {
     private int _selectedIconId = 0;
 
@@ -91,9 +91,9 @@ public partial class IconsPageViewModel : ObservableObject
         });
     }
 
-    public void OnNavigatedTo() { }
+    public override void OnNavigatedTo() { }
 
-    public void OnNavigatedFrom() { }
+    public override void OnNavigatedFrom() { }
 
     [RelayCommand]
     public void OnIconSelectedEvent(int parameter)

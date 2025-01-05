@@ -3,9 +3,10 @@
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 
 
+
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class SettingsPageViewModel : ObservableObject, INavigationAware
+public partial class SettingsPageViewModel : ViewModel
 {
     [ObservableProperty]
     private string pageTitle = "软件设置";
@@ -27,7 +28,7 @@ public partial class SettingsPageViewModel : ObservableObject, INavigationAware
         ApplicationThemeManager.Apply(newValue);
     }
 
-    public void OnNavigatedTo()
+    public override void OnNavigatedTo()
     {
         if (!_isInitialized)
         {
@@ -35,7 +36,7 @@ public partial class SettingsPageViewModel : ObservableObject, INavigationAware
         }
     }
 
-    public void OnNavigatedFrom() { }
+    public override void OnNavigatedFrom() { }
 
     private void InitializeViewModel()
     {

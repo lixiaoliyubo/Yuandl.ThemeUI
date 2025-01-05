@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Yuandl.ThemeUI.Sample.Models;
 
-public class MenuItemData : ObservableObject
+public class MenuItemData : ViewModel
 {
     public IconElement Icon { get; set; }
 

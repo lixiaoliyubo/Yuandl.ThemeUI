@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class DropDownButtonPageViewModel : ObservableObject
+public partial class DropDownButtonPageViewModel : ViewModel
 {
 }

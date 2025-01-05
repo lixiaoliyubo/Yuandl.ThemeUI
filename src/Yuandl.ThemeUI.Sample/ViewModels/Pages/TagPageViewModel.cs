@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class TagPageViewModel : ObservableObject
+public partial class TagPageViewModel : ViewModel
 {
 }

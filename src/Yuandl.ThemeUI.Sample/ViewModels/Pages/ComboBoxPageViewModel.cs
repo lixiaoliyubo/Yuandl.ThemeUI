@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ComboBoxPageViewModel : ObservableObject
+public partial class ComboBoxPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ObservableCollection<string> _comboBoxFontFamilies =

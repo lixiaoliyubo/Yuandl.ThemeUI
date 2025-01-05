@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class TreePageViewModel : ObservableObject
+public partial class TreePageViewModel : ViewModel
 {
 }

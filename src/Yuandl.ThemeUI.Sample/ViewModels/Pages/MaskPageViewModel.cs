@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class MaskPageViewModel : ObservableObject
+public partial class MaskPageViewModel : ViewModel
 {
 }

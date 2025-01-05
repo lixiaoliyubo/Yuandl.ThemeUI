@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class StepPageViewModel : ObservableObject
+public partial class StepPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ObservableCollection<string> _steps = new();

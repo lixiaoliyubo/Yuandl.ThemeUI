@@ -8,7 +8,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class PaginationPageViewModel : ObservableObject
+public partial class PaginationPageViewModel : ViewModel
 {
     private readonly List<SelectableViewModel> data = new List<SelectableViewModel>();
 

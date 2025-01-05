@@ -8,7 +8,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class HomePageViewModel : ObservableObject
+public partial class HomePageViewModel : ViewModel
 {
     [ObservableProperty]
     private ICollection<NavigationCard> _navigationCards = new ObservableCollection<NavigationCard>(

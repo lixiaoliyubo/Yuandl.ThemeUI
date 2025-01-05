@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class PinBoxPageViewModel : ObservableObject
+public partial class PinBoxPageViewModel : ViewModel
 {
 }

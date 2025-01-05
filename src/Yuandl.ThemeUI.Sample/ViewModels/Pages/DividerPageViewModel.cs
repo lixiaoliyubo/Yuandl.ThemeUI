@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class DividerPageViewModel : ObservableObject
+public partial class DividerPageViewModel : ViewModel
 {
 }

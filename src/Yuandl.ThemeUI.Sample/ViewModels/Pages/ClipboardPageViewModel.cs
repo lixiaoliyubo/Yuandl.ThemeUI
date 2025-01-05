@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ClipboardPageViewModel : ObservableObject
+public partial class ClipboardPageViewModel : ViewModel
 {
     [ObservableProperty]
     private string _textToCopy = "This text will be copied to the clipboard.";

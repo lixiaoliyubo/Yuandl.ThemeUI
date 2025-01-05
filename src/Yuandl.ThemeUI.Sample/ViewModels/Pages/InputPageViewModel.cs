@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class TextBoxPageViewModel : ObservableObject
+public partial class TextBoxPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ThemeResource[] enumValues = (ThemeResource[])Enum.GetValues(typeof(ThemeResource));

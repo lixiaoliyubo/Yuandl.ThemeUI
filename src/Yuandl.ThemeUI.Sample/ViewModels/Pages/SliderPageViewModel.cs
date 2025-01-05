@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class SliderPageViewModel : ObservableObject
+public partial class SliderPageViewModel : ViewModel
 {
     [ObservableProperty]
     private int _simpleSliderValue = 0;

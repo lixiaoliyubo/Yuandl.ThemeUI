@@ -4,9 +4,8 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ViewModel
 {
-
     [ObservableProperty]
     private string pageTitle = "源动力 ThemeUI";
 

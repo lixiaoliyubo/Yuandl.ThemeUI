@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class NotificationPageViewModel : ObservableObject
+public partial class NotificationPageViewModel : ViewModel
 {
     [RelayCommand]
     private void OnButton(object sender)

@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class DatePickerPageViewModel : ObservableObject
+public partial class DatePickerPageViewModel : ViewModel
 {
 }

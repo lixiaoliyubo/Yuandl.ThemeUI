@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class HyperlinkButtonPageViewModel : ObservableObject
+public partial class HyperlinkButtonPageViewModel : ViewModel
 {
     [ObservableProperty]
     private bool _isHyperlinkEnabled = true;

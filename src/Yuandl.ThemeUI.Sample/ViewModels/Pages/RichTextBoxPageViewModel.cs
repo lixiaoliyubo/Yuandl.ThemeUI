@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class RichTextBoxPageViewModel : ObservableObject
+public partial class RichTextBoxPageViewModel : ViewModel
 {
 }

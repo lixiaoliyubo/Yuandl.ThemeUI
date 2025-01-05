@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.Models;
 
-public partial class ThemeColorEntity : ObservableObject
+public partial class ThemeColorEntity : ViewModel
 {
     public string? Name { get; set; }
 

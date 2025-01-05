@@ -3,7 +3,7 @@
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class CardPageViewModel : ObservableObject
+public partial class CardPageViewModel : ViewModel
 {
     [ObservableProperty]
     private string pageTitle = "网页展示";

@@ -6,7 +6,7 @@ using Yuandl.ThemeUI.Sample.Controls;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class DialogPageViewModel : ObservableObject
+public partial class DialogPageViewModel : ViewModel
 {
     private readonly IContentDialogService _contentDialogService;
 

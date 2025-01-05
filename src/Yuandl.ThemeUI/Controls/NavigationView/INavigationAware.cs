@@ -9,12 +9,14 @@ namespace Yuandl.ThemeUI.Controls;
 public interface INavigationAware
 {
     /// <summary>
-    /// Method triggered when the class is navigated.
+    /// Asynchronously handles the event that is fired after the component is navigated to.
     /// </summary>
-    void OnNavigatedTo();
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task OnNavigatedToAsync();
 
     /// <summary>
-    /// Method triggered when the navigation leaves the current class.
+    /// Asynchronously handles the event that is fired before the component is navigated from.
     /// </summary>
-    void OnNavigatedFrom();
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task OnNavigatedFromAsync();
 }

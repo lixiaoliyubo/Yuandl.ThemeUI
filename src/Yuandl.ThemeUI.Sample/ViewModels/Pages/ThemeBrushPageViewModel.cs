@@ -7,7 +7,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ThemeBrushPageViewModel : ObservableObject
+public partial class ThemeBrushPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ObservableCollection<ThemeColorEntity> _items = new ObservableCollection<ThemeColorEntity>();

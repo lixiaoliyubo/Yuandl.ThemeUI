@@ -125,9 +125,8 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         IPageViewItem? item = sender.SelectedItem;
         if (item != null)
         {
-            if (NavigationParent?.Navigate(item) ?? false)
+            if (Navigate(item))
             {
-                SelectedItem = item;
             }
         }
     }
@@ -391,7 +390,7 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     private int _currentIndexInJournal;
 
     /// <summary>
-    /// Stores the navigation history.
+    /// Gets stores the navigation history.
     /// </summary>
     private List<string> Journal { get; } = new(50);
 
@@ -494,6 +493,13 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     /// <returns>True if navigation is successful; otherwise, false.</returns>
     public bool Navigate(IPageViewItem viewItem, object? dataContext = null, bool isBackwardsNavigated = false)
     {
+        if (SelectedItem == viewItem)
+        {
+            return false;
+        }
+
+        SelectedItem = viewItem;
+
         var pageInstance = GetNavigationItemInstance(viewItem);
 
         if (OnNavigating(pageInstance))
@@ -501,12 +507,10 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
             return false;
         }
 
-        if (Sidebar != null && !(Sidebar?.SelectedItem?.IsActive ?? false))
+        if (Sidebar != null)
         {
             Sidebar.OnNavigationViewItemClick(viewItem);
         }
-
-        SelectedItem = viewItem;
 
         OnNavigated(pageInstance);
 
@@ -673,8 +677,15 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     {
         if (SelectedItem != null)
         {
-            IPageViewItem page = GetNavigationItemInstance(SelectedItem) as IPageViewItem;
-            return NavigationViewContentPresenter.Navigate(page);
+            // 保存当前页面的状态（如果需要）
+            IPageViewItem currentPage = SelectedItem;
+
+            // 移除当前内容，模拟关闭
+            SelectedItem = null;
+            _ = UpdateContent(null, null);
+
+            // 重新加载页面，模拟重新打开
+            return Navigate(currentPage);
         }
 
         return false;

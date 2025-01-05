@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace Yuandl.ThemeUI.Sample.Models;
 
-public class SelectableViewModel : ObservableObject
+public class SelectableViewModel : ViewModel
 {
     private bool _isSelected;
     private string? _name;

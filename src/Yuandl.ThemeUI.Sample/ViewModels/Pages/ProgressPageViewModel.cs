@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ProgressPageViewModel : ObservableObject
+public partial class ProgressPageViewModel : ViewModel
 {
 }

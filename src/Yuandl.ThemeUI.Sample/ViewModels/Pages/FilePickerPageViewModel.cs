@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class FilePickerPageViewModel : ObservableObject
+public partial class FilePickerPageViewModel : ViewModel
 {
     [ObservableProperty]
     private Visibility _openedFilePathVisibility = Visibility.Collapsed;

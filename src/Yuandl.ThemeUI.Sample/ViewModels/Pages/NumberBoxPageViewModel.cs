@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class NumberBoxPageViewModel : ObservableObject
+public partial class NumberBoxPageViewModel : ViewModel
 {
 }

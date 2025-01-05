@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class MessageBoxPageViewModel : ObservableObject
+public partial class MessageBoxPageViewModel : ViewModel
 {
     [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "relay command")]
     [RelayCommand]

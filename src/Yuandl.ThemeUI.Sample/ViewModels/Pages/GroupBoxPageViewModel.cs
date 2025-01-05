@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class GroupBoxPageViewModel : ObservableObject
+public partial class GroupBoxPageViewModel : ViewModel
 {
     [ObservableProperty]
     private string pageTitle = "网页展示";

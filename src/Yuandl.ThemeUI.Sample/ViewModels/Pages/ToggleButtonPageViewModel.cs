@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ToggleButtonPageViewModel : ObservableObject
+public partial class ToggleButtonPageViewModel : ViewModel
 {
 }

@@ -8,7 +8,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class DataGridPageViewModel : ObservableObject
+public partial class DataGridPageViewModel : ViewModel
 {
     [ObservableProperty]
     public IEnumerable<DataGridSelectionUnit> _selectionUnits = new[] { DataGridSelectionUnit.FullRow, DataGridSelectionUnit.Cell, DataGridSelectionUnit.CellOrRowHeader };

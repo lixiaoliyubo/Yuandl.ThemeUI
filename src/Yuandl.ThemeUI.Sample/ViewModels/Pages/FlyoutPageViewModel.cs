@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class FlyoutPageViewModel : ObservableObject
+public partial class FlyoutPageViewModel : ViewModel
 {
     [ObservableProperty]
     private bool _isFlyoutOpen = false;

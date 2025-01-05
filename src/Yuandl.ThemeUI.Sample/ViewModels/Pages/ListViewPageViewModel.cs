@@ -7,7 +7,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ListViewPageViewModel : ObservableObject
+public partial class ListViewPageViewModel : ViewModel
 {
     private int _listViewSelectionModeComboBoxSelectedIndex = 0;
 

@@ -7,7 +7,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class MenuPageViewModel : ObservableObject
+public partial class MenuPageViewModel : ViewModel
 {
     [ObservableProperty]
     public ObservableCollection<MenuItemData> _menuItems = new ObservableCollection<MenuItemData>();

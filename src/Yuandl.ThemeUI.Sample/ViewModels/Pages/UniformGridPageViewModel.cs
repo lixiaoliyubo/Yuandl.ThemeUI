@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class UniformGridPageViewModel : ObservableObject
+public partial class UniformGridPageViewModel : ViewModel
 {
     [ObservableProperty]
     private bool _isAnchorEnabled = true;

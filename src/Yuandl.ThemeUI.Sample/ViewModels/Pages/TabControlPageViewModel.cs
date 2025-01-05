@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class TabControlPageViewModel : ObservableObject
+public partial class TabControlPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ObservableCollection<CustomTab> _customTabs;
@@ -58,7 +58,7 @@ Nulla a porta libero, quis hendrerit ex. In ut pharetra sem. Nunc gravida ante r
     }
 }
 
-public partial class CustomTab : ObservableObject
+public partial class CustomTab : ViewModel
 {
     public Action<ICommand> CloseCommand { get; }
 

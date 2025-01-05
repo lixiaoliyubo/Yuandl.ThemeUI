@@ -3,7 +3,7 @@
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ButtonPageViewModel : ObservableObject
+public partial class ButtonPageViewModel : ViewModel
 {
     [ObservableProperty]
     private string pageTitle = "网页展示";

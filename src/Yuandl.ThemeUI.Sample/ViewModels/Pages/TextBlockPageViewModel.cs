@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class TextBlockPageViewModel : ObservableObject
+public partial class TextBlockPageViewModel : ViewModel
 {
 }

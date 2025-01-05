@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class NavigatePageViewModel : ObservableObject
+public partial class NavigatePageViewModel : ViewModel
 {
     private readonly IWindow _window;
 

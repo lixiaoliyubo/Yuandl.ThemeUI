@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class TitleBarPageViewModel : ObservableObject
+public partial class TitleBarPageViewModel : ViewModel
 {
 }

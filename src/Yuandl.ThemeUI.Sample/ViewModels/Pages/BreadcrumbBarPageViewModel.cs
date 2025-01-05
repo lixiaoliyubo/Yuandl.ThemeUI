@@ -6,7 +6,7 @@ using Yuandl.ThemeUI.Sample.Models;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class BreadcrumbBarPageViewModel : ObservableObject
+public partial class BreadcrumbBarPageViewModel : ViewModel
 {
     private readonly Folder[] _baseFoldersCollection =
     [

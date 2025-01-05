@@ -4,7 +4,7 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class InfoBadgePageViewModel : ObservableObject
+public partial class InfoBadgePageViewModel : ViewModel
 {
     [ObservableProperty]
     private ControlAppearance _infoBadgeSeverity = ControlAppearance.Primary;

@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ListBoxPageViewModel : ObservableObject
+public partial class ListBoxPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ObservableCollection<string> _listBoxItems;

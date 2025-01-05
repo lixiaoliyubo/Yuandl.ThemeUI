@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ChartsPageViewModel : ObservableObject
+public partial class ChartsPageViewModel : ViewModel
 {
     [ObservableProperty]
     private ObservableCollection<KeyValuePair<string, double>> _barDatas = new();

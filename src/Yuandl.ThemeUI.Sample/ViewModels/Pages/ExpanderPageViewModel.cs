@@ -4,6 +4,6 @@
 
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
-public partial class ExpanderPageViewModel : ObservableObject
+public partial class ExpanderPageViewModel : ViewModel
 {
 }
