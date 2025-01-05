@@ -203,9 +203,9 @@ public partial class SidebarMenu : System.Windows.Controls.Control
 
     internal void OnNavigationViewItemClick(IPageViewItem pageViewItem)
     {
-        SelectedItem?.Deactivate(this);
         if (SelectedItem != pageViewItem)
         {
+            SelectedItem?.Deactivate(this);
             SelectedItem = pageViewItem;
             pageViewItem.Activate(this);
             OnItemInvoked();

@@ -165,7 +165,6 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
 		<PackageReference Include="ShowMeTheXAML" />
 		<PackageReference Include="ShowMeTheXAML.AvalonEdit" />
 		<PackageReference Include="ShowMeTheXAML.MSBuild" />

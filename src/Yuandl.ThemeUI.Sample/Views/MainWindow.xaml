@@ -18,7 +18,7 @@
         MinWidth="900"
         ExtendsContentIntoTitleBar="True"
         WindowBackdropType="Mica"
-        WindowCornerPreference="Round"
+        WindowCornerPreference="Default"
         WindowStartupLocation="CenterScreen">
     <Window.CommandBindings>
         <CommandBinding Command="Copy" Executed="OnCopy" />

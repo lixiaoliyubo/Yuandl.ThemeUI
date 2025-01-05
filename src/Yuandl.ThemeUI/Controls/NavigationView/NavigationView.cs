@@ -10,7 +10,7 @@ using Yuandl.ThemeUI.ElementAssist;
 namespace Yuandl.ThemeUI.Controls;
 
 /// <content>
-/// Defines the template parts for the <see cref="NavigationView"/> control
+/// Defines the template part of the navigation view control.
 /// </content>
 [TemplatePart(
     Name = TemplateElementNavigationViewContentPresenter,
@@ -21,14 +21,14 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     private const string TemplateElementNavigationViewContentPresenter = "PART_NavigationViewContentPresenter";
 
     /// <summary>
-    /// Gets or sets the control responsible for rendering the content.
+    /// Gets or sets the control responsible for rendering content.
     /// </summary>
     protected NavigationViewContentPresenter NavigationViewContentPresenter { get; set; } = null!;
 
     protected SidebarMenu SidebarMenu { get; } = null!;
 
     /// <summary>
-    /// Initializes static members of the <see cref="NavigationView"/> class and overrides default property metadata.
+    /// Initializes static members of the <see cref="NavigationView"/> class.
     /// </summary>
     static NavigationView()
     {
@@ -53,6 +53,9 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         Unloaded += OnUnloaded;
     }
 
+    /// <summary>
+    /// Applies the template to the control.
+    /// </summary>
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
@@ -69,6 +72,11 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         }
     }
 
+    /// <summary>
+    /// Handles the unloaded event.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="e">The event arguments.</param>
     private void OnUnloaded(object sender, RoutedEventArgs e)
     {
         Loaded -= OnLoaded;
@@ -76,7 +84,7 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 
         ClearJournal();
 
-        PageIdOrTargetTagNavigationViewsDictionary.Clear();
+        NavigationPages.Clear();
 
         if (Sidebar is SidebarMenu sidebar)
         {
@@ -87,68 +95,46 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         }
     }
 
+    /// <summary>
+    /// Handles the loaded event.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="e">The event arguments.</param>
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
     }
 
+    /// <summary>
+    /// Handles the ItemsChanged event of the SidebarMenu.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="args">The event arguments.</param>
     private void OnSidebarItemsChanged(SidebarMenu sender, RoutedEventArgs args)
     {
         IList<object> list = (IList<object>)sender.MenuItems;
         AddItemsToDictionaries(list);
     }
 
-    protected virtual void AddItemsToDictionaries(IEnumerable list)
-    {
-        foreach (IPageViewItem pageViewItem in list.OfType<IPageViewItem>())
-        {
-            if (!PageIdOrTargetTagNavigationViewsDictionary.ContainsKey(pageViewItem.Id))
-            {
-                PageIdOrTargetTagNavigationViewsDictionary.Add(
-                    pageViewItem.Id,
-                    pageViewItem
-                );
-            }
-
-            if (
-                !PageIdOrTargetTagNavigationViewsDictionary.ContainsKey(
-                    pageViewItem.PageTag
-                )
-            )
-            {
-                PageIdOrTargetTagNavigationViewsDictionary.Add(
-                    pageViewItem.PageTag,
-                    pageViewItem
-                );
-            }
-
-            if (pageViewItem.PageType != null && !NavigationPages.ContainsKey(pageViewItem.PageType))
-            {
-                _ = NavigationPages.TryAdd(
-                    pageViewItem.PageType,
-                    pageViewItem
-                );
-            }
-
-            if (pageViewItem.HasItems)
-            {
-                AddItemsToDictionaries(pageViewItem.MenuItems);
-            }
-        }
-    }
-
+    /// <summary>
+    /// Handles the ItemClick event of the SidebarMenu.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="args">The event arguments.</param>
     private void OnSidebarItemClick(SidebarMenu sender, RoutedEventArgs args)
     {
         IPageViewItem? item = sender.SelectedItem;
         if (item != null)
         {
-            if (NavigationParent?.Navigate(item) ?? false) 
+            if (NavigationParent?.Navigate(item) ?? false)
             {
                 SelectedItem = item;
             }
         }
     }
 
-    /// <summary>Identifies the <see cref="NavigationParent"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the navigation parent control.
+    /// </summary>
     internal static readonly DependencyProperty NavigationParentProperty =
         DependencyProperty.RegisterAttached(
             nameof(NavigationParent),
@@ -158,7 +144,7 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         );
 
     /// <summary>
-    /// Gets the parent <see cref="NavigationView"/> for its <see cref="PageViewItem"/> children.
+    /// Gets the dependency property value of the navigation parent control.
     /// </summary>
     internal NavigationView? NavigationParent
     {
@@ -166,14 +152,18 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         private set => SetValue(NavigationParentProperty, value);
     }
 
-    /// <summary>Helper for getting <see cref="NavigationParentProperty"/> from <paramref name="navigationItem"/>.</summary>
-    /// <param name="navigationItem"><see cref="DependencyObject"/> to read <see cref="NavigationParentProperty"/> from.</param>
-    /// <returns>NavigationParent property value.</returns>
+    /// <summary>
+    /// Gets the dependency property value of the navigation parent control.
+    /// </summary>
+    /// <param name="navigationItem">The control to read the dependency property value from.</param>
+    /// <returns>The dependency property value of the navigation parent control.</returns>
     [AttachedPropertyBrowsableForType(typeof(DependencyObject))]
     internal static NavigationView? GetNavigationParent(DependencyObject navigationItem) =>
         navigationItem.GetValue(NavigationParentProperty) as NavigationView;
 
-    /// <summary>Identifies the <see cref="SidebarMenu"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the SidebarMenu.
+    /// </summary>
     public static readonly DependencyProperty SidebarProperty = DependencyProperty.Register(
         nameof(Sidebar),
         typeof(SidebarMenu),
@@ -181,6 +171,11 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         new FrameworkPropertyMetadata(null, (d, baseValue) => (SidebarMenu?)baseValue)
     );
 
+    /// <summary>
+    /// Handles the IsPaneOpenChanged event of the SidebarMenu.
+    /// </summary>
+    /// <param name="sender">The event sender.</param>
+    /// <param name="args">The event arguments.</param>
     private void OnIsPaneOpenChanged(SidebarMenu sender, RoutedEventArgs args)
     {
         _ = VisualStateManager.GoToState(
@@ -190,13 +185,18 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         );
     }
 
+    /// <summary>
+    /// Gets or sets the SidebarMenu instance.
+    /// </summary>
     public SidebarMenu? Sidebar
     {
         get => (SidebarMenu?)GetValue(SidebarProperty);
         set => SetValue(SidebarProperty, value);
     }
 
-    /// <summary>Identifies the <see cref="TransitionDuration"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the transition duration.
+    /// </summary>
     public static readonly DependencyProperty TransitionDurationProperty = DependencyProperty.Register(
         nameof(TransitionDuration),
         typeof(int),
@@ -204,7 +204,9 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         new FrameworkPropertyMetadata(200)
     );
 
-    /// <summary>Identifies the <see cref="OpenPaneLength"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the open pane length.
+    /// </summary>
     public static readonly DependencyProperty OpenPaneLengthProperty = DependencyProperty.Register(
         nameof(OpenPaneLength),
         typeof(double),
@@ -212,19 +214,27 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         new FrameworkPropertyMetadata(0D)
     );
 
+    /// <summary>
+    /// Gets or sets the open pane length.
+    /// </summary>
     public double OpenPaneLength
     {
         get => (double)GetValue(OpenPaneLengthProperty);
         set => SetValue(OpenPaneLengthProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets the compact pane length.
+    /// </summary>
     public double CompactPaneLength
     {
         get => (double)GetValue(CompactPaneLengthProperty);
         set => SetValue(CompactPaneLengthProperty, value);
     }
 
-    /// <summary>Identifies the <see cref="CompactPaneLength"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the compact pane length.
+    /// </summary>
     public static readonly DependencyProperty CompactPaneLengthProperty = DependencyProperty.Register(
         nameof(CompactPaneLength),
         typeof(double),
@@ -232,6 +242,9 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         new FrameworkPropertyMetadata(60.0)
     );
 
+    /// <summary>
+    /// Gets or sets the transition duration.
+    /// </summary>
     [Bindable(true)]
     [Category("Appearance")]
     public int TransitionDuration
@@ -240,7 +253,9 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         set => SetValue(TransitionDurationProperty, value);
     }
 
-    /// <summary>Identifies the <see cref="Transition"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the transition.
+    /// </summary>
     public static readonly DependencyProperty TransitionProperty = DependencyProperty.Register(
         nameof(Transition),
         typeof(Transition),
@@ -248,13 +263,18 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         new FrameworkPropertyMetadata(Transition.FadeInWithSlide)
     );
 
+    /// <summary>
+    /// Gets or sets the transition.
+    /// </summary>
     public Transition Transition
     {
         get => (Transition)GetValue(TransitionProperty);
         set => SetValue(TransitionProperty, value);
     }
 
-    /// <summary>Identifies the <see cref="FrameMargin"/> dependency property.</summary>
+    /// <summary>
+    /// Identifies the dependency property of the frame margin.
+    /// </summary>
     public static readonly DependencyProperty FrameMarginProperty = DependencyProperty.Register(
         nameof(FrameMargin),
         typeof(Thickness),
@@ -262,25 +282,36 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         new FrameworkPropertyMetadata(default(Thickness))
     );
 
+    /// <summary>
+    /// Gets or sets the frame margin.
+    /// </summary>
     public Thickness FrameMargin
     {
         get => (Thickness)GetValue(FrameMarginProperty);
         set => SetValue(FrameMarginProperty, value);
     }
 
+    /// <summary>
+    /// The navigating event.
+    /// </summary>
     public event TypedEventHandler<NavigationView, NavigatingCancelEventArgs> Navigating
     {
         add => AddHandler(NavigatingEvent, value);
         remove => RemoveHandler(NavigatingEvent, value);
     }
 
+    /// <summary>
+    /// The navigated event.
+    /// </summary>
     public event TypedEventHandler<NavigationView, NavigatedEventArgs> Navigated
     {
         add => AddHandler(NavigatedEvent, value);
         remove => RemoveHandler(NavigatedEvent, value);
     }
 
-    /// <summary>Identifies the <see cref="Navigating"/> routed event.</summary>
+    /// <summary>
+    /// Identifies the navigating event.
+    /// </summary>
     public static readonly RoutedEvent NavigatingEvent = EventManager.RegisterRoutedEvent(
         nameof(Navigating),
         RoutingStrategy.Bubble,
@@ -288,7 +319,9 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         typeof(NavigationView)
     );
 
-    /// <summary>Identifies the <see cref="Navigated"/> routed event.</summary>
+    /// <summary>
+    /// Identifies the navigated event.
+    /// </summary>
     public static readonly RoutedEvent NavigatedEvent = EventManager.RegisterRoutedEvent(
         nameof(Navigated),
         RoutingStrategy.Bubble,
@@ -296,13 +329,18 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         typeof(NavigationView)
     );
 
+    /// <summary>
+    /// The selection changed event.
+    /// </summary>
     public event TypedEventHandler<NavigationView, RoutedEventArgs> SelectionChanged
     {
         add => AddHandler(SelectionChangedEvent, value);
         remove => RemoveHandler(SelectionChangedEvent, value);
     }
 
-    /// <summary>Identifies the <see cref="SelectionChanged"/> routed event.</summary>
+    /// <summary>
+    /// Identifies the selection changed event.
+    /// </summary>
     public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
         nameof(SelectionChanged),
         RoutingStrategy.Bubble,
@@ -319,8 +357,10 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     }
 
     /// <summary>
-    /// Raises the navigating requested event.
+    /// Raises the navigating event.
     /// </summary>
+    /// <param name="sourcePage">The source page.</param>
+    /// <returns>True if the navigation was canceled; otherwise, false.</returns>
     protected virtual bool OnNavigating(object sourcePage)
     {
         var eventArgs = new NavigatingCancelEventArgs(NavigatingEvent, this) { Page = sourcePage };
@@ -331,8 +371,9 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     }
 
     /// <summary>
-    /// Raises the navigated requested event.
+    /// Raises the navigated event.
     /// </summary>
+    /// <param name="page">The page.</param>
     protected virtual void OnNavigated(object page)
     {
         var eventArgs = new NavigatedEventArgs(NavigatedEvent, this) { Page = page };
@@ -342,64 +383,115 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 
     private IServiceProvider? _serviceProvider;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets or sets the selected item.
+    /// </summary>
     public IPageViewItem? SelectedItem { get; private set; }
 
     private int _currentIndexInJournal;
 
+    /// <summary>
+    /// Stores the navigation history.
+    /// </summary>
     private List<string> Journal { get; } = new(50);
 
     private readonly NavigationCache _cache = new();
 
-    protected ConcurrentDictionary<Type, IPageViewItem> NavigationPages { get; set; } = [];
+    /// <summary>
+    /// Gets or sets all navigation pages.
+    /// </summary>
+    protected ConcurrentDictionary<string, IPageViewItem> NavigationPages { get; set; } = [];
 
-    protected Dictionary<string, IPageViewItem> PageIdOrTargetTagNavigationViewsDictionary { get; } = [];
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Gets a value indicating whether the navigation view can go back.
+    /// </summary>
     public bool CanGoBack => Journal.Count > 1 && _currentIndexInJournal >= 0;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the service provider.
+    /// </summary>
+    /// <param name="serviceProvider">The service provider.</param>
     public void SetServiceProvider(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Adds items to the dictionary.
+    /// </summary>
+    /// <param name="list">The list of items to add.</param>
+    protected virtual void AddItemsToDictionaries(IEnumerable list)
+    {
+        foreach (IPageViewItem pageViewItem in list.OfType<IPageViewItem>())
+        {
+            bool isAdd = false;
+            if (!string.IsNullOrEmpty(pageViewItem.Id) && !NavigationPages.ContainsKey(pageViewItem.Id))
+            {
+                isAdd = true;
+                _ = NavigationPages.TryAdd(
+                    pageViewItem.Id,
+                    pageViewItem
+                );
+            }
+
+            if (!isAdd && !string.IsNullOrEmpty(pageViewItem.PageTag) && !NavigationPages.ContainsKey(pageViewItem.PageTag))
+            {
+                _ = NavigationPages.TryAdd(
+                    pageViewItem.PageTag,
+                    pageViewItem
+                );
+            }
+
+            if (pageViewItem.HasItems)
+            {
+                AddItemsToDictionaries(pageViewItem.MenuItems);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Navigates to the specified page ID or target tag.
+    /// </summary>
+    /// <param name="pageIdOrTargetTag">The page ID or target tag.</param>
+    /// <param name="dataContext">The data context.</param>
+    /// <returns>True if navigation is successful; otherwise, false.</returns>
     public bool Navigate(string pageIdOrTargetTag, object? dataContext = null)
     {
         if (
-            PageIdOrTargetTagNavigationViewsDictionary.TryGetValue(
+            NavigationPages.TryGetValue(
                 pageIdOrTargetTag,
                 out IPageViewItem? navigationViewItem
             )
         )
         {
-            return Navigate(navigationViewItem, dataContext);
+            return Navigate(navigationViewItem?.PageType, dataContext);
         }
 
         return false;
     }
 
-    /// <inheritdoc />
-    public bool Navigate(Type PageType, object? dataContext = null)
+    /// <summary>
+    /// Navigates to the specified page type.
+    /// </summary>
+    /// <param name="PageType">The page type.</param>
+    /// <param name="dataContext">The data context.</param>
+    /// <returns>True if navigation is successful; otherwise, false.</returns>
+    public bool Navigate(Type? PageType, object? dataContext = null)
     {
-        if (
-            NavigationPages.TryGetValue(
-                PageType,
-                out IPageViewItem? navigationViewItem
-            )
-        )
+        IPageViewItem navigationViewItem = NavigationPages.FirstOrDefault(a => a.Value.PageType == PageType).Value;
+        if (navigationViewItem == null)
         {
-            return Navigate(navigationViewItem, dataContext);
+            navigationViewItem = new PageViewItem() { PageType = PageType, PageTag = Guid.NewGuid().ToString(), DataContent = dataContext };
+            _ = NavigationPages.TryAdd(navigationViewItem.PageTag, navigationViewItem);
         }
-
-        navigationViewItem = new PageViewItem() { PageType = PageType, PageTag = Guid.NewGuid().ToString(), DataContent = dataContext };
-
-        PageIdOrTargetTagNavigationViewsDictionary.Add(navigationViewItem.PageTag, navigationViewItem);
-
-        _ = NavigationPages.TryAdd(PageType, navigationViewItem);
 
         return Navigate(navigationViewItem, dataContext);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Navigates to the specified page view item.
+    /// </summary>
+    /// <param name="viewItem">The page view item.</param>
+    /// <param name="dataContext">The data context.</param>
+    /// <param name="isBackwardsNavigated">A value indicating whether the navigation is backwards.</param>
+    /// <returns>True if navigation is successful; otherwise, false.</returns>
     public bool Navigate(IPageViewItem viewItem, object? dataContext = null, bool isBackwardsNavigated = false)
     {
         var pageInstance = GetNavigationItemInstance(viewItem);
@@ -409,19 +501,30 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
             return false;
         }
 
+        if (Sidebar != null && !(Sidebar?.SelectedItem?.IsActive ?? false))
+        {
+            Sidebar.OnNavigationViewItemClick(viewItem);
+        }
+
+        SelectedItem = viewItem;
+
         OnNavigated(pageInstance);
 
         _ = UpdateContent(pageInstance, dataContext);
 
         AddToJournal(viewItem, isBackwardsNavigated);
 
-        SelectedItem = viewItem;
-
         OnSelectionChanged();
 
         return true;
     }
 
+    /// <summary>
+    /// Updates the content.
+    /// </summary>
+    /// <param name="content">The content.</param>
+    /// <param name="dataContext">The data context.</param>
+    /// <returns>True if the content update is successful; otherwise, false.</returns>
     private bool UpdateContent(object? content, object? dataContext = null)
     {
         if (dataContext is not null && content is FrameworkElement frameworkViewContent)
@@ -433,57 +536,69 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
     }
 
     /// <summary>
-    /// Get navigation item instance.
+    /// Gets the navigation item instance.
     /// </summary>
-    /// <param name="NavViewItem">PageViewItem</param>
-    private object GetNavigationItemInstance(IPageViewItem NavViewItem)
+    /// <param name="pageViewItem">The navigation view item.</param>
+    /// <returns>The navigation item instance.</returns>
+    private object GetNavigationItemInstance(IPageViewItem? pageViewItem)
     {
-        if (NavViewItem.PageType is null)
+        if (pageViewItem?.PageType is null)
         {
             throw new InvalidOperationException(
-                $"The {nameof(NavViewItem.PageType)} property cannot be null."
+                $"The {nameof(pageViewItem.PageTag)} property cannot be null."
             );
         }
 
         if (_serviceProvider is not null)
         {
-            return _serviceProvider.GetService(NavViewItem.PageType)
+            return _serviceProvider.GetService(pageViewItem.PageType)
                 ?? throw new InvalidOperationException(
-            $"{nameof(_serviceProvider)}.{nameof(_serviceProvider.GetService)} returned null for type {NavViewItem.PageType}."
+            $"{nameof(_serviceProvider)}.{nameof(_serviceProvider.GetService)} returned null for type {pageViewItem.PageType}."
             );
         }
 
         return _cache.Remember(
-                NavViewItem.PageType,
-                NavViewItem.CacheMode,
+                pageViewItem.PageType,
+                pageViewItem.CacheMode,
                 ComputeCachedNavigationInstance
             )
             ?? throw new InvalidOperationException(
-                $"Unable to get or create instance of {NavViewItem.PageType} from cache."
+                $"Unable to get or create instance of {pageViewItem.PageTag} from cache."
             );
 
-        object? ComputeCachedNavigationInstance() => GetPageInstanceFromCache(NavViewItem);
+        object? ComputeCachedNavigationInstance() => GetPageInstanceFromCache(pageViewItem.PageType);
     }
 
-    private object? GetPageInstanceFromCache(IPageViewItem NavViewItem)
+    /// <summary>
+    /// Gets the page instance from the cache.
+    /// </summary>
+    /// <param name="pageType">The navigation view item.</param>
+    /// <returns>The page instance.</returns>
+    private object? GetPageInstanceFromCache(Type pageType)
     {
-        if (NavViewItem.PageType is null)
+        if (pageType is null)
         {
             return default;
         }
 
         if (_serviceProvider is not null)
         {
-            return _serviceProvider.GetService(NavViewItem.PageType)
+            return _serviceProvider.GetService(pageType)
                 ?? throw new InvalidOperationException(
                     $"{nameof(_serviceProvider.GetService)} returned null"
                 );
         }
 
-        return InvokeElementConstructor(NavViewItem.PageType, NavViewItem.DataContent)
+        return NavigationViewActivator.CreateInstance(pageType)
             ?? throw new InvalidOperationException("Failed to create instance of the page");
     }
 
+    /// <summary>
+    /// Invokes the element constructor.
+    /// </summary>
+    /// <param name="tPage">The page type.</param>
+    /// <param name="dataContext">The data context.</param>
+    /// <returns>The element instance.</returns>
     private FrameworkElement? InvokeElementConstructor(Type tPage, object? dataContext)
     {
         ConstructorInfo? ctor = dataContext is null
@@ -495,42 +610,65 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         return result;
     }
 
+    /// <summary>
+    /// Adds to the journal.
+    /// </summary>
+    /// <param name="viewItem">The view item.</param>
+    /// <param name="isBackwardsNavigated">A value indicating whether the navigation is backwards.</param>
     private void AddToJournal(IPageViewItem viewItem, bool isBackwardsNavigated)
     {
         if (isBackwardsNavigated)
         {
+            // If it's a backwards navigation, remove the last two records
             Journal.RemoveAt(Journal.LastIndexOf(Journal[^2]));
             Journal.RemoveAt(Journal.LastIndexOf(Journal[^1]));
 
+            // Update the current index, decrease by 2
             _currentIndexInJournal -= 2;
         }
 
+        // Add the current view item's tag to the journal
         Journal.Add(viewItem.PageTag);
+
+        // Increase the current index
         _currentIndexInJournal++;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Goes back.
+    /// </summary>
+    /// <returns>True if navigation is successful; otherwise, false.</returns>
     public virtual bool GoBack()
     {
+        // If there are not more than one page in the journal, it's not possible to go back
         if (Journal.Count <= 1)
         {
             return false;
         }
 
+        // Get the ID of the second last page
         var itemId = Journal[^2];
 
+        // Navigate to that page
         return Navigate(itemId, null);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Clears the journal.
+    /// </summary>
     public virtual void ClearJournal()
     {
+        // Reset the current index to 0
         _currentIndexInJournal = 0;
 
+        // Clear the journal
         Journal.Clear();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Refreshes the current page.
+    /// </summary>
+    /// <returns>True if refresh is successful; otherwise, false.</returns>
     public virtual bool Refresh()
     {
         if (SelectedItem != null)
@@ -542,6 +680,12 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
         return false;
     }
 
+    /// <summary>
+    /// Gets the template child.
+    /// </summary>
+    /// <typeparam name="T">The type of the child.</typeparam>
+    /// <param name="name">The name of the child.</param>
+    /// <returns>The template child.</returns>
     protected T GetTemplateChild<T>(string name)
         where T : DependencyObject
     {

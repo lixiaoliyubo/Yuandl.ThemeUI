@@ -46,7 +46,7 @@
                             Margin="5,1,5,1"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            TextBlock.Foreground="{TemplateBinding Foreground}" />
+                            TextBlock.Foreground="{DynamicResource ControlTextColorBrush}" />
                         <Rectangle
                             x:Name="DayButtonFocusVisual"
                             IsHitTestVisible="false"

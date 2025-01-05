@@ -56,20 +56,23 @@
                                         Width="12"
                                         Height="12"
                                         Data="M384 690l452-452 60 60-512 512-238-238 60-60z"
-                                        Fill="{TemplateBinding Foreground}"
+                                        Fill="{DynamicResource ControlTextSecondaryColorBrush}"
                                         Stretch="Uniform"
                                         Visibility="Collapsed" />
                                 </Grid>
                             </Border>
                         </Grid>
                         <ContentPresenter
-                            x:Name="contentPresenter"
                             Margin="{TemplateBinding Padding}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             ContentTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource AncestorType=controls:Step}}"
                             TextElement.FontWeight="Black"
-                            TextElement.Foreground="{DynamicResource ControlTextColorBrush}" />
+                            TextElement.Foreground="{DynamicResource ControlTextColorBrush}">
+                            <ContentPresenter.Content>
+                                <TextBlock x:Name="PART_Content" Text="{TemplateBinding Content}" Foreground="{Binding Foreground, RelativeSource={RelativeSource Self}}"/>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=controls:Step}}" Value="Vertical">
@@ -80,24 +83,26 @@
                         </DataTrigger>
                         <Trigger Property="Status" Value="Waiting">
                             <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
-                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="PART_Index" Property="Visibility" Value="Visible" />
                             <Setter Property="Background" Value="{DynamicResource ControlFillColorBrush}" />
+                            <Setter TargetName="PART_Index" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_Content" Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
                         </Trigger>
                         <Trigger Property="Status" Value="InProgress">
                             <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="PART_Index" Property="Visibility" Value="Visible" />
                             <Setter Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
+                            <Setter TargetName="PART_Index" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_Content" Property="Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
                         </Trigger>
                         <Trigger Property="Status" Value="Complete">
-                            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentSecondaryColorBrush}" />
-                            <Setter Property="Background" Value="{DynamicResource SystemAccentTertiaryColorBrush}" />
-                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="PART_Index" Property="Visibility" Value="Collapsed" />
                             <Setter Property="Foreground" Value="{DynamicResource SystemAccentColorBrush}" />
-                            <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="{DynamicResource ControlTextSecondaryColorBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource SystemAccentTertiaryColorBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentSecondaryColorBrush}" />
+                            <Setter TargetName="PART_Index" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_PathComplete" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_PathComplete" Property="Fill" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            <Setter TargetName="PART_Content" Property="Foreground" Value="{DynamicResource ControlTextSecondaryColorBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

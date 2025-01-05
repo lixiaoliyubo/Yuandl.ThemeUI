@@ -103,7 +103,7 @@
                                 <ui:SymbolIcon
                                     Grid.Row="0"
                                     FontSize="28"
-                                    Symbol="{Binding Icon, Mode=OneTime}" />
+                                    Symbol="{Binding Icon, Mode=OneTime}" Foreground="{DynamicResource ControlTextColorBrush}"/>
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
