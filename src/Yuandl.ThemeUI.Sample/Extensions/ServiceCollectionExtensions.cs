@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
                 .Where(x =>
                     x.IsClass &&
                     x.Namespace != null &&
-                    (x.BaseType.Name == "Page" || x.BaseType.Name == "ObservableObject") &&
+                    (x.BaseType.Name == "Page" || x.BaseType.Name == "ObservableObject" || x.BaseType.Name == "ViewModel") &&
                     x.Namespace!.StartsWith(namespaceName, StringComparison.InvariantCultureIgnoreCase)
                 );
 

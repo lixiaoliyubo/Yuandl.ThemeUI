@@ -2,9 +2,11 @@
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 
+using Yuandl.ThemeUI.Sample.ViewModels;
+
 namespace Yuandl.ThemeUI.Sample.Models;
 
-public partial class ThemeColorEntity : ViewModel
+public partial class ThemeColorEntity : ObservableObject
 {
     public string? Name { get; set; }
 

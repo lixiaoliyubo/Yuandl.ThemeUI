@@ -21,13 +21,13 @@
         <smtx:XamlDisplay UniqueKey="CardSample1" Margin="20">
             <ui:Card AllowDrop="True" Margin="15" ui:ElevationAssist.Elevation="Dp3">
                 <ui:Card.Header>
-                    <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card Header" />
+                    <ui:TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card Header" />
                 </ui:Card.Header>
                 <Grid>
                     <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card面板" />
                 </Grid>
                 <ui:Card.Footer>
-                    <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card Footer" />
+                    <ui:TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="Card Footer" />
                 </ui:Card.Footer>
             </ui:Card>
         </smtx:XamlDisplay>
@@ -51,7 +51,7 @@
         </smtx:XamlDisplay>
         <smtx:XamlDisplay UniqueKey="CardSample3" Margin="20" Tag="A CardAction with an icon, a header and a description.">
             <ui:CardAction  Margin="15" Icon="{ui:SymbolIcon DocumentEdit20, FontSize=43, Filled=False}">
-                <TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="CardAction面板" />
+                <ui:TextBlock Margin="15,0,0,0" VerticalAlignment="Center" FontSize="14" Text="CardAction面板" />
             </ui:CardAction>
         </smtx:XamlDisplay>
     </StackPanel>
