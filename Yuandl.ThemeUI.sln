@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "src\ConsoleA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuandl.ThemeUI.Demo", "src\Yuandl.ThemeUI.Demo\Yuandl.ThemeUI.Demo.csproj", "{44599396-8912-4B9D-8F9D-7EEB2E5C406E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuandl.ThemeUI.Mvvm", "Yuandl.ThemeUI.Mvvm\Yuandl.ThemeUI.Mvvm.csproj", "{E05A695C-AD8B-43FB-BA10-18A0C24BECCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuandl.ThemeUI.Mvvm", "src\Yuandl.ThemeUI.Mvvm\Yuandl.ThemeUI.Mvvm.csproj", "{E05A695C-AD8B-43FB-BA10-18A0C24BECCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
