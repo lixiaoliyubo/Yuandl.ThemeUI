@@ -1,0 +1,29 @@
+<Page x:Class="Yuandl.ThemeUI.Mvvm.Views.CachePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Yuandl.ThemeUI.Mvvm.Views" 
+      xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml"
+      mc:Ignorable="d" Loaded="Page_Loaded" Unloaded="Page_Unloaded"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CachePage">
+
+    <Grid Margin="42" >
+        <ui:FormItem
+            Grid.Column="0"
+            Prefix="缓存数据" PrefixWidth="200">
+            <StackPanel Orientation="Horizontal">
+                <ui:TextBox
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding Content, Mode=OneWay}" />
+                <ui:Button
+                    Margin="20,0,0,0"
+                    Command="{Binding UpdateCommand, Mode=OneWay}"
+                    Content="更新数据" />
+            </StackPanel>
+        </ui:FormItem>
+    </Grid>
+</Page>
