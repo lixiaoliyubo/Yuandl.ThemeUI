@@ -2,6 +2,7 @@
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 
+
 namespace Yuandl.ThemeUI.Sample.ViewModels.Pages;
 
 public partial class SettingsPageViewModel : ObservableObject, INavigationAware
@@ -58,4 +59,5 @@ public partial class SettingsPageViewModel : ObservableObject, INavigationAware
         return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString()
             ?? string.Empty;
     }
+
 }

@@ -60,7 +60,6 @@ public partial class App : Application
 
                 // Theme manipulation
                 _ = services.AddSingleton<IThemeService, ThemeService>();
-                _ = services.AddSingleton<ITaskBarService, TaskBarService>();
                 _ = services.AddSingleton<ISnackbarService, SnackbarService>();
                 _ = services.AddSingleton<ISnackbarService, SnackbarService>();
                 _ = services.AddSingleton<IContentDialogService, ContentDialogService>();

@@ -10,7 +10,7 @@ public partial class UniformGrid : Grid
 {
     // Provides the next spot in the boolean array with a 'false' value.
 #pragma warning disable SA1009 // Closing parenthesis must be followed by a space.
-    internal static IEnumerable<(int row, int column)> GetFreeSpot(TakenSpotsReferenceHolder arrayref, int firstcolumn, bool topdown)
+    internal static IEnumerable<(int Row, int Column)> GetFreeSpot(TakenSpotsReferenceHolder arrayref, int firstcolumn, bool topdown)
 #pragma warning restore SA1009 // Closing parenthesis must be followed by a space.
     {
         if (topdown)
@@ -56,7 +56,7 @@ public partial class UniformGrid : Grid
     // returns the dimensions of the
     // grid we need to hold all elements.
 #pragma warning disable SA1008 // Opening parenthesis must be spaced correctly
-    internal static (int rows, int columns) GetDimensions(FrameworkElement[] visible, int rows, int cols, int firstColumn)
+    internal static (int Rows, int Columns) GetDimensions(FrameworkElement[] visible, int rows, int cols, int firstColumn)
 #pragma warning restore SA1008 // Opening parenthesis must be spaced correctly
     {
         // If a dimension isn't specified, we need to figure out the other one (or both).

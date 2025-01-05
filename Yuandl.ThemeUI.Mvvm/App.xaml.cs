@@ -49,7 +49,6 @@ public partial class App : Application
                 _ = services.AddSingleton<ISnackbarService, SnackbarService>();
                 _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
                 _ = services.AddSingleton<IThemeService, ThemeService>();
-                _ = services.AddSingleton<ITaskBarService, TaskBarService>();
 
                 // Main window with navigation
                 _ = services.AddSingleton<IWindow, MainWindow>();

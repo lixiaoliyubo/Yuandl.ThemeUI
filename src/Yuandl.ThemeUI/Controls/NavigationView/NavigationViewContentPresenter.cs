@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using Yuandl.ThemeUI.ElementAssist;
 
-// ReSharper disable once CheckNamespace
 namespace Yuandl.ThemeUI.Controls;
 
 public class NavigationViewContentPresenter : Frame
