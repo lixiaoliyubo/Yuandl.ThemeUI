@@ -11,8 +11,6 @@
         xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml"
         xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample" 
         xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls"
-        ui:Design.Background="{ui:ThemeResource ApplicationFillBrush}"
-        ui:Design.Foreground="{ui:ThemeResource ApplicationTextColorBrush}"
         mc:Ignorable="d"
         Icon="/app_icon.ico" Title="MainWindow" Height="800" Width="1200" 
         MinWidth="900"

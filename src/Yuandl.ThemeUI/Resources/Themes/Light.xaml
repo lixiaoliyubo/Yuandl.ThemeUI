@@ -91,7 +91,7 @@
 
 
     <!--  控件背景颜色 -->
-    <Color x:Key="ControlFillColor">#FAFFFFFF</Color>
+    <Color x:Key="ControlFillColor">#0Ff2f3f5</Color>
     <SolidColorBrush x:Key="ControlFillColorBrush" Color="{StaticResource ControlFillColor}" />
     <!--  控件实心背景填充颜色 -->
     <Color x:Key="ControlSolidFillColor">#F3F3F3</Color>

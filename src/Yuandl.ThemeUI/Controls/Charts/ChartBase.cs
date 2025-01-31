@@ -130,15 +130,15 @@ public class ChartBase : Control
         {
             isPopupOpen = true;
 
-            KeyValuePair<Rect, string> currentItem = PointCache.FirstOrDefault(x => x.Key.Contains(currentPoint));
-            if (currentItem.Key == null)
+            KeyValuePair<Rect, string>? currentItem = PointCache.FirstOrDefault(x => x.Key.Contains(currentPoint));
+            if (currentItem == null)
             {
                 return;
             }
 
-            _textBlock.Text = currentItem.Value;
+            _textBlock.Text = currentItem?.Value ?? string.Empty;
             _popup.IsOpen = true;
-            _lastItem = currentItem;
+            _lastItem = currentItem ?? default(KeyValuePair<Rect, string>);
         }
     }
 
@@ -218,7 +218,9 @@ public class ChartBase : Control
             fontWeight = FontWeights.Thin;
         }
 
-        return new FormattedText(text, CultureInfo.CurrentCulture, flowDirection, new Typeface(FontFamily, FontStyles.Normal, fontWeight, FontStretches.Normal), textSize, color ?? Brushes.Bisque)
+        // 获取当前的 PixelsPerDip 值
+        double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+        return new FormattedText(text, CultureInfo.CurrentCulture, flowDirection, new Typeface(FontFamily, FontStyles.Normal, fontWeight, FontStretches.Normal), textSize, color ?? Brushes.Bisque, pixelsPerDip)
         {
             MaxLineCount = 1,
             TextAlignment = TextAlignment.Justify,

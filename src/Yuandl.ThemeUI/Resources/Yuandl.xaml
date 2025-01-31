@@ -17,6 +17,10 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Resources/DefaultFocusVisualStyle.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Resources/DefaultTextBoxScrollViewerStyle.xaml" />
 
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Ripple/Ripple.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TabControl/TabItem.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TabControl/TabControl.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ContextMenu/ContextMenu.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Mask/Mask.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Step/Step.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Step/StepItem.xaml" />
@@ -48,8 +52,6 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Frame/Frame.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Image/Image.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Label/Label.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TabControl/TabControl.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TabControl/TabItem.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeView/TreeView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeView/TreeViewItem.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ListBox/ListBox.xaml" />
@@ -60,11 +62,8 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/GroupBox/GroupBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Menu/Menu.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Menu/MenuItem.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Menu/MenuLoader.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Divider/Divider.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ContentDialog/ContentDialog.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ContextMenu/ContextMenu.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ContextMenu/ContextMenuLoader.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/MessageBox/MessageBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Page/Page.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TextBlock/TextBlock.xaml" />
@@ -79,6 +78,7 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ProgressRing/ProgressRing.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/RichTextBox/RichTextBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ToolTip/ToolTip.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/CycleLoading/CycleLoading.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ProgressBar/ProgressBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/BreadcrumbBar/BreadcrumbBar.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Expander/Expander.xaml" />

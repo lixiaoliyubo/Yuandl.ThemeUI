@@ -4,7 +4,7 @@
 namespace Yuandl.ThemeUI.Controls;
 
 /// <summary>
-/// Extended <see cref="System.Windows.Controls.TreeViewItem"/> with <see cref="SymbolRegular"/> properties.
+/// Extended <see cref="System.Windows.Controls.TreeViewItem"/>
 /// </summary>
 public class TreeViewItem : System.Windows.Controls.TreeViewItem
 {

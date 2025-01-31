@@ -106,6 +106,16 @@ public class UiApplication
         return Resources[resourceKey];
     }
 
+    internal T GetResource<T>(string key)
+    {
+        if (TryFindResource(key) is T resource)
+        {
+            return resource;
+        }
+
+        return default;
+    }
+
     /// <summary>
     /// Turns the application's into shutdown mode.
     /// </summary>

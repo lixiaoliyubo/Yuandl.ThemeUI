@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace Yuandl.ThemeUI.ElementAssist;
+namespace Yuandl.ThemeUI.Controls;
 
 [TemplateVisualState(GroupName = "CommonStates", Name = TemplateStateNormal)]
 [TemplateVisualState(GroupName = "CommonStates", Name = TemplateStateMousePressed)]
@@ -32,6 +32,137 @@ public class Ripple : ContentControl
     public Ripple()
     {
         SizeChanged += OnSizeChanged;
+    }
+
+    private static readonly DependencyPropertyKey RippleSizePropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(RippleSize), typeof(double), typeof(Ripple), new PropertyMetadata(default(double)));
+
+    public static readonly DependencyProperty RippleSizeProperty =
+        RippleSizePropertyKey.DependencyProperty;
+
+    public double RippleSize
+    {
+        get => (double)GetValue(RippleSizeProperty);
+        private set => SetValue(RippleSizePropertyKey, value);
+    }
+
+    private static readonly DependencyPropertyKey RippleXPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(RippleX), typeof(double), typeof(Ripple), new PropertyMetadata(default(double)));
+
+    public static readonly DependencyProperty RippleXProperty = RippleXPropertyKey.DependencyProperty;
+
+    public double RippleX
+    {
+        get => (double)GetValue(RippleXProperty);
+        private set => SetValue(RippleXPropertyKey, value);
+    }
+
+    private static readonly DependencyPropertyKey RippleYPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(RippleY), typeof(double), typeof(Ripple), new PropertyMetadata(default(double)));
+
+    public static readonly DependencyProperty RippleYProperty = RippleYPropertyKey.DependencyProperty;
+
+    public double RippleY
+    {
+        get => (double)GetValue(RippleYProperty);
+        private set => SetValue(RippleYPropertyKey, value);
+    }
+
+    /// <summary>
+    ///   The DependencyProperty for the RecognizesAccessKey property.
+    ///   Default Value: false
+    /// </summary>
+    public static readonly DependencyProperty RecognizesAccessKeyProperty =
+        DependencyProperty.Register(nameof(RecognizesAccessKey), typeof(bool), typeof(Ripple), new PropertyMetadata(default(bool)));
+
+    /// <summary> Gets or sets a value indicating whether
+    ///   Determine if Ripple should use AccessText in its style
+    /// </summary>
+    public bool RecognizesAccessKey
+    {
+        get => (bool)GetValue(RecognizesAccessKeyProperty);
+        set => SetValue(RecognizesAccessKeyProperty, value);
+    }
+
+    /// <summary>
+    /// Set to <c>true</c> to cause the ripple to originate from the centre of the
+    /// content.  Otherwise the effect will originate from the mouse down position.
+    /// </summary>
+    public static readonly DependencyProperty IsCenteredProperty = DependencyProperty.Register(
+        nameof(IsCentered), typeof(bool), typeof(Ripple), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
+
+    public bool IsCentered
+    {
+        get => (bool)GetValue(IsCenteredProperty);
+        set => SetValue(IsCenteredProperty, value);
+    }
+
+    /// <summary>
+    /// Set to <c>True</c> to disable ripple effect
+    /// </summary>
+    public static readonly DependencyProperty IsDisabledProperty = DependencyProperty.RegisterAttached(
+        nameof(IsDisabled), typeof(bool), typeof(Ripple), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
+
+    public bool IsDisabled
+    {
+        get => (bool)GetValue(IsDisabledProperty);
+        set => SetValue(IsDisabledProperty, value);
+    }
+
+    public static readonly DependencyProperty SizeMultiplier = DependencyProperty.Register(
+        nameof(RippleSizeMultiplier), typeof(double), typeof(Ripple), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.Inherits));
+
+    public double RippleSizeMultiplier
+    {
+        get => (double)GetValue(SizeMultiplier);
+        set => SetValue(SizeMultiplier, value);
+    }
+
+    public static readonly DependencyProperty FeedbackProperty = DependencyProperty.Register(
+        nameof(Feedback), typeof(Brush), typeof(Ripple), new FrameworkPropertyMetadata(default(Brush),  FrameworkPropertyMetadataOptions.Inherits | FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public Brush? Feedback
+    {
+        get => (Brush?)GetValue(FeedbackProperty);
+        set => SetValue(FeedbackProperty, value);
+    }
+
+    public static readonly DependencyProperty OnTopProperty = DependencyProperty.Register(
+        nameof(OnTop), typeof(bool), typeof(Ripple), new FrameworkPropertyMetadata(default(bool), FrameworkPropertyMetadataOptions.Inherits | FrameworkPropertyMetadataOptions.AffectsRender));
+
+    public bool OnTop
+    {
+        get => (bool)GetValue(OnTopProperty);
+        set => SetValue(OnTopProperty, value);
+    }
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        _ = VisualStateManager.GoToState(this, TemplateStateNormal, false);
+    }
+
+    private void OnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
+    {
+        var innerContent = Content as FrameworkElement;
+
+        double width, height;
+
+        if (IsCentered && innerContent != null)
+        {
+            width = innerContent.ActualWidth;
+            height = innerContent.ActualHeight;
+        }
+        else
+        {
+            width = sizeChangedEventArgs.NewSize.Width;
+            height = sizeChangedEventArgs.NewSize.Height;
+        }
+
+        var radius = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2));
+
+        RippleSize = 2 * radius * RippleSizeMultiplier;
     }
 
     private static void MouseButtonEventHandler(object sender, MouseButtonEventArgs e)
@@ -99,18 +230,9 @@ public class Ripple : ContentControl
 #endif
     }
 
-    public static readonly DependencyProperty FeedbackProperty = DependencyProperty.Register(
-        nameof(Feedback), typeof(Brush), typeof(Ripple), new PropertyMetadata(default(Brush)));
-
-    public Brush? Feedback
-    {
-        get => (Brush?)GetValue(FeedbackProperty);
-        set => SetValue(FeedbackProperty, value);
-    }
-
     protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
     {
-        if (RippleAssist.GetIsCentered(this))
+        if (IsCentered)
         {
             var innerContent = Content as FrameworkElement;
 
@@ -143,14 +265,14 @@ public class Ripple : ContentControl
             RippleY = point.Y - (RippleSize / 2);
         }
 
-        if (!RippleAssist.GetIsDisabled(this))
+        if (!IsDisabled)
         {
             _ = VisualStateManager.GoToState(this, TemplateStateNormal, false);
             _ = VisualStateManager.GoToState(this, TemplateStateMousePressed, true);
             _ = PressedInstances.Add(this);
         }
 
-        if (!RippleAssist.GetIsDisabled(this))
+        if (!IsDisabled)
         {
             _ = VisualStateManager.GoToState(this, TemplateStateNormal, false);
             _ = VisualStateManager.GoToState(this, TemplateStateMousePressed, true);
@@ -158,94 +280,5 @@ public class Ripple : ContentControl
         }
 
         base.OnPreviewMouseLeftButtonDown(e);
-    }
-
-    private static readonly DependencyPropertyKey RippleSizePropertyKey =
-        DependencyProperty.RegisterReadOnly(
-            "RippleSize", typeof(double), typeof(Ripple),
-            new PropertyMetadata(default(double)));
-
-    public static readonly DependencyProperty RippleSizeProperty =
-        RippleSizePropertyKey.DependencyProperty;
-
-    public double RippleSize
-    {
-        get => (double)GetValue(RippleSizeProperty);
-        private set => SetValue(RippleSizePropertyKey, value);
-    }
-
-    private static readonly DependencyPropertyKey RippleXPropertyKey =
-        DependencyProperty.RegisterReadOnly(
-            "RippleX", typeof(double), typeof(Ripple),
-            new PropertyMetadata(default(double)));
-
-    public static readonly DependencyProperty RippleXProperty =
-        RippleXPropertyKey.DependencyProperty;
-
-    public double RippleX
-    {
-        get => (double)GetValue(RippleXProperty);
-        private set => SetValue(RippleXPropertyKey, value);
-    }
-
-    private static readonly DependencyPropertyKey RippleYPropertyKey =
-        DependencyProperty.RegisterReadOnly(
-            "RippleY", typeof(double), typeof(Ripple),
-            new PropertyMetadata(default(double)));
-
-    public static readonly DependencyProperty RippleYProperty =
-        RippleYPropertyKey.DependencyProperty;
-
-    public double RippleY
-    {
-        get => (double)GetValue(RippleYProperty);
-        private set => SetValue(RippleYPropertyKey, value);
-    }
-
-    /// <summary>
-    ///   The DependencyProperty for the RecognizesAccessKey property.
-    ///   Default Value: false
-    /// </summary>
-    public static readonly DependencyProperty RecognizesAccessKeyProperty =
-        DependencyProperty.Register(
-            nameof(RecognizesAccessKey), typeof(bool), typeof(Ripple),
-            new PropertyMetadata(default(bool)));
-
-    /// <summary> Gets or sets a value indicating whether
-    ///   Determine if Ripple should use AccessText in its style
-    /// </summary>
-    public bool RecognizesAccessKey
-    {
-        get => (bool)GetValue(RecognizesAccessKeyProperty);
-        set => SetValue(RecognizesAccessKeyProperty, value);
-    }
-
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-
-        _ = VisualStateManager.GoToState(this, TemplateStateNormal, false);
-    }
-
-    private void OnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
-    {
-        var innerContent = Content as FrameworkElement;
-
-        double width, height;
-
-        if (RippleAssist.GetIsCentered(this) && innerContent != null)
-        {
-            width = innerContent.ActualWidth;
-            height = innerContent.ActualHeight;
-        }
-        else
-        {
-            width = sizeChangedEventArgs.NewSize.Width;
-            height = sizeChangedEventArgs.NewSize.Height;
-        }
-
-        var radius = Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2));
-
-        RippleSize = 2 * radius * RippleAssist.GetRippleSizeMultiplier(this);
     }
 }

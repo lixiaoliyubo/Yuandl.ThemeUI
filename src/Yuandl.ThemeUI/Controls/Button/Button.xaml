@@ -13,6 +13,7 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Resources/Shadows.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <converters:BrushRoundConverter x:Key="BrushRoundConverter" />
     <Thickness x:Key="ButtonPadding">16,6,16,6</Thickness>
     <Thickness x:Key="ButtonBorderThemeThickness">1</Thickness>
     <Thickness x:Key="ButtonIconMargin">0,0,8,0</Thickness>
@@ -56,20 +57,21 @@
                                     TextElement.Foreground="{TemplateBinding Foreground}" />
                             </Border>
                         </AdornerDecorator>
-                        <assist:Ripple x:Name="Ripple" 
+                        <controls:Ripple x:Name="Ripple" 
+                            Focusable="False"
+                            Feedback="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Focusable="False"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <assist:Ripple.Clip>
+                            <controls:Ripple.Clip>
                                 <MultiBinding Converter="{StaticResource BorderClipConverter}">
                                     <Binding ElementName="ContentBorder" Path="ActualWidth" />
                                     <Binding ElementName="ContentBorder" Path="ActualHeight" />
                                     <Binding ElementName="ContentBorder" Path="CornerRadius" />
                                     <Binding ElementName="ContentBorder" Path="BorderThickness" />
                                 </MultiBinding>
-                            </assist:Ripple.Clip>
-                        </assist:Ripple>
+                            </controls:Ripple.Clip>
+                        </controls:Ripple>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -91,7 +93,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="assist:RippleAssist.Feedback" Value="{DynamicResource ControlFillColorBrush}" />
     </Style>
 
     <Style x:Key="DefaultUiButtonStyle" TargetType="{x:Type controls:Button}">
@@ -152,20 +153,21 @@
                                 </Grid>
                             </Border>
                         </AdornerDecorator>
-                        <assist:Ripple x:Name="Ripple" 
+                        <controls:Ripple x:Name="Ripple" 
+                            Focusable="False"
+                            Feedback="{TemplateBinding Foreground, Converter={StaticResource BrushRoundConverter}}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Focusable="False"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <assist:Ripple.Clip>
+                            <controls:Ripple.Clip>
                                 <MultiBinding Converter="{StaticResource BorderClipConverter}">
                                     <Binding ElementName="ContentBorder" Path="ActualWidth" />
                                     <Binding ElementName="ContentBorder" Path="ActualHeight" />
                                     <Binding ElementName="ContentBorder" Path="CornerRadius" />
                                     <Binding ElementName="ContentBorder" Path="BorderThickness" />
                                 </MultiBinding>
-                            </assist:Ripple.Clip>
-                        </assist:Ripple>
+                            </controls:Ripple.Clip>
+                        </controls:Ripple>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
@@ -187,22 +189,6 @@
                             <Setter Property="BorderBrush" Value="{DynamicResource ControlPressedBorderColorBrush}" />
                             <Setter Property="Foreground" Value="{DynamicResource ControlPressedTextColorBrush}" />
                         </MultiTrigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource ControlDisabledFillColorBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource ControlDisableTextColorBrush}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource ControlDisabledBorderColorBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource ControlDisableTextColorBrush}" />
-                        </Trigger>
-                        <Trigger Property="Content" Value="{x:Null}">
-                            <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
-                        </Trigger>
-                        <Trigger Property="Content" Value="">
-                            <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
-                        </Trigger>
-                        <Trigger Property="Icon" Value="{x:Null}">
-                            <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
-                            <Setter TargetName="ControlIcon" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
                         <!--  TRANSPARENT  -->
                         <Trigger Property="Appearance" Value="Transparent">
                             <Setter Property="Background" Value="Transparent" />
@@ -236,11 +222,26 @@
                             <Setter Property="Background" Value="{DynamicResource SystemSuccessTextColorBrush}" />
                             <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{DynamicResource ControlDisabledFillColorBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource ControlDisableTextColorBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource ControlDisabledBorderColorBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource ControlDisableTextColorBrush}" />
+                        </Trigger>
+                        <Trigger Property="Content" Value="{x:Null}">
+                            <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
+                        </Trigger>
+                        <Trigger Property="Content" Value="">
+                            <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
+                        </Trigger>
+                        <Trigger Property="Icon" Value="{x:Null}">
+                            <Setter TargetName="ControlIcon" Property="Margin" Value="0" />
+                            <Setter TargetName="ControlIcon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="assist:RippleAssist.Feedback" Value="{DynamicResource ControlFillColorBrush}" />
     </Style>
 
 

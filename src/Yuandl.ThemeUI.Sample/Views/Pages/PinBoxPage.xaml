@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     This Source Code Form is subject to the terms of the MIT License.
     If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
     Copyright (C) Yuandl ThemeUI. All Rights Reserved.
@@ -61,37 +61,21 @@
             <Slider x:Name="Slider"  Maximum="100" Minimum="0" Value="12" />
             <UniformGrid Columns="2">
                 <StackPanel Orientation="Vertical" Margin="20" VerticalAlignment="Center">
-                <Label Content="Orientation" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <ComboBox x:Name="cmbOrientation" SelectedIndex="0">
-                        <ComboBoxItem Content="Horizontal" />
-                        <ComboBoxItem Content="Vertical" />
-                </ComboBox>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="20">
-                <Label Content="Horizontal Alignment"/>
-                <ComboBox x:Name="cmbHorizontalAlignment" SelectedIndex="0">
-                    <ComboBoxItem Content="Left" />
-                    <ComboBoxItem Content="Center" />
-                    <ComboBoxItem Content="Right" />
-                    <ComboBoxItem Content="Stretch" />
-                </ComboBox>
-            </StackPanel>
-            <!--<StackPanel Orientation="Vertical" Margin="20">
-                <Label Content="Password Reveal Mode"/>
-                <ComboBox x:Name="cmbPassReveal" SelectedIndex="0">
-                    <ComboBoxItem Content="Hidden" />
-                    <ComboBoxItem Content="Peek" />
-                    <ComboBoxItem Content="Visible" />
-                </ComboBox>
-            </StackPanel>-->
-             <!--<StackPanel Orientation="Vertical" Margin="10">
-                <Label Content="Show Success"/>
-                <ui:ToggleSwitch x:Name="tgShowSuccess"  />
-            </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="10">
-                <Label Content="Show Error"/>
-                <ui:ToggleSwitch x:Name="tgShowError"/>
-                </StackPanel>-->
+                    <Label Content="Orientation" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <ComboBox x:Name="cmbOrientation" SelectedIndex="0">
+                            <ComboBoxItem Content="Horizontal" />
+                            <ComboBoxItem Content="Vertical" />
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="20">
+                    <Label Content="Horizontal Alignment"/>
+                    <ComboBox x:Name="cmbHorizontalAlignment" SelectedIndex="0">
+                        <ComboBoxItem Content="Left" />
+                        <ComboBoxItem Content="Center" />
+                        <ComboBoxItem Content="Right" />
+                        <ComboBoxItem Content="Stretch" />
+                    </ComboBox>
+                </StackPanel>
             </UniformGrid>
         </StackPanel>
     </Grid>

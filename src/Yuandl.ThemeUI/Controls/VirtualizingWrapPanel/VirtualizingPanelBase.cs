@@ -1,4 +1,4 @@
-﻿// This Source Code Form is subject to the terms of the MIT License.
+// This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 
@@ -198,7 +198,7 @@ public abstract class VirtualizingPanelBase : VirtualizingPanel, IScrollInfo
     /// <summary>
     /// Gets or sets the scroll owner.
     /// </summary>
-    public ScrollViewer? ScrollOwner { get; set; }
+    public System.Windows.Controls.ScrollViewer? ScrollOwner { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the content can be vertically scrolled.

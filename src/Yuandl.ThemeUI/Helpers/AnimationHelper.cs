@@ -36,6 +36,13 @@ public class AnimationHelper
         };
     }
 
+    /// <summary>
+    ///     创建一个Double动画
+    /// </summary>
+    /// <param name="formValue"></param>
+    /// <param name="toValue"></param>
+    /// <param name="milliseconds"></param>
+    /// <returns></returns>
     public static DoubleAnimation CreateAnimation(double formValue, double toValue, double milliseconds = 200)
     {
         return new(formValue, toValue, new Duration(TimeSpan.FromMilliseconds(milliseconds)))

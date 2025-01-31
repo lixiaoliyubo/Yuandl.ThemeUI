@@ -89,20 +89,27 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="Severity" Value="Primary">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
+                            <Setter TargetName="ControlIcon" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Info">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemInfoTextColorBrush}" />
+                            <Setter TargetName="ControlIcon" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Success">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemSuccessTextColorBrush}" />
+                            <Setter TargetName="ControlIcon" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Warning">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemWarningTextColorBrush}" />
+                            <Setter TargetName="ControlIcon" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Error">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemErrorTextColorBrush}" />
+                            <Setter TargetName="ControlIcon" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
-
+                        <Trigger Property="Severity" Value="Transparent">
+                            <Setter TargetName="ControlIcon" Property="TextElement.Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
 
                 </ControlTemplate>
@@ -151,21 +158,27 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="Severity" Value="Primary">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemAccentColorBrush}" />
+                            <Setter TargetName="TextBlock" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Info">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemInfoTextColorBrush}" />
+                            <Setter TargetName="TextBlock" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Success">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemSuccessTextColorBrush}" />
+                            <Setter TargetName="TextBlock" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Warning">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemWarningTextColorBrush}" />
+                            <Setter TargetName="TextBlock" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
                         <Trigger Property="Severity" Value="Error">
                             <Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource SystemErrorTextColorBrush}" />
+                            <Setter TargetName="TextBlock" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Trigger>
-
-
+                        <Trigger Property="Severity" Value="Transparent">
+                            <Setter TargetName="TextBlock" Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
 
                 </ControlTemplate>

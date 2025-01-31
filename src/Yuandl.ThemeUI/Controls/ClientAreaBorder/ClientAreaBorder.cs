@@ -23,7 +23,7 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
     public ApplicationTheme ApplicationTheme { get; set; } = ApplicationTheme.Unknown;
 
     /// <summary>
-    /// Gets the system value for the padded border thickness (<see cref="User32.SM.CXPADDEDBORDER"/>) in WPF units.
+    /// Gets the system value for the padded border thickness (<see cref="Dwmapi.SM.CXPADDEDBORDER"/>) in WPF units.
     /// </summary>
     public Thickness PaddedBorderThickness
     {
@@ -66,7 +66,6 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
     /// <remarks>
     /// If you use a <see cref="WindowChrome"/> to extend the client area of a window to the non-client area, you need to handle the edge margin issue when the window is maximized.
     /// Use this property to get the correct margin value when the window is maximized, so that when the window is maximized, the client area can completely cover the screen client area by no less than a single pixel at any DPI.
-    /// The<see cref="User32.GetSystemMetrics"/> method cannot obtain this value directly.
     /// </remarks>
     public Thickness WindowChromeNonClientFrameThickness =>
         _windowChromeNonClientFrameThickness ??= new Thickness(

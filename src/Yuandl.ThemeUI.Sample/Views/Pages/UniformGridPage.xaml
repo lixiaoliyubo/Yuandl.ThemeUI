@@ -14,11 +14,11 @@
       xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
       controls:PageControlDocumentation.DocumentationType="{x:Type ui:UniformGrid}"
       xmlns:models="clr-namespace:Yuandl.ThemeUI.Sample.Models" 
-      mc:Ignorable="d" 
+      mc:Ignorable="d" ScrollViewer.CanContentScroll="False"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AnchorPage">
 
-    <StackPanel Orientation="Vertical">
+    <Grid>
         <smtx:XamlDisplay UniqueKey="UniformGridSample1" Margin="20" Tag="UniformGrid Example Demonstration">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -26,7 +26,11 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <ui:UniformGrid ColumnSpacing="{Binding Value, ElementName=columnSpacing,Mode=OneWay}" Columns="5" RowSpacing="{Binding Value, ElementName=rowSpacing,Mode=OneWay}">
+                    <ui:UniformGrid 
+                        ColumnSpacing="{Binding Value, ElementName=columnSpacing,Mode=OneWay}" 
+                        Columns="{Binding ElementName=textColumns,Path=Text}" 
+                        Rows="{Binding ElementName=textRows,Path=Text}" 
+                        RowSpacing="{Binding Value, ElementName=rowSpacing,Mode=OneWay}">
                         <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
                         <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
                         <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
@@ -49,13 +53,23 @@
                         <Grid Width="50" Height="50" Background="{ui:ThemeResource SystemAccentColorBrush}"/>
                     </ui:UniformGrid>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Margin="10" Orientation="Vertical" Width="200" Background="{ui:ThemeResource ControlFillColorBrush}">
-                    <TextBlock Text="ColumnSpacing Value" Margin="15"/>
-                    <Slider x:Name="columnSpacing" Orientation="Horizontal" Value="10" Maximum="50"/>
-                    <TextBlock Text="RowSpacing Value" Margin="15"/>
-                    <Slider x:Name="rowSpacing" Orientation="Horizontal" Value="10" Maximum="50"/>
-                </StackPanel>
+                <Border Grid.Column="1" Width="350" Background="{ui:ThemeResource ControlFillColorBrush}">
+                    <StackPanel  Margin="10" Orientation="Vertical">
+                        <ui:FormItem Prefix="Rows：" PrefixWidth="120" TextAlignment="Right">
+                            <ui:TextBox x:Name="textRows" Text="10" HorizontalAlignment="Stretch"/>
+                        </ui:FormItem>
+                        <ui:FormItem Prefix="Columns：" PrefixWidth="120" TextAlignment="Right">
+                            <ui:TextBox x:Name="textColumns" Text="10" HorizontalAlignment="Stretch"/>
+                        </ui:FormItem>
+                        <ui:FormItem Prefix="ColumnSpacing：" PrefixWidth="120" TextAlignment="Right">
+                            <Slider x:Name="columnSpacing" Orientation="Horizontal" Value="10" Maximum="50" HorizontalAlignment="Stretch"/>
+                        </ui:FormItem>
+                        <ui:FormItem Prefix="RowSpacing：" PrefixWidth="120" TextAlignment="Right">
+                            <Slider x:Name="rowSpacing" Orientation="Horizontal" Value="10" Maximum="50" HorizontalAlignment="Stretch"/>
+                        </ui:FormItem>
+                    </StackPanel>
+                </Border>
             </Grid>
         </smtx:XamlDisplay>
-    </StackPanel>
+    </Grid>
 </Page>

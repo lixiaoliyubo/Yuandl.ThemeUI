@@ -89,21 +89,21 @@
                                 </Grid>
                             </Border>
                         </AdornerDecorator>
-                        <assist:Ripple x:Name="Ripple" 
+                        <controls:Ripple x:Name="Ripple" 
                             Padding="{TemplateBinding Padding}"
                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                             Focusable="False"
                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <assist:Ripple.Clip>
+                            <controls:Ripple.Clip>
                                 <MultiBinding Converter="{StaticResource BorderClipConverter}">
                                     <Binding ElementName="ContentBorder" Path="ActualWidth" />
                                     <Binding ElementName="ContentBorder" Path="ActualHeight" />
                                     <Binding ElementName="ContentBorder" Path="CornerRadius" />
                                     <Binding ElementName="ContentBorder" Path="BorderThickness" />
                                 </MultiBinding>
-                            </assist:Ripple.Clip>
-                        </assist:Ripple>
+                            </controls:Ripple.Clip>
+                        </controls:Ripple>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -138,7 +138,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="assist:RippleAssist.Feedback" Value="{DynamicResource ApplicationTextColorBrush}" />
         <Setter Property="assist:ElevationAssist.Elevation" Value="Dp0" />
     </Style>
 

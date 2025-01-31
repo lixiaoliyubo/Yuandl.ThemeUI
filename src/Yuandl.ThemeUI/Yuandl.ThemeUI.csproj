@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net47;net48;net5.0-windows;net6.0-windows;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net462;net47;net48;net6.0-windows;net8.0-windows;net9.0-windows</TargetFrameworks>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace>Yuandl.ThemeUI</RootNamespace>
@@ -16,8 +16,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>源动力</Company>
     <Copyright>Copyright (C) 2024 yuandl.cn</Copyright>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0</FileVersion>
+    <AssemblyVersion>2.0.4</AssemblyVersion>
+    <FileVersion>2.0.4</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,6 +42,7 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
 		<PackageReference Include="PolySharp">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

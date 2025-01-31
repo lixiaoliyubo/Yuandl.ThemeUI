@@ -9,6 +9,8 @@
     xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls">
 
     <Style x:Key="DefaultFormItemStyle" TargetType="{x:Type controls:FormItem}">
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="IsTabStop" Value="False" />
@@ -19,11 +21,23 @@
                         <controls:TextBlock x:Name="PrefixTextBlock" Margin="3"
                                    Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Prefix}"
                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=PrefixWidth}"
-                                   VerticalAlignment="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=VerticalContentAlignment}"                                   
-                                   TextAlignment="Right" DockPanel.Dock="Left" />
-                        <ContentPresenter Margin="3"
-                                          Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" />
+                                   VerticalAlignment="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=VerticalContentAlignment}"   
+                                   HorizontalAlignment="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HorizontalContentAlignment}"
+                                   TextAlignment="{TemplateBinding TextAlignment}"
+                                   DockPanel.Dock="Left" />
+                        <ContentPresenter 
+                            Margin="3" 
+                            IsEnabled="{TemplateBinding IsEnabled}"
+                            Content="{TemplateBinding Content}" />
                     </DockPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PrefixTextBlock" Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter TargetName="PrefixTextBlock" Property="DockPanel.Dock" Value="Top" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
 
             </Setter.Value>

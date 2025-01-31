@@ -27,7 +27,7 @@
             </ui:ButtonGroup>
         </smtx:XamlDisplay>
         <smtx:XamlDisplay UniqueKey="ButtonSample2" Margin="20" Tag="Disable button.">
-            <Button HorizontalAlignment="Left" Content="DisableButton" Margin="10" IsEnabled="False"/>
+            <Button HorizontalAlignment="Left" Content="DisableButton" Margin="10" IsEnabled="True"/>
         </smtx:XamlDisplay>
         <smtx:XamlDisplay UniqueKey="ButtonSample3" Margin="20" Tag="Custom button Appearance.">
             <ui:UniformGrid Rows="1" ColumnSpacing="10">

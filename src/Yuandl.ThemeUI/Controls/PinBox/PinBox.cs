@@ -2,6 +2,7 @@
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 using System.Security;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Yuandl.ThemeUI.Controls;
@@ -13,6 +14,13 @@ public partial class PinBox : System.Windows.Controls.Control
     private UniformGrid? _uniformGrid;
     private List<SecureString>? _passwordList;
 
+    public PinBox() {
+        ForegroundProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(Brushes.Transparent, new PropertyChangedCallback(OnForegroundChanged)));
+        BackgroundProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(Brushes.Transparent, new PropertyChangedCallback(OnBackgroundChanged)));
+        BorderBrushProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(Brushes.Transparent, new PropertyChangedCallback(OnBorderBrushChanged)));
+        BorderThicknessProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(new Thickness(0, 0, 0, 0), new PropertyChangedCallback(OnBorderThicknessChanged)));
+    }
+
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
@@ -22,10 +30,6 @@ public partial class PinBox : System.Windows.Controls.Control
         CreatePinBoxes(PasswordLength);
         UpdatePinBoxes(GetPassword(), PasswordLength);
 
-        ForegroundProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(Brushes.Transparent, new PropertyChangedCallback(OnForegroundChanged)));
-        BackgroundProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(Brushes.Transparent, new PropertyChangedCallback(OnBackgroundChanged)));
-        BorderBrushProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(Brushes.Transparent, new PropertyChangedCallback(OnBorderBrushChanged)));
-        BorderThicknessProperty.OverrideMetadata(typeof(PinBox), new FrameworkPropertyMetadata(new Thickness(0, 0, 0, 0), new PropertyChangedCallback(OnBorderThicknessChanged)));
     }
 
     private void OnForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -265,17 +269,17 @@ public partial class PinBox : System.Windows.Controls.Control
             password = new System.Net.NetworkCredential(string.Empty, secureString).Password;
         }
 
-        // var style = (Style)TryFindResource("PinBoxPasswordBoxStyle");
+        var style = (Style)TryFindResource("PinBoxPasswordBoxStyle");
         var passwordBox = new System.Windows.Controls.PasswordBox()
         {
+            Style = style,
             MaxLength = 1,
             TabIndex = index,
             Name = $"passwordBoxItem{index}",
             Width = ItemWidth,
             Padding = new Thickness(0, 0, 0, 0),
-
             // PlaceholderText = "*",
-            Margin = new Thickness(ItemSpacing, 0, ItemSpacing, 0),
+            Margin = new Thickness(0, 0, 0, 0),
             PasswordChar = GetPasswordChar(PasswordChar),
             Foreground = this.Foreground,
             Background = this.Background,
@@ -283,11 +287,7 @@ public partial class PinBox : System.Windows.Controls.Control
             BorderThickness = this.BorderThickness,
             FlowDirection = this.FlowDirection,
             IsEnabled = this.IsEnabled,
-            Visibility = this.Visibility,
-
-            // ClearButtonEnabled = false,
-            // RevealButtonEnabled = this.PasswordRevealMode,
-            // Style= style
+            Visibility = this.Visibility
         };
 
         if (!string.IsNullOrEmpty(password))
@@ -348,7 +348,7 @@ public partial class PinBox : System.Windows.Controls.Control
         {
             foreach (System.Windows.Controls.PasswordBox box in _uniformGrid.Children)
             {
-                // box.PlaceholderText = string.Empty;
+                //box.PlaceholderText = string.Empty;
             }
 
             if (!string.IsNullOrEmpty(newValue))

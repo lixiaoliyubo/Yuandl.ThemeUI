@@ -37,24 +37,15 @@ Nulla a porta libero, quis hendrerit ex. In ut pharetra sem. Nunc gravida ante r
             }
         });
 
-        CustomTabs = new()
+        CustomTabs = new();
+        for (int i = 0; i < 10; i++)
         {
-            new CustomTab(closeCommand)
+            CustomTabs.Add(new CustomTab(closeCommand)
             {
-                CustomHeader = "Custom tab 1",
-                CustomContent = "Custom content 1"
-            },
-            new CustomTab(closeCommand)
-            {
-                CustomHeader = "Custom tab 2",
-                CustomContent = "Custom content 2"
-            },
-            new CustomTab(closeCommand)
-            {
-                CustomHeader = "Custom tab 3",
-                CustomContent = "Custom content 3",
-            },
-        };
+                CustomHeader = $"Custom tab {i}",
+                CustomContent = $"Custom content {i}"
+            });
+        }
     }
 }
 

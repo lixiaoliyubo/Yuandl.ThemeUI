@@ -11,6 +11,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.SDK" Version="17.3.32804.24" />
     <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.7.2196" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
+    <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageVersion Include="NLog" Version="5.3.4" />
     <PackageVersion Include="NLog.Extensions.Logging" Version="5.3.14" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />

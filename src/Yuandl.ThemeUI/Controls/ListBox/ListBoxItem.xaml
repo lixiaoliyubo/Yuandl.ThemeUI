@@ -7,6 +7,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
+    xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
     xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist">
 
     <converters:BrushRoundConverter x:Key="BrushRoundConverter" />
@@ -73,7 +74,7 @@
                             <Border x:Name="MouseOverBorder" Background="{Binding Path=(assist:ListBoxItemAssist.HoverBackground), RelativeSource={RelativeSource TemplatedParent}}" Opacity="0" />
                             <Border x:Name="SelectedBorder" Background="{Binding Path=(assist:ListBoxItemAssist.SelectedFocusedBackground), RelativeSource={RelativeSource TemplatedParent}}" Opacity="0" />
                             <Border x:Name="SelectedUnfocusedBorder" Background="{Binding Path=(assist:ListBoxItemAssist.SelectedUnfocusedBackground), RelativeSource={RelativeSource TemplatedParent}}" Opacity="0" />
-                            <assist:Ripple x:Name="Ripple"
+                            <controls:Ripple x:Name="Ripple"
                               Padding="{TemplateBinding Padding}"
                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"

@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     This Source Code Form is subject to the terms of the MIT License.
     If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
     Copyright (C) Yuandl ThemeUI. All Rights Reserved.
@@ -25,12 +25,6 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="MinHeight" Value="{StaticResource PinBoxMinHeight}" />
         <Setter Property="MinWidth" Value="{StaticResource PinBoxMinWidth}" />
-        <!--<Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type PasswordBox}">
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>-->
     </Style>
 
     <Style TargetType="{x:Type controls:PinBox}">
@@ -66,9 +60,12 @@
                         <controls:UniformGrid x:Name="PART_Panel"
                                            Grid.Row="1"
                                            Rows="1"
+                                           ColumnSpacing="{TemplateBinding ItemSpacing}"
+                                           RowSpacing="{TemplateBinding ItemSpacing}"
                                            Orientation="{TemplateBinding Orientation}" />
                         <ContentPresenter x:Name="DescriptionPresenter"
                                           Grid.Row="2"
+                                          VerticalAlignment="Bottom"
                                           Content="{TemplateBinding Description}"
                                           TextElement.Foreground="{DynamicResource ControlTextColorBrush}" />
                     </Grid>

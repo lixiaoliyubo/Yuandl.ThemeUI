@@ -153,6 +153,9 @@
                         </EventTrigger>
                     </Grid.Triggers>
                 </Grid>
+                <ui:CycleLoading Margin="2" Value="60" LoadTitle="Loading...." Width="100">
+                    <TextBlock Text="activity"/>
+                </ui:CycleLoading>
             </StackPanel>
         </smtx:XamlDisplay>
     </StackPanel>
