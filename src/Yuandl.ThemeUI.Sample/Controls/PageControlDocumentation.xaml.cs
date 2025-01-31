@@ -247,7 +247,7 @@ public class PageControlDocumentation : Control
 
     private static string CreateUrlForGithub(Type pageType, ReadOnlySpan<char> fileExtension)
     {
-        const string baseUrl = "https://github.com/lixiaoliyubo/Yuandl.ThemeUI/src/Yuandl.ThemeUI.Sample/";
+        const string baseUrl = "https://github.com/lixiaoliyubo/Yuandl.ThemeUI/tree/master/src/Yuandl.ThemeUI.Sample/";
         const string baseNamespace = "Yuandl.ThemeUI.Sample";
 
         ReadOnlySpan<char> pageFullNameWithoutBaseNamespace = pageType.FullName.AsSpan()[
