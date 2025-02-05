@@ -70,4 +70,14 @@
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
+    <Style TargetType="{x:Type Paragraph}">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="FontFamily" Value="Consolas" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
+    </Style>
 </ResourceDictionary>

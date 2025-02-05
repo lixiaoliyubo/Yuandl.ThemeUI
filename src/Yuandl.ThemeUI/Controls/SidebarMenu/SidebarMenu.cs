@@ -45,7 +45,18 @@ public partial class SidebarMenu : System.Windows.Controls.Control
     /// </summary>
     protected System.Windows.Controls.ItemsControl MenuItemsItemsControl { get; set; } = null!;
 
-    public IPageViewItem? SelectedItem { get; set; }
+    public static readonly DependencyProperty SelectedItemProperty =
+        DependencyProperty.Register(
+            nameof(SelectedItem),
+            typeof(IPageViewItem),
+            typeof(SidebarMenu),
+            new PropertyMetadata(null));
+
+    public IPageViewItem? SelectedItem
+    {
+        get { return (IPageViewItem?)GetValue(SelectedItemProperty); }
+        set { SetValue(SelectedItemProperty, value); }
+    }
 
     public SidebarMenu()
     {
