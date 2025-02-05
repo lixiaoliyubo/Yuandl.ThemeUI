@@ -19,7 +19,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Dark"/>
+                <ui:ThemesDictionary Theme="Light"/>
                 <ui:ControlsDictionary />
                 <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI.Sample;component/Controls/ShowMeTheXAML.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI.Sample;component/Controls/PageControlDocumentation.xaml" />

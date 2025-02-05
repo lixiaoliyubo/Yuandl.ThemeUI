@@ -11,6 +11,9 @@ public partial class StepPageViewModel : ViewModel
     [ObservableProperty]
     private ObservableCollection<string> _steps = new();
 
+    [ObservableProperty]
+    private int _progress = 1;
+
     public StepPageViewModel()
     {
         Steps = new ObservableCollection<string>();

@@ -25,7 +25,6 @@ public enum ThemeResource
     TextFillColorPrimaryBrush,
 
     ControFillLightColor,
-    ControFillLightColorBrush,
     ControlFillColorTransparent,
     ControlFillColorTransparentBrush,
     ControPopupFillColor,

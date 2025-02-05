@@ -11,13 +11,18 @@
         xmlns:ui="http://schemas.yuandl.cn/xamltheme/2024/xaml"
         xmlns:local="clr-namespace:Yuandl.ThemeUI.Sample" 
         xmlns:controls="clr-namespace:Yuandl.ThemeUI.Sample.Controls"
-        mc:Ignorable="d"
-        Icon="/app_icon.ico" Title="MainWindow" Height="800" Width="1200" 
-        MinWidth="900"
+        d:Background="{ui:ThemeResource ApplicationFillBrush}"
+        d:Foreground="{ui:ThemeResource ApplicationTextColorBrush}"
+        Background="{ui:ThemeResource ApplicationFillBrush}"
+        Foreground="{ui:ThemeResource ApplicationTextColorBrush}"
         ExtendsContentIntoTitleBar="True"
         WindowBackdropType="Mica"
-        WindowCornerPreference="Default"
-        WindowStartupLocation="CenterScreen">
+        WindowCornerPreference="Round"
+        WindowState ="Normal"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Icon="/app_icon.ico" Title="MainWindow" Height="800" Width="1200" 
+        MinWidth="900">
     <Window.CommandBindings>
         <CommandBinding Command="Copy" Executed="OnCopy" />
     </Window.CommandBindings>
