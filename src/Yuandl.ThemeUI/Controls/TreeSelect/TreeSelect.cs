@@ -149,6 +149,7 @@ public class TreeSelect : Selector
         get { return (bool)GetValue(IsEditableProperty); }
         set { SetValue(IsEditableProperty, value); }
     }
+
     /// <summary>
     ///     DependencyProperty for MaxDropDownHeight
     /// </summary>
@@ -177,25 +178,75 @@ public class TreeSelect : Selector
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        
+
         if (_treeView != null)
         {
             _treeView.SelectedItemChanged -= TreeView_SelectedItemChanged;
         }
-        
+
         _treeView = GetTemplateChild("PART_TreeView") as TreeView;
-        
+
         if (_treeView != null)
         {
             _treeView.SelectedItemChanged += TreeView_SelectedItemChanged;
-            // 通过绑定来同步SelectedItem
-            var binding = new Binding(nameof(SelectedItem))
+
+            // 如果有初始选中项，展开到该项
+            if (SelectedItem != null)
             {
-                Source = this,
-                Mode = BindingMode.TwoWay
-            };
-            _treeView.SetBinding(TreeView.SelectedItemProperty, binding);
+                ExpandToItem(_treeView, SelectedItem);
+            }
         }
+    }
+
+    private void ExpandToItem(ItemsControl itemsControl, object item)
+    {
+        if (itemsControl == null || item == null) return;
+
+        var itemsSourcePath = GetItemsSourcePropertyPath(this);
+        if (string.IsNullOrEmpty(itemsSourcePath)) return;
+
+        foreach (var containerItem in itemsControl.Items)
+        {
+            var container = itemsControl.ItemContainerGenerator.ContainerFromItem(containerItem) as TreeViewItem;
+            if (container == null) continue;
+
+            if (containerItem == item)
+            {
+                // 找到目标项，选中它
+                container.IsSelected = true;
+                ExpandParents(container);
+                return;
+            }
+
+            // 检查子项
+            var children = GetItemChildren(containerItem, itemsSourcePath) as IEnumerable;
+            if (children != null)
+            {
+                container.IsExpanded = true;
+                ExpandToItem(container, item);
+            }
+        }
+    }
+
+    private void ExpandParents(TreeViewItem item)
+    {
+        TreeViewItem parent = GetParentTreeViewItem(item);
+        while (parent != null)
+        {
+            parent.IsExpanded = true;
+            parent = GetParentTreeViewItem(parent);
+        }
+    }
+
+    private TreeViewItem GetParentTreeViewItem(DependencyObject item)
+    {
+        DependencyObject? parent = VisualTreeHelper.GetParent(item);
+        while (parent != null && !(parent is TreeViewItem))
+        {
+            parent = VisualTreeHelper.GetParent(parent);
+        }
+
+        return parent as TreeViewItem;
     }
 
     private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -206,52 +257,35 @@ public class TreeSelect : Selector
             {
                 _isUpdating = true;
                 SelectedItem = e.NewValue;
+                UpdateSelectedIndex();
+                UpdateSelectedValue();
             }
             finally
             {
                 _isUpdating = false;
             }
         }
+
         IsDropDownOpen = false; // 选择后关闭下拉框
     }
 
     private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = (TreeSelect)d;
-        if (control._isUpdating) return;
+        if (control._isUpdating)
+        {
+            return;
+        }
 
         try
         {
             control._isUpdating = true;
-            
+
             // Update SelectedIndex
-            if (control.ItemsSource != null)
-            {
-                var itemsSourcePath = GetItemsSourcePropertyPath(control);
-                var foundIndex = FindIndexByItem(control.ItemsSource, e.NewValue, itemsSourcePath);
-                if (foundIndex != -1)
-                {
-                    control.SelectedIndex = foundIndex;
-                }
-                else
-                {
-                    control.SelectedIndex = -1;
-                }
-            }
+            control.UpdateSelectedIndex();
 
             // Update SelectedValue
-            if (e.NewValue != null && !string.IsNullOrEmpty(control.SelectedValuePath))
-            {
-                var propertyInfo = e.NewValue.GetType().GetProperty(control.SelectedValuePath);
-                if (propertyInfo != null)
-                {
-                    control.SelectedValue = propertyInfo.GetValue(e.NewValue, null);
-                }
-            }
-            else
-            {
-                control.SelectedValue = e.NewValue;
-            }
+            control.UpdateSelectedValue();
         }
         finally
         {
@@ -262,26 +296,21 @@ public class TreeSelect : Selector
     private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = (TreeSelect)d;
-        if (control._isUpdating) return;
+        if (control._isUpdating)
+        {
+            return;
+        }
 
         try
         {
             control._isUpdating = true;
-            if (control.ItemsSource != null && !string.IsNullOrEmpty(control.SelectedValuePath))
+            if (!string.IsNullOrEmpty(control.SelectedValuePath))
             {
-                var itemsSourcePath = GetItemsSourcePropertyPath(control);
-                var item = FindItemByValue(control.ItemsSource, e.NewValue, control.SelectedValuePath, itemsSourcePath);
-                if (item != null)
-                {
-                    control.SelectedItem = item;
-                    int currentIndex = 0;
-                    control.SelectedIndex = FindIndexByItem(control.ItemsSource, item, itemsSourcePath);
-                }
-                else
-                {
-                    control.SelectedItem = null;
-                    control.SelectedIndex = -1;
-                }
+                // Update SelectedItem
+                control.UpdateSelectedItem();
+
+                // Update SelectedIndex
+                control.UpdateSelectedIndex();
             }
         }
         finally
@@ -293,37 +322,31 @@ public class TreeSelect : Selector
     private static void OnSelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = (TreeSelect)d;
-        if (control._isUpdating) return;
+        if (control._isUpdating)
+        {
+            return;
+        }
 
         try
         {
             control._isUpdating = true;
-            if (control.ItemsSource != null && control.SelectedIndex >= 0)
+            if (control.ItemsSource != null)
             {
-                int currentIndex = 0;
-                var itemsSourcePath = GetItemsSourcePropertyPath(control);
-                var item = FindItemByIndex(control.ItemsSource, control.SelectedIndex, ref currentIndex, itemsSourcePath);
-                if (item != null)
+                var selectedIndex = (int)e.NewValue;
+
+                if (selectedIndex >= 0)
                 {
-                    control.SelectedItem = item;
-                    if (!string.IsNullOrEmpty(control.SelectedValuePath))
-                    {
-                        var propertyInfo = item.GetType().GetProperty(control.SelectedValuePath);
-                        if (propertyInfo != null)
-                        {
-                            control.SelectedValue = propertyInfo.GetValue(item, null);
-                        }
-                    }
-                    else
-                    {
-                        control.SelectedValue = item;
-                    }
+                    // Update SelectedItem
+                    control.UpdateSelectedItem();
+
+                    // Update SelectedValue
+                    control.UpdateSelectedValue();
                 }
-            }
-            else
-            {
-                control.SelectedItem = null;
-                control.SelectedValue = null;
+                else
+                {
+                    control.SelectedItem = null;
+                    control.SelectedValue = null;
+                }
             }
         }
         finally
@@ -334,10 +357,41 @@ public class TreeSelect : Selector
 
     private void UpdateSelectedIndex()
     {
-        if (ItemsSource is IList list)
+        if (ItemsSource != null)
         {
-            SelectedIndex = list.IndexOf(SelectedItem);
+            var itemsSourcePath = GetItemsSourcePropertyPath(this);
+            var foundIndex = FindIndexByItem(ItemsSource, SelectedItem, itemsSourcePath);
+            SelectedIndex = foundIndex;
         }
+    }
+
+    private void UpdateSelectedValue()
+    {
+        if (SelectedItem != null)
+        {
+            if (!string.IsNullOrEmpty(SelectedValuePath))
+            {
+                var propertyInfo = SelectedItem.GetType().GetProperty(SelectedValuePath);
+                if (propertyInfo != null)
+                {
+                    SelectedValue = propertyInfo.GetValue(SelectedItem, null);
+                }
+            }
+            else
+            {
+                SelectedValue = SelectedItem;
+            }
+        }
+    }
+
+    private void UpdateSelectedItem()
+    {
+        int currentIndex = 0;
+        var itemsSourcePath = GetItemsSourcePropertyPath(this);
+        var item = FindItemByIndex(ItemsSource, SelectedIndex, ref currentIndex, itemsSourcePath);
+
+        // Update SelectedItem
+        SelectedItem = item;
     }
 
     private static string GetItemsSourcePropertyPath(TreeSelect control)
@@ -347,13 +401,14 @@ public class TreeSelect : Selector
             var binding = hierarchicalTemplate.ItemsSource as Binding;
             return binding?.Path.Path ?? string.Empty;
         }
+
         return string.Empty;
     }
 
     private static object? GetItemChildren(object item, string itemsSourcePath)
     {
         if (string.IsNullOrEmpty(itemsSourcePath)) return null;
-        
+
         var propertyInfo = item.GetType().GetProperty(itemsSourcePath);
         return propertyInfo?.GetValue(item);
     }
@@ -385,6 +440,7 @@ public class TreeSelect : Selector
                 }
             }
         }
+
         return null;
     }
 
@@ -397,6 +453,7 @@ public class TreeSelect : Selector
         {
         }
     }
+
     private static int FindIndexByItem(IEnumerable items, object targetItem, string itemsSourcePath)
     {
         int index = 0;
@@ -406,7 +463,7 @@ public class TreeSelect : Selector
             {
                 return index;
             }
-            
+
             index++;
 
             var subItems = GetItemChildren(item, itemsSourcePath) as IEnumerable;
@@ -417,9 +474,11 @@ public class TreeSelect : Selector
                 {
                     return index + subIndex;
                 }
+
                 index += GetItemCount(subItems, itemsSourcePath) - 1;
             }
         }
+
         return -1;
     }
 
@@ -435,6 +494,7 @@ public class TreeSelect : Selector
                 count += GetItemCount(subItems, itemsSourcePath);
             }
         }
+
         return count;
     }
 
@@ -447,7 +507,7 @@ public class TreeSelect : Selector
                 currentIndex = 0;
                 return item;
             }
-            
+
             currentIndex++;
 
             var subItems = GetItemChildren(item, itemsSourcePath) as IEnumerable;
@@ -468,63 +528,6 @@ public class TreeSelect : Selector
     {
         TreeSelect cb = d as TreeSelect;
     }
-
-    private void UpdateSelectedValue()
-    {
-        if (SelectedItem != null && !string.IsNullOrEmpty(SelectedValuePath))
-        {
-            System.Reflection.PropertyInfo? propertyInfo = SelectedItem.GetType().GetProperty(SelectedValuePath);
-            if (propertyInfo != null)
-            {
-                SelectedValue = propertyInfo.GetValue(SelectedItem, null);
-            }
-        }
-        else
-        {
-            SelectedValue = SelectedItem;
-        }
-    }
-
-    private void UpdateSelectedItem()
-    {
-        if (SelectedItem == null || string.IsNullOrEmpty(this.SelectedValuePath))
-        {
-            SelectedValue = null;
-        }
-        else
-        {
-            SelectedValue = SelectedItem.GetType().GetProperty(SelectedValuePath).GetValue(this.SelectedItem, null);
-        }
-    }
-
-    /*
-
-    protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-    {
-        var uie = element as FrameworkElement;
-
-        if (!(item is ComboBoxItem))
-        {
-            var textBinding = new Binding(DisplayMemberPath);
-            textBinding.Source = item;
-            uie.SetBinding(ContentPresenter.ContentProperty, textBinding);
-        }
-
-        base.PrepareContainerForItemOverride(element, item);
-    }
-
-    protected override bool IsItemItsOwnContainerOverride(object item)
-    {
-        if (item is ComboBoxItem)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    */
 
     private bool _isUpdating = false;
 }
