@@ -41,8 +41,7 @@
             <ui:TreeSelect ItemsSource="{Binding ItemsSource}" 
                            ScrollViewer.CanContentScroll="False" 
                            PlaceholderText="请选择" 
-                           SelectedValuePath="Name"
-                           SelectedIndex="2">
+                           SelectedIndex="3">
                 <ui:TreeSelect.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Name}" />

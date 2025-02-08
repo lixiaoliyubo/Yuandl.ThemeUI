@@ -98,18 +98,30 @@ public class TreeSelect : Selector
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
+    public static readonly DependencyProperty SelectionBoxItemProperty =
+        DependencyProperty.Register(nameof(SelectionBoxItem), typeof(object), typeof(TreeSelect), new FrameworkPropertyMetadata(string.Empty));
+
+    /// <summary>
+    /// Gets used to display the selected item
+    /// </summary>
+    public object SelectionBoxItem
+    {
+        get => GetValue(SelectionBoxItemProperty);
+        set => SetValue(SelectionBoxItemProperty, value);
+    }
+
     // 定义SelectedItemTemplate依赖属性
-    public static readonly DependencyProperty SelectedItemTemplateProperty =
+    public static readonly DependencyProperty SelectionItemTemplateProperty =
         DependencyProperty.Register(
-            nameof(SelectedItemTemplate),
+            nameof(SelectionItemTemplate),
             typeof(DataTemplate),
             typeof(TreeSelect),
             new FrameworkPropertyMetadata(null));
 
-    public DataTemplate? SelectedItemTemplate
+    public DataTemplate? SelectionItemTemplate
     {
-        get => (DataTemplate?)GetValue(SelectedItemTemplateProperty);
-        set => SetValue(SelectedItemTemplateProperty, value);
+        get => (DataTemplate?)GetValue(SelectionItemTemplateProperty);
+        set => SetValue(SelectionItemTemplateProperty, value);
     }
 
     /// <summary>
@@ -138,7 +150,6 @@ public class TreeSelect : Selector
                     new FrameworkPropertyMetadata(
                             false,
                             new PropertyChangedCallback(OnIsEditableChanged)));
-
 
     /// <summary>
     ///     True if this TreeSelect is editable.
@@ -175,10 +186,64 @@ public class TreeSelect : Selector
 
     private TreeView _treeView;
 
+    protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+    {
+        base.OnItemsSourceChanged(oldValue, newValue);
+
+        if (_isUpdating)
+        {
+            return;
+        }
+
+        try
+        {
+            _isUpdating = true;
+
+            // 如果有 SelectedValue，优先根据 SelectedValue 更新
+            if (SelectedValue != null && !string.IsNullOrEmpty(SelectedValuePath))
+            {
+                var itemsSourcePath = GetItemsSourcePropertyPath(this);
+                var item = FindItemByValue(newValue, SelectedValue, SelectedValuePath, itemsSourcePath);
+                SelectedItem = item;
+                UpdateSelectedIndex();
+            }
+
+            // 如果有 SelectedIndex，根据 SelectedIndex 更新
+            else if (SelectedIndex >= 0)
+            {
+                UpdateSelectedItem();
+                UpdateSelectedValue();
+            }
+
+            // 如果有 SelectedItem，验证 SelectedItem 是否在新的 ItemsSource 中
+            else if (SelectedItem != null)
+            {
+                var itemsSourcePath = GetItemsSourcePropertyPath(this);
+                var index = FindIndexByItem(newValue, SelectedItem, itemsSourcePath);
+                if (index == -1)
+                {
+                    // SelectedItem 不在新的 ItemsSource 中，清除选择
+                    SelectedItem = null;
+                    SelectedValue = null;
+                    SelectedIndex = -1;
+                }
+                else
+                {
+                    // SelectedItem 在新的 ItemsSource 中，更新其他值
+                    UpdateSelectedIndex();
+                    UpdateSelectedValue();
+                }
+            }
+        }
+        finally
+        {
+            _isUpdating = false;
+        }
+    }
+
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-
         if (_treeView != null)
         {
             _treeView.SelectedItemChanged -= TreeView_SelectedItemChanged;
@@ -402,7 +467,7 @@ public class TreeSelect : Selector
             return binding?.Path.Path ?? string.Empty;
         }
 
-        return string.Empty;
+        return "Children";
     }
 
     private static object? GetItemChildren(object item, string itemsSourcePath)

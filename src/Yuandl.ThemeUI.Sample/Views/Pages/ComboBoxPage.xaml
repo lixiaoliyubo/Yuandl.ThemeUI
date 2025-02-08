@@ -18,7 +18,7 @@
 
     <StackPanel Orientation="Vertical">
         <smtx:XamlDisplay UniqueKey="ComboBoxSample1" Margin="20" Tag="A ComboBox with items defined inline.">
-            <ComboBox  Margin="10" MinWidth="200" HorizontalAlignment="Left" ui:CommonAssist.PlaceholderText="-=请选择=-" SelectedItem="Blue">
+            <ComboBox  Margin="10" MinWidth="200" HorizontalAlignment="Left" ui:CommonAssist.PlaceholderText="-=请选择=-">
                 <ComboBoxItem Content="Blue" />
                 <ComboBoxItem Content="Green" />
                 <ComboBoxItem Content="Red" />

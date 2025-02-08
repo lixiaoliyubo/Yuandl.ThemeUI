@@ -121,8 +121,8 @@
                                             Name="PART_ContentPresenter"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch"
-                                            Content="{TemplateBinding SelectedValue}"
-                                            ContentTemplate="{TemplateBinding SelectedItemTemplate}"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionItemTemplate}"
                                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                             IsHitTestVisible="False"
                                             TextElement.Foreground="{TemplateBinding Foreground}" />
@@ -206,6 +206,7 @@
 
                                                 <TreeView 
                                                     x:Name="PART_TreeView"
+                                                    SelectedValuePath="{TemplateBinding SelectedValuePath}"
                                                     KeyboardNavigation.DirectionalNavigation="Contained"
                                                     ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                                                     ItemTemplate="{TemplateBinding ItemTemplate}"
