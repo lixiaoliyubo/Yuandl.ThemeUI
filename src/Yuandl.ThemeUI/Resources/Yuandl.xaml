@@ -54,6 +54,7 @@
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/Label/Label.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeView/TreeView.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeView/TreeViewItem.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeSelect/TreeSelect.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ListBox/ListBox.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ListBox/ListBoxItem.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ListView/ListView.xaml" />
