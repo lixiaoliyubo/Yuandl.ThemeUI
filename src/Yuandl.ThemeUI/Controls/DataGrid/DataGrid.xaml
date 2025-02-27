@@ -8,7 +8,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
     xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TextBox/TextBox.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/CheckBox/CheckBox.xaml"/>

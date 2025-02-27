@@ -37,11 +37,10 @@
                 </TreeViewItem>
             </TreeView>
         </smtx:XamlDisplay>
-        <smtx:XamlDisplay UniqueKey="TreeSample2" Margin="20" Tag="Simple TreeView.">
+        <smtx:XamlDisplay UniqueKey="TreeSample2" Margin="20" Tag="treeSelect example.">
             <ui:TreeSelect ItemsSource="{Binding ItemsSource}" 
-                           ScrollViewer.CanContentScroll="False" 
                            PlaceholderText="请选择" 
-                           SelectedIndex="3">
+                           SelectedIndex="1">
                 <ui:TreeSelect.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Name}" />

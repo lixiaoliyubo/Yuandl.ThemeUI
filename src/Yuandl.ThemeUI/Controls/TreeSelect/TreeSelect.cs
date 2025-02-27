@@ -3,7 +3,6 @@
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
 
 using System.Collections;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -11,32 +10,31 @@ using System.Windows.Input;
 namespace Yuandl.ThemeUI.Controls;
 
 /// <summary>
-/// TreeSelect.xaml 的交互逻辑
+/// Tree selection control that supports single
 /// </summary>
-[TemplatePart(Name = "PART_TreeView", Type = typeof(TreeView))]
-[TemplatePart(Name = "PART_Popup", Type = typeof(Popup))]
+[TemplatePart(Name = TreeViewTemplateName, Type = typeof(TreeView))]
 [StyleTypedProperty(Property = "ItemContainerStyle", StyleTargetType = typeof(TreeViewItem))]
-public class TreeSelect : Selector
+public class TreeSelect : ItemsControl
 {
-    public bool IsMulti
-    {
-        get { return (bool)GetValue(IsMultiProperty); }
-        set { SetValue(IsMultiProperty, value); }
-    }
+    private const string TreeViewTemplateName = "PART_TreeView";
 
-    public static readonly DependencyProperty IsMultiProperty =
-        DependencyProperty.Register(nameof(IsMulti), typeof(bool), typeof(TreeSelect), new PropertyMetadata(false));
-
-    /// <summary>Identifies the <see cref="PlaceholderText"/> dependency property.</summary>
-    public static readonly DependencyProperty PlaceholderTextProperty = DependencyProperty.Register(
-        nameof(PlaceholderText),
-        typeof(string),
-        typeof(TreeSelect),
-        new PropertyMetadata(string.Empty)
-    );
+    private bool _isUpdating; // Flag to prevent circular updates
+    private TreeView _treeView;
+    private bool _pendingTreeViewUpdate; // Flag to indicate if there is a pending TreeView selection update
 
     /// <summary>
-    /// Gets or sets numbers pattern.
+    /// Dependency property for the placeholder text of the dropdown
+    /// </summary>
+    public static readonly DependencyProperty PlaceholderTextProperty =
+        DependencyProperty.Register(
+            nameof(PlaceholderText),
+            typeof(string),
+            typeof(TreeSelect),
+            new PropertyMetadata(string.Empty)
+        );
+
+    /// <summary>
+    /// Gets or sets the placeholder text of the dropdown
     /// </summary>
     public string PlaceholderText
     {
@@ -44,132 +42,72 @@ public class TreeSelect : Selector
         set => SetValue(PlaceholderTextProperty, value);
     }
 
-    // SelectedItem property
-    public static new readonly DependencyProperty SelectedItemProperty =
-        DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(TreeSelect), new PropertyMetadata(null, OnSelectedItemChanged));
-
-    public new object? SelectedItem
-    {
-        get { return GetValue(SelectedItemProperty); }
-        set { SetValue(SelectedItemProperty, value); }
-    }
-
-    // SelectedIndex property
-    public static new readonly DependencyProperty SelectedIndexProperty =
-        DependencyProperty.Register(nameof(SelectedIndex), typeof(int), typeof(TreeSelect), new PropertyMetadata(-1, OnSelectedIndexChanged));
-
-    public new int SelectedIndex
-    {
-        get { return (int)GetValue(SelectedIndexProperty); }
-        set { SetValue(SelectedIndexProperty, value); }
-    }
-
-    // SelectedValue property
-    public static new readonly DependencyProperty SelectedValueProperty =
-        DependencyProperty.Register(nameof(SelectedValue), typeof(object), typeof(TreeSelect), new PropertyMetadata(null, OnSelectedValueChanged));
-
-    public new object? SelectedValue
-    {
-        get { return GetValue(SelectedValueProperty); }
-        set { SetValue(SelectedValueProperty, value); }
-    }
-
-    // SelectedValuePath property
-    public static new readonly DependencyProperty SelectedValuePathProperty =
-        DependencyProperty.Register(nameof(SelectedValuePath), typeof(string), typeof(TreeSelect), new PropertyMetadata(string.Empty));
-
-    public new string SelectedValuePath
-    {
-        get { return (string)GetValue(SelectedValuePathProperty); }
-        set { SetValue(SelectedValuePathProperty, value); }
-    }
-
-    // 定义IsDropDownOpen依赖属性
+    /// <summary>
+    /// Dependency property for whether the dropdown is open
+    /// </summary>
     public static readonly DependencyProperty IsDropDownOpenProperty =
         DependencyProperty.Register(
             nameof(IsDropDownOpen),
             typeof(bool),
             typeof(TreeSelect),
-            new FrameworkPropertyMetadata(false));
+            new FrameworkPropertyMetadata(false, OnIsDropDownOpenChanged));
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the dropdown is open
+    /// </summary>
     public bool IsDropDownOpen
     {
         get => (bool)GetValue(IsDropDownOpenProperty);
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
-    public static readonly DependencyProperty SelectionBoxItemProperty =
-        DependencyProperty.Register(nameof(SelectionBoxItem), typeof(object), typeof(TreeSelect), new FrameworkPropertyMetadata(string.Empty));
-
     /// <summary>
-    /// Gets used to display the selected item
-    /// </summary>
-    public object SelectionBoxItem
-    {
-        get => GetValue(SelectionBoxItemProperty);
-        set => SetValue(SelectionBoxItemProperty, value);
-    }
-
-    // 定义SelectedItemTemplate依赖属性
-    public static readonly DependencyProperty SelectionItemTemplateProperty =
-        DependencyProperty.Register(
-            nameof(SelectionItemTemplate),
-            typeof(DataTemplate),
-            typeof(TreeSelect),
-            new FrameworkPropertyMetadata(null));
-
-    public DataTemplate? SelectionItemTemplate
-    {
-        get => (DataTemplate?)GetValue(SelectionItemTemplateProperty);
-        set => SetValue(SelectionItemTemplateProperty, value);
-    }
-
-    /// <summary>
-    ///     DependencyProperty for the IsReadOnlyProperty
+    /// Dependency property for whether the control is read-only
     /// </summary>
     public static readonly DependencyProperty IsReadOnlyProperty =
-            TextBox.IsReadOnlyProperty.AddOwner(typeof(TreeSelect));
+        TextBox.IsReadOnlyProperty.AddOwner(typeof(TreeSelect));
 
     /// <summary>
-    ///     When the TreeSelect is Editable, if the TextBox within it is read only.
+    /// Gets or sets a value indicating whether gets or sets whether the control is in read-only mode
+    /// When the control is editable, this property determines whether the text box can be edited
     /// </summary>
     public bool IsReadOnly
     {
-        get { return (bool)GetValue(IsReadOnlyProperty); }
-        set { SetValue(IsReadOnlyProperty, value); }
+        get => (bool)GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
     }
 
     /// <summary>
-    /// DependencyProperty for IsEditable
+    /// Dependency property for whether the control is editable
     /// </summary>
     public static readonly DependencyProperty IsEditableProperty =
-            DependencyProperty.Register(
-                    "IsEditable",
-                    typeof(bool),
-                    typeof(TreeSelect),
-                    new FrameworkPropertyMetadata(
-                            false,
-                            new PropertyChangedCallback(OnIsEditableChanged)));
+        DependencyProperty.Register(
+            nameof(IsEditable),
+            typeof(bool),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(false));
 
     /// <summary>
-    ///     True if this TreeSelect is editable.
+    /// Gets or sets a value indicating whether gets or sets whether the control is editable
     /// </summary>
-    /// <value></value>
     public bool IsEditable
     {
-        get { return (bool)GetValue(IsEditableProperty); }
-        set { SetValue(IsEditableProperty, value); }
+        get => (bool)GetValue(IsEditableProperty);
+        set => SetValue(IsEditableProperty, value);
     }
 
     /// <summary>
-    ///     DependencyProperty for MaxDropDownHeight
+    /// Dependency property for the maximum height of the dropdown
     /// </summary>
-    // Need to figure out the right default value, and this should actually be a better value
-    public static readonly DependencyProperty MaxDropDownHeightProperty
-        = DependencyProperty.Register(nameof(MaxDropDownHeight), typeof(double), typeof(TreeSelect), new FrameworkPropertyMetadata(SystemParameters.PrimaryScreenHeight / 3, OnVisualStatePropertyChanged));
+    public static readonly DependencyProperty MaxDropDownHeightProperty =
+        DependencyProperty.Register(
+            nameof(MaxDropDownHeight),
+            typeof(double),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(SystemParameters.PrimaryScreenHeight / 3));
 
     /// <summary>
-    ///     The maximum height of the popup
+    /// Gets or sets the maximum height of the dropdown
     /// </summary>
     [Bindable(true), Category("Layout")]
     [TypeConverter(typeof(LengthConverter))]
@@ -179,60 +117,449 @@ public class TreeSelect : Selector
         set => SetValue(MaxDropDownHeightProperty, value);
     }
 
-    static TreeSelect()
+    public static readonly DependencyProperty SelectedItemProperty =
+        DependencyProperty.Register(
+            nameof(SelectedItem),
+            typeof(object),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
+
+    public object? SelectedItem
     {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeSelect), new FrameworkPropertyMetadata(typeof(TreeSelect)));
+        get => GetValue(SelectedItemProperty);
+        set => SetValue(SelectedItemProperty, value);
     }
 
-    private TreeView _treeView;
+    private static readonly DependencyPropertyKey SelectionBoxItemTemplatePropertyKey =
+        DependencyProperty.RegisterReadOnly(
+            nameof(SelectionBoxItemTemplate),
+            typeof(DataTemplate),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata((DataTemplate)null));
 
-    protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+    /// <summary>
+    /// The DependencyProperty for the SelectionBoxItemProperty
+    /// </summary>
+    public static readonly DependencyProperty SelectionBoxItemTemplateProperty = SelectionBoxItemTemplatePropertyKey.DependencyProperty;
+
+    /// <summary>
+    /// Gets used to set the item DataTemplate
+    /// </summary>
+    public DataTemplate? SelectionBoxItemTemplate
     {
-        base.OnItemsSourceChanged(oldValue, newValue);
+        get { return (DataTemplate?)GetValue(SelectionBoxItemTemplateProperty); }
+        private set { SetValue(SelectionBoxItemTemplatePropertyKey, value); }
+    }
 
-        if (_isUpdating)
+    private static readonly DependencyPropertyKey SelectionBoxItemStringFormatPropertyKey =
+        DependencyProperty.RegisterReadOnly(
+            nameof(SelectionBoxItemStringFormat),
+            typeof(string),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata((string)null));
+
+    /// <summary>
+    /// The DependencyProperty for the SelectionBoxItemProperty
+    /// </summary>
+    public static readonly DependencyProperty SelectionBoxItemStringFormatProperty = SelectionBoxItemStringFormatPropertyKey.DependencyProperty;
+
+    /// <summary>
+    /// Gets used to set the item DataStringFormat
+    /// </summary>
+    public string? SelectionBoxItemStringFormat
+    {
+        get { return (string?)GetValue(SelectionBoxItemStringFormatProperty); }
+        private set { SetValue(SelectionBoxItemStringFormatPropertyKey, value); }
+    }
+
+    public static readonly DependencyProperty SelectedValueProperty =
+        DependencyProperty.Register(
+            nameof(SelectedValue),
+            typeof(object),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedValueChanged));
+
+    public object? SelectedValue
+    {
+        get => GetValue(SelectedValueProperty);
+        set => SetValue(SelectedValueProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectedIndexProperty =
+        DependencyProperty.Register(
+            nameof(SelectedIndex),
+            typeof(int),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedIndexChanged));
+
+    public int SelectedIndex
+    {
+        get => (int)GetValue(SelectedIndexProperty);
+        set => SetValue(SelectedIndexProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectedValuePathProperty =
+        DependencyProperty.Register(
+            nameof(SelectedValuePath),
+            typeof(string),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(null));
+
+    public string? SelectedValuePath
+    {
+        get => (string?)GetValue(SelectedValuePathProperty);
+        set => SetValue(SelectedValuePathProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectionBoxItemProperty =
+        DependencyProperty.Register(
+            nameof(SelectionBoxItem),
+            typeof(object),
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(null)
+        );
+
+    /// <summary>
+    /// Gets used to display the selected item
+    /// </summary>
+    public object? SelectionBoxItem
+    {
+        get { return GetValue(SelectionBoxItemProperty); }
+        private set { SetValue(SelectionBoxItemProperty, value); }
+    }
+
+    /// <summary>
+    /// Event for selection change
+    /// </summary>
+    public event SelectionChangedEventHandler SelectionChanged
+    {
+        add { AddHandler(SelectionChangedEvent, value); }
+        remove { RemoveHandler(SelectionChangedEvent, value); }
+    }
+
+    /// <summary>
+    /// Routed event for selection change
+    /// </summary>
+    public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
+        nameof(SelectionChanged),
+        RoutingStrategy.Bubble,
+        typeof(SelectionChangedEventHandler),
+        typeof(TreeSelect));
+
+    /// <summary>
+    /// Event for dropdown open state change
+    /// </summary>
+    public event EventHandler<bool> DropDownOpenChanged;
+
+    /// <summary>
+    /// Static constructor to register default style and event handling
+    /// </summary>
+    static TreeSelect()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(TreeSelect),
+            new FrameworkPropertyMetadata(typeof(TreeSelect)));
+    }
+
+    /// <summary>
+    /// Called when the control template is applied, initializes the control
+    /// </summary>
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        if (_treeView != null)
+        {
+            _treeView.SelectedItemChanged -= OnTreeViewSelectedItemChanged;
+        }
+
+        _treeView = GetTemplateChild(TreeViewTemplateName) as TreeView ?? throw new InvalidOperationException("TreeView template part not found");
+        if (_treeView != null)
+        {
+            _treeView.SelectedItemChanged += OnTreeViewSelectedItemChanged;
+            if (_pendingTreeViewUpdate)
+            {
+                UpdateTreeViewSelection();
+                _pendingTreeViewUpdate = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Updates the selection state of the TreeView
+    /// </summary>
+    private void UpdateTreeViewSelection()
+    {
+        if (_treeView == null || SelectedItem == null)
         {
             return;
         }
 
-        try
+        // Wait for ItemContainer generation to complete
+        if (_treeView.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
         {
-            _isUpdating = true;
+            _treeView.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+            return;
+        }
 
-            // 如果有 SelectedValue，优先根据 SelectedValue 更新
-            if (SelectedValue != null && !string.IsNullOrEmpty(SelectedValuePath))
-            {
-                var itemsSourcePath = GetItemsSourcePropertyPath(this);
-                var item = FindItemByValue(newValue, SelectedValue, SelectedValuePath, itemsSourcePath);
-                SelectedItem = item;
-                UpdateSelectedIndex();
-            }
+        ExpandToItem(_treeView, SelectedItem);
+    }
 
-            // 如果有 SelectedIndex，根据 SelectedIndex 更新
-            else if (SelectedIndex >= 0)
-            {
-                UpdateSelectedItem();
-                UpdateSelectedValue();
-            }
+    /// <summary>
+    /// Event handler for ItemContainerGenerator status change
+    /// </summary>
+    /// <param name="sender">Event source</param>
+    /// <param name="e">Event arguments</param>
+    private void ItemContainerGenerator_StatusChanged(object? sender, EventArgs e)
+    {
+        if (_treeView?.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+        {
+            _treeView.ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
+            // Flatten all items to find the path to the target item
+            ExpandToItem(_treeView, SelectedItem);
+        }
+    }
 
-            // 如果有 SelectedItem，验证 SelectedItem 是否在新的 ItemsSource 中
-            else if (SelectedItem != null)
+    /// <summary>
+    /// Handles the selected item change event
+    /// </summary>
+    /// <param name="d">Dependency object</param>
+    /// <param name="e">Event arguments</param>
+    private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var control = (TreeSelect)d;
+        if (!control._isUpdating)
+        {
+            control._isUpdating = true;
+            try
             {
-                var itemsSourcePath = GetItemsSourcePropertyPath(this);
-                var index = FindIndexByItem(newValue, SelectedItem, itemsSourcePath);
-                if (index == -1)
+                if (control._treeView == null)
                 {
-                    // SelectedItem 不在新的 ItemsSource 中，清除选择
-                    SelectedItem = null;
-                    SelectedValue = null;
-                    SelectedIndex = -1;
+                    control._pendingTreeViewUpdate = true;
                 }
                 else
                 {
-                    // SelectedItem 在新的 ItemsSource 中，更新其他值
-                    UpdateSelectedIndex();
-                    UpdateSelectedValue();
+                    control.UpdateTreeViewSelection();
                 }
+
+                control.UpdateSelectionBoxItem();
+                control.UpdateSelectedValue();
+                control.UpdateSelectedIndex();
+
+                // Trigger the selection change event
+                var args = new SelectionChangedEventArgs(
+                    SelectionChangedEvent,
+                    e.OldValue != null ? new[] { e.OldValue } : Array.Empty<object>(),
+                    e.NewValue != null ? new[] { e.NewValue } : Array.Empty<object>());
+                control.RaiseEvent(args);
+            }
+            finally
+            {
+                control._isUpdating = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles the selected value change event
+    /// </summary>
+    /// <param name="d">Dependency object</param>
+    /// <param name="e">Event arguments</param>
+    private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var control = (TreeSelect)d;
+        if (control._isUpdating) return;
+
+        control._isUpdating = true;
+        try
+        {
+            control.UpdateSelectedItemFromValue();
+
+            if (control._treeView == null)
+            {
+                control._pendingTreeViewUpdate = true;
+            }
+            else
+            {
+                control.UpdateTreeViewSelection();
+            }
+
+            control.UpdateSelectedIndex();
+            control.UpdateSelectionBoxItem();
+        }
+        finally
+        {
+            control._isUpdating = false;
+        }
+    }
+
+    /// <summary>
+    /// Handles the selected index change event
+    /// </summary>
+    /// <param name="d">Dependency object</param>
+    /// <param name="e">Event arguments</param>
+    private static void OnSelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var control = (TreeSelect)d;
+        if (control._isUpdating) return;
+
+        control._isUpdating = true;
+        try
+        {
+            control.UpdateSelectedItemFromIndex();
+
+            if (control._treeView == null)
+            {
+                control._pendingTreeViewUpdate = true;
+            }
+            else
+            {
+                control.UpdateTreeViewSelection();
+            }
+
+            control.UpdateSelectedValue();
+            control.UpdateSelectionBoxItem();
+        }
+        finally
+        {
+            control._isUpdating = false;
+        }
+    }
+
+    /// <summary>
+    /// Handles the mouse down event to close the dropdown
+    /// </summary>
+    private void UpdateSelectionBoxItem()
+    {
+        if (SelectedItem == null)
+        {
+            SelectionBoxItem = null;
+            SelectionBoxItemTemplate = null;
+            return;
+        }
+
+        // If DisplayMemberPath is set, use the property value
+        if (!string.IsNullOrEmpty(DisplayMemberPath))
+        {
+            System.Reflection.PropertyInfo prop = SelectedItem.GetType().GetProperty(DisplayMemberPath);
+            SelectionBoxItem = prop?.GetValue(SelectedItem) ?? SelectedItem;
+            SelectionBoxItemTemplate = null;
+            return;
+        }
+
+        // If ItemTemplate is set, use the template
+        if (ItemTemplate != null)
+        {
+            SelectionBoxItem = SelectedItem;
+            SelectionBoxItemTemplate = ItemTemplate;
+            return;
+        }
+
+        // By default, display the item directly
+        SelectionBoxItem = SelectedItem;
+        SelectionBoxItemTemplate = null;
+    }
+
+    /// <summary>
+    /// Updates the SelectedValue based on the current selected item
+    /// </summary>
+    private void UpdateSelectedValue()
+    {
+        SelectedValue = GetValueFromItem(SelectedItem);
+    }
+
+    /// <summary>
+    /// Updates the SelectedIndex based on the current selected item
+    /// </summary>
+    private void UpdateSelectedIndex()
+    {
+        if (SelectedItem == null)
+        {
+            SelectedIndex = -1;
+            return;
+        }
+
+        List<object> flattenedItems = FlattenItems(Items);
+        SelectedIndex = flattenedItems.IndexOf(SelectedItem);
+    }
+
+    /// <summary>
+    /// Updates the selected item based on the SelectedValue
+    /// </summary>
+    private void UpdateSelectedItemFromValue()
+    {
+        SelectedItem = FindItemByValue(Items, SelectedValue);
+    }
+
+    /// <summary>
+    /// Updates the selected item based on the SelectedIndex
+    /// </summary>
+    private void UpdateSelectedItemFromIndex()
+    {
+        // Get the total number of items
+        var totalCount = GetTotalItemCount(Items);
+
+        if (SelectedIndex < 0 || SelectedIndex >= totalCount)
+        {
+            SelectedItem = null;
+            return;
+        }
+
+        // Recursively find the item at the specified index
+        SelectedItem = FindItemByIndex(Items, SelectedIndex);
+    }
+
+    /// <summary>
+    /// Handles the dropdown open state change event
+    /// </summary>
+    /// <param name="d">Dependency object</param>
+    /// <param name="e">Event arguments</param>
+    private static void OnIsDropDownOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var treeSelect = (TreeSelect)d;
+        var newValue = (bool)e.NewValue;
+
+        if (newValue)
+        {
+            // When the dropdown is opened, capture the mouse
+            _ = Mouse.Capture(treeSelect, CaptureMode.SubTree);
+        }
+        else if (treeSelect.IsMouseCaptured)
+        {
+            _ = Mouse.Capture(null);
+        }
+
+        // Trigger the state change event
+        treeSelect.OnDropDownOpenChanged(newValue);
+    }
+
+    /// <summary>
+    /// Handles the TreeView selected item change event
+    /// </summary>
+    /// <param name="sender">Event source</param>
+    /// <param name="e">Event arguments</param>
+    private void OnTreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        if (_isUpdating) return;
+
+        _isUpdating = true;
+        try
+        {
+            SelectedItem = e.NewValue;
+            UpdateSelectionBoxItem();
+            UpdateSelectedValue();
+            UpdateSelectedIndex();
+
+            // Trigger the SelectionChanged event
+            var args = new SelectionChangedEventArgs(
+                SelectionChangedEvent,
+                e.OldValue != null ? new[] { e.OldValue } : Array.Empty<object>(),
+                e.NewValue != null ? new[] { e.NewValue } : Array.Empty<object>());
+            RaiseEvent(args);
+
+            // When the dropdown is closed, release the mouse capture
+            if (_treeView.IsLoaded && IsDropDownOpen)
+            {
+                SetCurrentValue(IsDropDownOpenProperty, false);
             }
         }
         finally
@@ -241,227 +568,222 @@ public class TreeSelect : Selector
         }
     }
 
-    public override void OnApplyTemplate()
+    /// <summary>
+    /// Called when the ItemsSource changes
+    /// </summary>
+    /// <param name="oldValue">Old value</param>
+    /// <param name="newValue">New value</param>
+    protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
     {
-        base.OnApplyTemplate();
-        if (_treeView != null)
-        {
-            _treeView.SelectedItemChanged -= TreeView_SelectedItemChanged;
-        }
+        base.OnItemsSourceChanged(oldValue, newValue);
 
-        _treeView = GetTemplateChild("PART_TreeView") as TreeView;
-
-        if (_treeView != null)
-        {
-            _treeView.SelectedItemChanged += TreeView_SelectedItemChanged;
-
-            // 如果有初始选中项，展开到该项
-            if (SelectedItem != null)
-            {
-                ExpandToItem(_treeView, SelectedItem);
-            }
-        }
-    }
-
-    private void ExpandToItem(ItemsControl itemsControl, object item)
-    {
-        if (itemsControl == null || item == null) return;
-
-        var itemsSourcePath = GetItemsSourcePropertyPath(this);
-        if (string.IsNullOrEmpty(itemsSourcePath)) return;
-
-        foreach (var containerItem in itemsControl.Items)
-        {
-            var container = itemsControl.ItemContainerGenerator.ContainerFromItem(containerItem) as TreeViewItem;
-            if (container == null) continue;
-
-            if (containerItem == item)
-            {
-                // 找到目标项，选中它
-                container.IsSelected = true;
-                ExpandParents(container);
-                return;
-            }
-
-            // 检查子项
-            var children = GetItemChildren(containerItem, itemsSourcePath) as IEnumerable;
-            if (children != null)
-            {
-                container.IsExpanded = true;
-                ExpandToItem(container, item);
-            }
-        }
-    }
-
-    private void ExpandParents(TreeViewItem item)
-    {
-        TreeViewItem parent = GetParentTreeViewItem(item);
-        while (parent != null)
-        {
-            parent.IsExpanded = true;
-            parent = GetParentTreeViewItem(parent);
-        }
-    }
-
-    private TreeViewItem GetParentTreeViewItem(DependencyObject item)
-    {
-        DependencyObject? parent = VisualTreeHelper.GetParent(item);
-        while (parent != null && !(parent is TreeViewItem))
-        {
-            parent = VisualTreeHelper.GetParent(parent);
-        }
-
-        return parent as TreeViewItem;
-    }
-
-    private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
         if (!_isUpdating)
         {
+            _isUpdating = true;
             try
             {
-                _isUpdating = true;
-                SelectedItem = e.NewValue;
-                UpdateSelectedIndex();
+                // If the new ItemsSource is null, clear all selections
+                if (newValue == null)
+                {
+                    SelectedItem = null;
+                    SelectedValue = null;
+                    SelectedIndex = -1;
+                    SelectionBoxItem = null;
+                    return;
+                }
+
+                // If SelectedValue is set, try to find the corresponding item in the new ItemsSource
+                if (SelectedValue != null)
+                {
+                    UpdateSelectedItemFromValue();
+                }
+
+                // If SelectedIndex is set, try to find the corresponding item in the new ItemsSource
+                else if (SelectedIndex >= 0)
+                {
+                    UpdateSelectedItemFromIndex();
+                }
+
+                // Update other related properties
+                UpdateSelectionBoxItem();
                 UpdateSelectedValue();
+                UpdateSelectedIndex();
             }
             finally
             {
                 _isUpdating = false;
             }
         }
-
-        IsDropDownOpen = false; // 选择后关闭下拉框
     }
 
-    private static void OnSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    /// <summary>
+    /// Called when the DisplayMemberPath changes
+    /// </summary>
+    /// <param name="oldDisplayMemberPath">Old display member path</param>
+    /// <param name="newDisplayMemberPath">New display member path</param>
+    protected override void OnDisplayMemberPathChanged(string oldDisplayMemberPath, string newDisplayMemberPath)
     {
-        var control = (TreeSelect)d;
-        if (control._isUpdating)
-        {
-            return;
-        }
-
-        try
-        {
-            control._isUpdating = true;
-
-            // Update SelectedIndex
-            control.UpdateSelectedIndex();
-
-            // Update SelectedValue
-            control.UpdateSelectedValue();
-        }
-        finally
-        {
-            control._isUpdating = false;
-        }
+        base.OnDisplayMemberPathChanged(oldDisplayMemberPath, newDisplayMemberPath);
+        UpdateSelectionBoxItem();
     }
 
-    private static void OnSelectedValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    /// <summary>
+    /// Triggered when the ItemTemplate changes.
+    /// </summary>
+    /// <param name="oldItemTemplate">The old item template.</param>
+    /// <param name="newItemTemplate">The new item template.</param>
+    protected override void OnItemTemplateChanged(DataTemplate oldItemTemplate, DataTemplate newItemTemplate)
     {
-        var control = (TreeSelect)d;
-        if (control._isUpdating)
+        base.OnItemTemplateChanged(oldItemTemplate, newItemTemplate);
+
+        if (_treeView != null)
         {
-            return;
+            _treeView.ItemTemplate = newItemTemplate;
         }
 
-        try
+        UpdateSelectionBoxItem();
+    }
+
+    private static int positionCounter = -1;
+
+    /// <summary>
+    /// Expand to the specified item and select it.
+    /// </summary>
+    private void ExpandToItem(ItemsControl itemsControl, object? item)
+    {
+        if (itemsControl == null || item == null) return;
+
+        // Wait for the ItemContainer generation to complete.
+        if (itemsControl.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
         {
-            control._isUpdating = true;
-            if (!string.IsNullOrEmpty(control.SelectedValuePath))
+            itemsControl.ItemContainerGenerator.StatusChanged += (s, e) =>
             {
-                // Update SelectedItem
-                control.UpdateSelectedItem();
-
-                // Update SelectedIndex
-                control.UpdateSelectedIndex();
-            }
-        }
-        finally
-        {
-            control._isUpdating = false;
-        }
-    }
-
-    private static void OnSelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        var control = (TreeSelect)d;
-        if (control._isUpdating)
-        {
-            return;
-        }
-
-        try
-        {
-            control._isUpdating = true;
-            if (control.ItemsSource != null)
-            {
-                var selectedIndex = (int)e.NewValue;
-
-                if (selectedIndex >= 0)
+                if (itemsControl.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
                 {
-                    // Update SelectedItem
-                    control.UpdateSelectedItem();
+                    ExpandToItemInternal(itemsControl, item);
+                }
+            };
+            return;
+        }
 
-                    // Update SelectedValue
-                    control.UpdateSelectedValue();
+        ExpandToItemInternal(itemsControl, item);
+    }
+
+    /// <summary>
+    /// The internal implementation of expanding to the specified item.
+    /// </summary>
+    /// <param name="itemsControl">The current ItemsControl.</param>
+    /// <param name="item">The target item.</param>
+    private void ExpandToItemInternal(ItemsControl itemsControl, object item)
+    {
+        var itemsSourcePath = GetItemsSourcePropertyPath();
+        if (string.IsNullOrEmpty(itemsSourcePath))
+        {
+            return;
+        }
+
+        foreach (var containerItem in itemsControl.Items)
+        {
+            var container = itemsControl.ItemContainerGenerator.ContainerFromItem(containerItem) as TreeViewItem;
+            if (container == null)
+            {
+                continue;
+            }
+
+            if (containerItem == item)
+            {
+                // Find the target item and select it.
+                container.Focus();
+                container.IsSelected = true;
+                return;
+            }
+
+            // Check the child items.
+            var children = GetItemChildren(containerItem, itemsSourcePath) as IEnumerable;
+            if (children != null)
+            {
+                container.IsExpanded = true;
+
+                // Wait for the child item containers to be generated.
+                if (container.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                {
+                    container.UpdateLayout();
+                    container.ItemContainerGenerator.StatusChanged += (s, e) =>
+                    {
+                        if (container.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+                        {
+                            ExpandToItem(container, item);
+                        }
+                    };
                 }
                 else
                 {
-                    control.SelectedItem = null;
-                    control.SelectedValue = null;
+                    ExpandToItem(container, item);
                 }
             }
         }
-        finally
-        {
-            control._isUpdating = false;
-        }
     }
 
-    private void UpdateSelectedIndex()
+    /// <summary>
+    /// Get the child item collection of the specified item.
+    /// </summary>
+    /// <param name="item">The item to get the child items from.</param>
+    /// <param name="itemsSourcePath">The property path of the child item collection.</param>
+    /// <returns>The child item collection, or null if there are none.</returns>
+    private static object? GetItemChildren(object item, string itemsSourcePath)
     {
-        if (ItemsSource != null)
+        if (string.IsNullOrEmpty(itemsSourcePath))
         {
-            var itemsSourcePath = GetItemsSourcePropertyPath(this);
-            var foundIndex = FindIndexByItem(ItemsSource, SelectedItem, itemsSourcePath);
-            SelectedIndex = foundIndex;
+            return null;
         }
+
+        System.Reflection.PropertyInfo propertyInfo = item.GetType().GetProperty(itemsSourcePath);
+        return propertyInfo?.GetValue(item);
     }
 
-    private void UpdateSelectedValue()
+    /// <summary>
+    /// The internal implementation of recursively finding the index of the specified item in the tree structure.
+    /// </summary>
+    /// <param name="item">The collection at the current level.</param>
+    /// <param name="targetItem">The target item.</param>
+    /// <returns>The index of the target item, or -1 if not found.</returns>
+    private int? FindItemIndex(object item, object targetItem)
     {
-        if (SelectedItem != null)
+        positionCounter++;
+        if (item == targetItem)
         {
-            if (!string.IsNullOrEmpty(SelectedValuePath))
+            return positionCounter;
+        }
+
+        // Get the name of the ItemsSource property defined in the ItemTemplate.
+        var itemsSourceProperty = GetItemsSourcePropertyPath();
+        if (!string.IsNullOrEmpty(itemsSourceProperty))
+        {
+            System.Reflection.PropertyInfo prop = item.GetType().GetProperty(itemsSourceProperty);
+            var children = prop?.GetValue(item) as IEnumerable;
+            if (children != null)
             {
-                var propertyInfo = SelectedItem.GetType().GetProperty(SelectedValuePath);
-                if (propertyInfo != null)
+                foreach (var child in children)
                 {
-                    SelectedValue = propertyInfo.GetValue(SelectedItem, null);
+                    // Search in the child items, passing the next index.
+                    var childIndex = FindItemIndex(child, targetItem);
+                    if (childIndex.HasValue)
+                    {
+                        return childIndex;
+                    }
                 }
             }
-            else
-            {
-                SelectedValue = SelectedItem;
-            }
         }
+
+        return null;
     }
 
-    private void UpdateSelectedItem()
+    /// <summary>
+    /// Get the name of the ItemsSource property of the item.
+    /// </summary>
+    private string GetItemsSourcePropertyPath()
     {
-        int currentIndex = 0;
-        var itemsSourcePath = GetItemsSourcePropertyPath(this);
-        var item = FindItemByIndex(ItemsSource, SelectedIndex, ref currentIndex, itemsSourcePath);
-
-        // Update SelectedItem
-        SelectedItem = item;
-    }
-
-    private static string GetItemsSourcePropertyPath(TreeSelect control)
-    {
-        if (control.ItemTemplate is HierarchicalDataTemplate hierarchicalTemplate)
+        if (_treeView?.ItemTemplate is HierarchicalDataTemplate hierarchicalTemplate)
         {
             var binding = hierarchicalTemplate.ItemsSource as Binding;
             return binding?.Path.Path ?? string.Empty;
@@ -470,129 +792,121 @@ public class TreeSelect : Selector
         return "Children";
     }
 
-    private static object? GetItemChildren(object item, string itemsSourcePath)
+    /// <summary>
+    /// Flatten the tree structure into a one-dimensional list.
+    /// </summary>
+    private List<object> FlattenItems(IEnumerable items)
     {
-        if (string.IsNullOrEmpty(itemsSourcePath)) return null;
+        var result = new List<object>();
+        if (items == null)
+        {
+            return result;
+        }
 
-        var propertyInfo = item.GetType().GetProperty(itemsSourcePath);
-        return propertyInfo?.GetValue(item);
-    }
-
-    private static object? FindItemByValue(IEnumerable items, object value, string valuePath, string itemsSourcePath)
-    {
         foreach (var item in items)
         {
-            if (item != null)
-            {
-                var propertyInfo = item.GetType().GetProperty(valuePath);
-                if (propertyInfo != null)
-                {
-                    var itemValue = propertyInfo.GetValue(item, null);
-                    if (Equals(itemValue, value))
-                    {
-                        return item;
-                    }
-                }
+            result.Add(item);
 
-                var subItems = GetItemChildren(item, itemsSourcePath) as IEnumerable;
-                if (subItems != null)
+            // Get and add the child items.
+            var itemsSourceProperty = GetItemsSourcePropertyPath();
+            if (!string.IsNullOrEmpty(itemsSourceProperty))
+            {
+                var prop = item.GetType().GetProperty(itemsSourceProperty);
+                var children = prop?.GetValue(item) as IEnumerable;
+                if (children != null)
                 {
-                    var result = FindItemByValue(subItems, value, valuePath, itemsSourcePath);
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    result.AddRange(FlattenItems(children));
                 }
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Modify the FindItemByIndex method to use the flattened list.
+    /// </summary>
+    /// <param name="items"></param>
+    /// <param name="targetIndex"></param>
+    /// <returns></returns>
+    private object? FindItemByIndex(IEnumerable? items, int targetIndex)
+    {
+        if (items == null) return null;
+
+        var flattenedItems = FlattenItems(items);
+        return targetIndex >= 0 && targetIndex < flattenedItems.Count ? flattenedItems[targetIndex] : null;
+    }
+
+    /// <summary>
+    /// Find an item based on the SelectedValue.
+    /// </summary>
+    /// <param name="items"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private object? FindItemByValue(IEnumerable? items, object? value)
+    {
+        if (items == null)
+        {
+            return null;
+        }
+
+        foreach (var item in items)
+        {
+            if (Equals(GetValueFromItem(item), value)) return item;
+
+            // Get the name of the ItemsSource property defined in the ItemTemplate.
+            var itemsSourceProperty = GetItemsSourcePropertyPath();
+            if (!string.IsNullOrEmpty(itemsSourceProperty))
+            {
+                var prop = item.GetType().GetProperty(itemsSourceProperty);
+                var children = prop?.GetValue(item) as IEnumerable;
+                var found = FindItemByValue(children, value);
+                if (found != null) return found;
             }
         }
 
         return null;
     }
 
-    internal static void OnVisualStatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    /// <summary>
+    /// Get the value of the item according to the SelectedValuePath.
+    /// </summary>
+    /// <param name="item">The item to get the value from.</param>
+    /// <returns>The value of the item, or the item itself if SelectedValuePath is not set.</returns>
+    private object? GetValueFromItem(object? item)
     {
-        // Due to inherited properties, its safer not to cast to control because this might get fired for
-        // non-controls.
-        var control = d as Control;
-        if (control != null)
-        {
-        }
+        if (item == null || string.IsNullOrEmpty(SelectedValuePath))
+            return item;
+
+        var prop = item.GetType().GetProperty(SelectedValuePath);
+        return prop?.GetValue(item);
     }
 
-    private static int FindIndexByItem(IEnumerable items, object targetItem, string itemsSourcePath)
+    /// <summary>
+    /// Get the total number of items in the tree structure.
+    /// </summary>
+    /// <param name="items">The item collection to calculate.</param>
+    /// <returns>The total number of items.</returns>
+    private int GetTotalItemCount(IEnumerable items)
     {
-        int index = 0;
-        foreach (var item in items)
-        {
-            if (Equals(item, targetItem))
-            {
-                return index;
-            }
-
-            index++;
-
-            var subItems = GetItemChildren(item, itemsSourcePath) as IEnumerable;
-            if (subItems != null)
-            {
-                var subIndex = FindIndexByItem(subItems, targetItem, itemsSourcePath);
-                if (subIndex != -1)
-                {
-                    return index + subIndex;
-                }
-
-                index += GetItemCount(subItems, itemsSourcePath) - 1;
-            }
-        }
-
-        return -1;
+        return FlattenItems(items).Count;
     }
 
-    private static int GetItemCount(IEnumerable items, string itemsSourcePath)
+    /// <summary>
+    /// Called when the selected item changes.
+    /// </summary>
+    /// <param name="e">The event arguments for the selected item change.</param>
+    protected virtual void OnSelectionChanged(SelectionChangedEventArgs e)
     {
-        int count = 0;
-        foreach (var item in items)
-        {
-            count++;
-            var subItems = GetItemChildren(item, itemsSourcePath) as IEnumerable;
-            if (subItems != null)
-            {
-                count += GetItemCount(subItems, itemsSourcePath);
-            }
-        }
-
-        return count;
+        RaiseEvent(e);
     }
 
-    private static object? FindItemByIndex(IEnumerable items, int targetIndex, ref int currentIndex, string itemsSourcePath)
+    /// <summary>
+    /// Called when the open state of the dropdown changes.
+    /// </summary>
+    /// <param name="isOpen">Whether it is open.</param>
+    protected virtual void OnDropDownOpenChanged(bool isOpen)
     {
-        foreach (var item in items)
-        {
-            if (currentIndex == targetIndex)
-            {
-                currentIndex = 0;
-                return item;
-            }
-
-            currentIndex++;
-
-            var subItems = GetItemChildren(item, itemsSourcePath) as IEnumerable;
-            if (subItems != null)
-            {
-                var result = FindItemByIndex(subItems, targetIndex, ref currentIndex, itemsSourcePath);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-        }
-
-        return null;
+        DropDownOpenChanged?.Invoke(this, isOpen);
     }
-
-    private static void OnIsEditableChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        TreeSelect cb = d as TreeSelect;
-    }
-
-    private bool _isUpdating = false;
 }

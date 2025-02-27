@@ -9,7 +9,7 @@
     xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
     xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
     xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <Style x:Key="CarouselItemBaseStyle" TargetType="controls:CarouselItem">
         <Setter Property="Focusable" Value="False"/>

@@ -102,7 +102,7 @@
                                 ToolTipService.InitialShowDelay="240">
                                 <ui:SymbolIcon
                                     Grid.Row="0"
-                                    FontSize="28"
+                                    FontSize="35"
                                     Symbol="{Binding Icon, Mode=OneTime}" Foreground="{DynamicResource ControlTextColorBrush}"/>
                             </Button>
                         </DataTemplate>

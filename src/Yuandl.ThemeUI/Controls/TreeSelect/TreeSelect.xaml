@@ -4,71 +4,12 @@
     xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
     xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist"
     xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/ComboBox/ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeView/TreeView.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TreeView/TreeViewItem.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-    <Thickness x:Key="ComboBoxPadding">10,8,10,8</Thickness>
-    <Thickness x:Key="ComboBoxBorderThemeThickness">1,1,1,1</Thickness>
-    <Thickness x:Key="ComboBoxAccentBorderThemeThickness">0,0,0,2</Thickness>
-    <Thickness x:Key="ComboBoxChevronMargin">8,0,10,0</Thickness>
-    <Thickness x:Key="ComboBoxItemMargin">6,4,6,0</Thickness>
-    <Thickness x:Key="ComboBoxItemContentMargin">10,8,8,8</Thickness>
-    <system:Double x:Key="ComboBoxChevronSize">11.0</system:Double>
-    <system:Double x:Key="ComboBoxPopupMinHeight">32.0</system:Double>
-
-    <Style x:Key="DefaultComboBoxTextBoxStyle" TargetType="{x:Type TextBox}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="ContextMenu" Value="{DynamicResource DefaultControlContextMenu}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
-        <Setter Property="CaretBrush" Value="{DynamicResource ControlTextColorBrush}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Visibility" Value="Hidden" />
-        <Setter Property="Cursor" Value="IBeam" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TextBox}">
-                    <controls:PassiveScrollViewer
-                        x:Name="PART_ContentHost"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch"
-                        Margin="{TemplateBinding Padding}"
-                        Style="{DynamicResource DefaultTextBoxScrollViewerStyle}"
-                        TextElement.Foreground="{TemplateBinding Foreground}" />
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="DefaultComboBoxToggleButtonStyle" TargetType="{x:Type ToggleButton}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Border.CornerRadius" Value="0" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border
-                        x:Name="ContentBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding Border.CornerRadius}">
-                        <ContentPresenter
-                            x:Name="PART_ContentHost"
-                            Content="{TemplateBinding Content}"
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style x:Key="DefaultUiTreeSelectStyle" TargetType="{x:Type controls:TreeSelect}">
         <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
@@ -86,11 +27,11 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
-        <Setter Property="MinHeight" Value="{DynamicResource TextControlThemeMinHeight}" />
-        <Setter Property="MinWidth" Value="{DynamicResource TextControlThemeMinWidth}" />
+        <Setter Property="MinHeight" Value="{DynamicResource TreeViewItemMinHeight}" />
+        <Setter Property="MinWidth" Value="{DynamicResource TreeViewItemMinHeight}" />
         <Setter Property="Padding" Value="{DynamicResource ComboBoxPadding}" />
         <Setter Property="Border.CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
-        <Setter Property="Popup.PopupAnimation" Value="None" />
+        <Setter Property="Popup.PopupAnimation" Value="Slide" />
         <Setter Property="Popup.Placement" Value="Bottom" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -118,18 +59,17 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="0" Margin="{TemplateBinding Padding}">
                                         <ContentPresenter
-                                            Name="PART_ContentPresenter"
+                                            x:Name="PART_ContentPresenter"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch"
                                             Content="{TemplateBinding SelectionBoxItem}"
-                                            ContentTemplate="{TemplateBinding SelectionItemTemplate}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                             IsHitTestVisible="False"
                                             TextElement.Foreground="{TemplateBinding Foreground}" />
-                                        
                                         <TextBlock 
                                             x:Name="PlaceholderBlock" 
-                                            Text="{Binding Path=PlaceholderText,RelativeSource={RelativeSource TemplatedParent}}" 
+                                            Text="{TemplateBinding PlaceholderText}" 
                                             Foreground="{DynamicResource ControlTextSecondaryColorBrush}"
                                             Visibility="Collapsed"/>
                                     </Grid>
@@ -160,24 +100,15 @@
                                             IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                             Style="{StaticResource DefaultComboBoxToggleButtonStyle}" />
                                     </Grid>
-                                    <Grid Grid.Column="0" Margin="{TemplateBinding Padding}">
-                                        <controls:TextBox
-                                            x:Name="PART_EditableTextBox"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            FontSize="{TemplateBinding FontSize}"
-                                            Foreground="{TemplateBinding Foreground}"
-                                            IsReadOnly="{TemplateBinding IsReadOnly}"
-                                            Style="{StaticResource DefaultComboBoxTextBoxStyle}" />
-                                    </Grid>
                                 </Grid>
                                 <Popup
-                                    x:Name="Popup"
+                                    x:Name="PART_Popup" 
                                     MinWidth="{TemplateBinding ActualWidth}"
                                     VerticalAlignment="Center"
                                     AllowsTransparency="True"
                                     Focusable="False"
-                                    IsOpen="{TemplateBinding IsDropDownOpen}"
+                                    StaysOpen="False"
+                                    IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                     Placement="{TemplateBinding Popup.Placement}"
                                     PopupAnimation="{TemplateBinding Popup.PopupAnimation}"
                                     VerticalOffset="1">
@@ -194,7 +125,7 @@
                                             <TranslateTransform />
                                         </Border.RenderTransform>
                                         <Grid>
-                                            <ScrollViewer
+                                            <controls:DynamicScrollViewer
                                                 MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                                 Margin="0"
                                                 HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
@@ -205,14 +136,22 @@
                                                 VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 
                                                 <TreeView 
-                                                    x:Name="PART_TreeView"
+                                                    x:Name="PART_TreeView"  
+                                                    Style="{StaticResource DefaultTreeViewStyle}"
                                                     SelectedValuePath="{TemplateBinding SelectedValuePath}"
+                                                    DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
+                                                    ItemTemplate="{TemplateBinding ItemTemplate}"
                                                     KeyboardNavigation.DirectionalNavigation="Contained"
                                                     ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    ItemTemplate="{TemplateBinding ItemTemplate}"
-                                                    ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
-                                                    TextElement.FontSize="{TemplateBinding FontSize}"/>
-                                            </ScrollViewer>
+                                                    TextElement.FontSize="{TemplateBinding FontSize}"
+                                                    ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}">
+                                                    <TreeView.ItemContainerStyle>
+                                                        <Style TargetType="TreeViewItem" BasedOn="{StaticResource DefaultTreeViewItemStyle}">
+                                                            <Setter Property="IsExpanded" Value="True" />
+                                                        </Style>
+                                                    </TreeView.ItemContainerStyle>
+                                                </TreeView>
+                                            </controls:DynamicScrollViewer>
                                         </Grid>
                                     </Border>
                                 </Popup>
@@ -234,20 +173,10 @@
                                     <Storyboard>
                                         <DoubleAnimation
                                             Storyboard.TargetName="ChevronIcon"
-                                            Storyboard.TargetProperty="(controls:SymbolIcon.RenderTransform).(RotateTransform.Angle)"
+                                            Storyboard.TargetProperty="(Button.RenderTransform).(RotateTransform.Angle)"
                                             From="0"
                                             To="180"
                                             Duration="00:00:00.167" />
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="DropDownBorder"
-                                            Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.Y)"
-                                            From="-90"
-                                            To="0"
-                                            Duration="00:00:00.167">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CircleEase EasingMode="EaseOut" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -256,7 +185,7 @@
                                     <Storyboard>
                                         <DoubleAnimation
                                             Storyboard.TargetName="ChevronIcon"
-                                            Storyboard.TargetProperty="(controls:SymbolIcon.RenderTransform).(RotateTransform.Angle)"
+                                            Storyboard.TargetProperty="(Button.RenderTransform).(RotateTransform.Angle)"
                                             From="180"
                                             To="0"
                                             Duration="00:00:00.167" />
@@ -267,11 +196,12 @@
 
                         <Trigger Property="SelectedValue" Value="{x:Null}">
                             <Setter TargetName="PlaceholderBlock" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_ContentPresenter" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="DropDownBorder" Property="MinHeight" Value="{StaticResource ComboBoxPopupMinHeight}" />
                         </Trigger>
-                        <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="False">
+                        <Trigger SourceName="PART_Popup" Property="Popup.AllowsTransparency" Value="False">
                             <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0" />
                         </Trigger>
                         <Trigger Property="IsGrouping" Value="True">
@@ -279,8 +209,6 @@
                         </Trigger>
                         <Trigger Property="IsEditable" Value="True">
                             <Setter Property="IsTabStop" Value="False" />
-                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="PART_ContentPresenter" Property="Visibility" Value="Hidden" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

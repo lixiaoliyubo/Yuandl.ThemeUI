@@ -78,10 +78,10 @@
     <SolidColorBrush x:Key="ControlItemActiveBorderColorBrush" Color="{StaticResource ControlItemActiveBorderColor}" />
 
     <!--  控件背景颜色 -->
-    <Color x:Key="ControlFillColor">#1E1E1E</Color>
+    <Color x:Key="ControlFillColor">#2C2C2C</Color>
     <SolidColorBrush x:Key="ControlFillColorBrush" Color="{StaticResource ControlFillColor}" />
     <!--  控件实心背景填充颜色 -->
-    <Color x:Key="ControlSolidFillColor">#2C2C2C</Color>
+    <Color x:Key="ControlSolidFillColor">#000000</Color>
     <SolidColorBrush x:Key="ControlSolidFillColorBrush" Color="{StaticResource ControlSolidFillColor}" />
     <!--  控件次要背景颜色 -->
     <Color x:Key="ControlFillSecondaryColor">#202020</Color>

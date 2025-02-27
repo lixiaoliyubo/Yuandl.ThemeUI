@@ -7,7 +7,6 @@
     xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
     xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist">
     <ResourceDictionary.MergedDictionaries>
-
         <ResourceDictionary Source="pack://application:,,,/Yuandl.ThemeUI;component/Controls/TextBlock/TextBlock.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
@@ -19,8 +18,8 @@
 
     <Style x:Key="DefaultUiTabControlStyle" TargetType="{x:Type TabControl}">
         <Setter Property="Padding" Value="2"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Background" Value="{DynamicResource ControlFillColorBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderColorBrush}"/>
         <Setter Property="Foreground" Value="{DynamicResource ControlTextColorBrush}"/>
@@ -81,6 +80,8 @@
                                     x:Name="PART_SelectedContentHost" 
                                     ContentSource="SelectedContent" 
                                     Margin="{TemplateBinding Padding}" 
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     TextElement.Foreground="{DynamicResource ControlTextColorBrush}"
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Border>
@@ -261,6 +262,8 @@
                                     x:Name="PART_SelectedContentHost" 
                                     ContentSource="SelectedContent" 
                                     Margin="{TemplateBinding Padding}" 
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                     TextElement.Foreground="{DynamicResource ControlTextColorBrush}"
                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Border>

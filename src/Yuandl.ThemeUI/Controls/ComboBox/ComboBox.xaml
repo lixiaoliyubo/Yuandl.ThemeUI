@@ -8,7 +8,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
     xmlns:assist="clr-namespace:Yuandl.ThemeUI.ElementAssist"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <Thickness x:Key="ComboBoxPadding">10,8,10,8</Thickness>
     <Thickness x:Key="ComboBoxBorderThemeThickness">1,1,1,1</Thickness>

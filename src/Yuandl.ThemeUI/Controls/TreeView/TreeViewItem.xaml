@@ -8,7 +8,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Yuandl.ThemeUI.Controls"
     xmlns:converters="clr-namespace:Yuandl.ThemeUI.Converters"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:Double x:Key="TreeViewItemChevronSize">10</system:Double>
     <system:Double x:Key="TreeViewItemFontSize">14</system:Double>
 
