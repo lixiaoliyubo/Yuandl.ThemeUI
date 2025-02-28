@@ -1,73 +1,53 @@
 name: Release and Publish NuGet
-
 on:
   push:
     branches:
-      - master  # 触发条件：提交到 master 分支时
+      - master
+      - release/*
+    paths:
+      - 'src/**'
 
-env:
-  Solution_Name: Yuandl.ThemeUI.sln  # 解决方案文件名
-  Configuration: Release  # 编译配置
-  Project_Path: src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj  # 需要生成 NuGet 包的项目路径
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest  # 使用 Windows 环境
-
+  deploy:
+    runs-on: windows-latest
     steps:
-      # 1. 检出代码
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # 2. 设置 .NET SDK
-      - name: Setup .NET
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+      - uses: nuget/setup-nuget@v2
+        with:
+          nuget-api-key: ${{ secrets.GITHUB_TOKEN}}
+      - name: Setup .NET Core SDK 9.x
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x  # 使用 .NET 8
+          dotnet-version: 9.x
 
-      # 3. 恢复 NuGet 包
-      - name: Restore dependencies
-        run: dotnet restore $env:Solution_Name
+      - name: Install dependencies
+        run: dotnet restore
 
-      # 4. 编译项目
-      - name: Build project
-        run: dotnet build $env:Solution_Name --configuration $env:Configuration
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI\Yuandl.ThemeUI.csproj --configuration Release --no-restore
 
-      # 5. 动态生成版本号
-      - name: Generate Version
-        id: version
-        run: |
-          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
-          echo "Generated Version: 1.0.0-$SHORT_SHA"
-          echo "version=1.0.0-$SHORT_SHA" >> $GITHUB_OUTPUT
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Demo\Yuandl.ThemeUI.Demo.csproj --configuration Release --no-restore
+        
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Mvvm\Yuandl.ThemeUI.Mvvm.csproj --configuration Release --no-restore
 
-      # 6. 打包 NuGet
-      - name: Pack NuGet
-        run: dotnet pack $env:Project_Path --configuration $env:Configuration --output ./artifacts /p:Version=${{ steps.version.outputs.version }}
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Sample\Yuandl.ThemeUI.Sample.csproj --configuration Release --no-restore
 
-      # 7. 发布 Releases
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish the package to NuGet.org
+        run: nuget push **\*.nupkg -NonInteractive -SkipDuplicate -Source 'https://api.nuget.org/v3/index.json'
+
+      - name: Publish the symbols to NuGet.org
+        run: nuget push **\*.snupkg -NonInteractive -SkipDuplicate -Source 'https://api.nuget.org/v3/index.json'
+
+      - name: Upload NuGet packages as artifacts
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          release_name: Release v${{ steps.version.outputs.version }}
-          draft: false
-          prerelease: false
-
-      # 8. 上传 NuGet 包到 Releases
-      - name: Upload NuGet to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg
-          asset_name: Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg
-          asset_content_type: application/octet-stream
-
-      # 9. 发布 NuGet 包到 NuGet.org
-      - name: Publish NuGet to NuGet.org
-        run: dotnet nuget push ./artifacts/Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+          name: nuget-packages
+          path: '**\*.nupkg'
