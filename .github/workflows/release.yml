@@ -37,7 +37,6 @@ jobs:
       - name: Generate Version
         id: version
         run: |
-          # 使用 github.sha 前 7 位作为版本号后缀
           SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
           echo "Generated Version: 1.0.0-$SHORT_SHA"
           echo "version=1.0.0-$SHORT_SHA" >> $GITHUB_OUTPUT
@@ -51,9 +50,9 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的 token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version.outputs.version }}  # 动态生成 Tag
+          tag_name: v${{ steps.version.outputs.version }}
           release_name: Release v${{ steps.version.outputs.version }}
           draft: false
           prerelease: false
@@ -64,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}  # 使用上一步生成的 Release URL
-          asset_path: ./artifacts/Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg  # NuGet 包路径
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg
           asset_name: Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg
           asset_content_type: application/octet-stream
 
