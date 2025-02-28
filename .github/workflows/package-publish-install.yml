@@ -2,7 +2,7 @@ name: Publish and Install NuGet Package
 on:
   push:
     branches:
-      - main  # 可以根据实际情况修改为目标分支
+      - master  # 可以根据实际情况修改为目标分支
 
 jobs:
   build - publish - install:
