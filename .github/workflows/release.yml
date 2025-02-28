@@ -17,11 +17,11 @@ jobs:
     steps:
       # 1. 检出代码
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # 2. 设置 .NET SDK
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x  # 使用 .NET 8
 
@@ -57,7 +57,6 @@ jobs:
           release_name: Release v${{ steps.version.outputs.version }}
           draft: false
           prerelease: false
-          generate_release_notes: true
 
       # 8. 上传 NuGet 包到 Releases
       - name: Upload NuGet to Release
