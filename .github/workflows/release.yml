@@ -2,7 +2,7 @@ name: Create Release
 on:
   push:
     branches:
-      - main  # 可以根据实际情况修改为目标分支
+      - master  # 可以根据实际情况修改为目标分支
 
 jobs:
   create_release:
