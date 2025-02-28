@@ -1,23 +1,70 @@
-name: Create Release
+name: Release and Publish NuGet
+
 on:
   push:
     branches:
-      -master # 可以根据实际情况修改为目标分支
+      - master  # 触发条件：提交到 master 分支时
 
 jobs:
-  create_release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest  # 使用 Windows 环境
+
     steps:
+      # 1. 检出代码
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # 2. 设置 .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x  # 使用 .NET 8
+
+      # 3. 恢复 NuGet 包
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 4. 编译项目
+      - name: Build project
+        run: dotnet build --configuration Release
+
+      # 5. 动态生成版本号
+      - name: Generate Version
+        id: version
+        run: |
+          # 使用 github.sha 前 7 位作为版本号后缀
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "Generated Version: 1.0.0-$SHORT_SHA"
+          echo "version=1.0.0-$SHORT_SHA" >> $GITHUB_OUTPUT
+
+      # 6. 打包 NuGet
+      - name: Pack NuGet
+        run: dotnet pack --configuration Release --output ./artifacts /p:Version=${{ steps.version.outputs.version }}
+
+      # 7. 发布 Releases
       - name: Create Release
         id: create_release
-        uses: softprops/action-github-release@v1
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的 token
         with:
-          tag_name: v${{ github.sha }}
-          release_name: Release ${{ github.sha }}
-          body: |
-            This is an automated release.
-            Commit SHA: ${{ github.sha }}
+          tag_name: v${{ steps.version.outputs.version }}  # 动态生成 Tag
+          release_name: Release v${{ steps.version.outputs.version }}
           draft: false
           prerelease: false
+          generate_release_notes: true
+
+      # 8. 上传 NuGet 包到 Releases
+      - name: Upload NuGet to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}  # 使用上一步生成的 Release URL
+          asset_path: ./artifacts/Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg  # NuGet 包路径
+          asset_name: Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg
+          asset_content_type: application/octet-stream
+
+      # 9. 发布 NuGet 包到 NuGet.org
+      - name: Publish NuGet to NuGet.org
+        run: dotnet nuget push ./artifacts/Yuandl.ThemeUI.${{ steps.version.outputs.version }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
