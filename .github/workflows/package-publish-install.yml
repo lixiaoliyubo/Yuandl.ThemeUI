@@ -33,13 +33,13 @@ jobs:
         run: dotnet build src\Yuandl.ThemeUI\Yuandl.ThemeUI.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
 
       - name: Build
-        run: dotnet build src\Yuandl.ThemeUI.Demo\Yuandl.ThemeUI.Demo.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
+        run: dotnet build src\Yuandl.ThemeUI.Demo\Yuandl.ThemeUI.Demo.csproj --configuration Release --no-restore
+        
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Mvvm\Yuandl.ThemeUI.Mvvm.csproj --configuration Release --no-restore
 
       - name: Build
-        run: dotnet build src\Yuandl.ThemeUI.Mvvm\Yuandl.ThemeUI.Mvvm.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
-
-      - name: Build
-        run: dotnet build src\Yuandl.ThemeUI.Sample\Yuandl.ThemeUI.Sample.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
+        run: dotnet build src\Yuandl.ThemeUI.Sample\Yuandl.ThemeUI.Sample.csproj --configuration Release --no-restore
 
       - name: Publish the package to NuGet.org
         run: nuget push **\*.nupkg -NonInteractive -SkipDuplicate -Source 'https://api.nuget.org/v3/index.json'
