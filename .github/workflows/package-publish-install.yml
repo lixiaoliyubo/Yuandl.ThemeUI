@@ -1,32 +1,61 @@
-name: Publish and Install NuGet Package
+name: yuandl-publish-nuget
+
 on:
   push:
     branches:
-      - master  # 可以根据实际情况修改为目标分支
+      - master
+      - release/*
+    paths:
+      - 'src/**'
+
+  workflow_dispatch:
 
 jobs:
-  build-publish-install:
+  deploy:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup.NET SDK
-        uses: actions/setup-dotnet@v3
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
         with:
-          dotnet-version: '8.0.x'  # 根据项目需求修改.NET SDK 版本
-      - name: Restore dependencies
+          msbuild-architecture: x64
+      - uses: nuget/setup-nuget@v2
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+      - name: Setup .NET Core SDK 9.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.x
+
+      - name: Fetch the certificate
+        run: |
+          $signing_keys_payload = [System.Convert]::FromBase64String("${{ secrets.NUGET_API_KEY }}")
+          $currentDirectory = Get-Location
+          $certificatePath = Join-Path -Path $currentDirectory -ChildPath "src/yuandl.snk"
+          [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
+
+      - name: Install dependencies
         run: dotnet restore
-      - name: Build project
-        run: dotnet build --configuration Release --no-restore
-      - name: Create NuGet package
-        run: dotnet pack --configuration Release --no-build --output.
-      - name: Publish NuGet package to GitHub Packages
-        run: |
-          dotnet nuget push *.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api -key ${{ secrets.GITHUB_TOKEN }}
-      - name: Install NuGet package in a test project
-        run: |
-          # 创建一个简单的测试项目用于安装包
-          dotnet new console -n TestProject
-          cd TestProject
-          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github --username ${{ github.repository_owner }} --password ${{ secrets.GITHUB_TOKEN }}
-          dotnet add package Yuandl.ThemeUI  # 将 Your.Package.Name 替换为实际的包名
+
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI\Yuandl.ThemeUI.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
+
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Demo\Yuandl.ThemeUI.Demo.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
+
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Mvvm\Yuandl.ThemeUI.Mvvm.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
+
+      - name: Build
+        run: dotnet build src\Yuandl.ThemeUI.Sample\Yuandl.ThemeUI.Sample.csproj --configuration Release --no-restore -p:SourceLinkEnabled=true
+
+      - name: Publish the package to NuGet.org
+        run: nuget push **\*.nupkg -NonInteractive -SkipDuplicate -Source 'https://api.nuget.org/v3/index.json'
+
+      - name: Publish the symbols to NuGet.org
+        run: nuget push **\*.snupkg -NonInteractive -SkipDuplicate -Source 'https://api.nuget.org/v3/index.json'
+
+      - name: Upload NuGet packages as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: '**\*.nupkg'
