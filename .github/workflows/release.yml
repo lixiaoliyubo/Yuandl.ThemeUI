@@ -6,13 +6,13 @@ on:
 
 jobs:
   create_release:
-    runs-on: ubuntu - latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Create Release
         id: create_release
-        uses: softprops/action - github - release@v1
+        uses: softprops/action-github-release@v1
         with:
           tag_name: v${{ github.sha }}
           release_name: Release ${{ github.sha }}
