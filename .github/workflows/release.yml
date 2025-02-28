@@ -5,6 +5,10 @@ on:
     branches:
       - master  # 触发条件：提交到 master 分支时
 
+env:
+  Solution_Name: Yuandl.ThemeUI.sln  # 设置解决方案文件名
+  Configuration: Release  # 设置编译配置
+
 jobs:
   build:
     runs-on: windows-latest  # 使用 Windows 环境
@@ -22,11 +26,11 @@ jobs:
 
       # 3. 恢复 NuGet 包
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore $env:Solution_Name
 
       # 4. 编译项目
       - name: Build project
-        run: dotnet build --configuration Release
+        run: dotnet build $env:Solution_Name --configuration $env:Configuration
 
       # 5. 动态生成版本号
       - name: Generate Version
@@ -39,7 +43,7 @@ jobs:
 
       # 6. 打包 NuGet
       - name: Pack NuGet
-        run: dotnet pack --configuration Release --output ./artifacts /p:Version=${{ steps.version.outputs.version }}
+        run: dotnet pack $env:Solution_Name --configuration $env:Configuration --output ./artifacts /p:Version=${{ steps.version.outputs.version }}
 
       # 7. 发布 Releases
       - name: Create Release
