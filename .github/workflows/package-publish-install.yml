@@ -1,0 +1,32 @@
+name: Publish and Install NuGet Package
+on:
+  push:
+    branches:
+      - main  # 可以根据实际情况修改为目标分支
+
+jobs:
+  build - publish - install:
+    runs-on: windows - latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup.NET SDK
+        uses: actions/setup - dotnet@v3
+        with:
+          dotnet - version: '8.0.x'  # 根据项目需求修改.NET SDK 版本
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build project
+        run: dotnet build --configuration Release --no - restore
+      - name: Create NuGet package
+        run: dotnet pack --configuration Release --no - build --output.
+      - name: Publish NuGet package to GitHub Packages
+        run: |
+          dotnet nuget push *.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api - key ${{ secrets.GITHUB_TOKEN }}
+      - name: Install NuGet package in a test project
+        run: |
+          # 创建一个简单的测试项目用于安装包
+          dotnet new console - n TestProject
+          cd TestProject
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github --username ${{ github.repository_owner }} --password ${{ secrets.GITHUB_TOKEN }}
+          dotnet add package Yuandl.ThemeUI  # 将 Your.Package.Name 替换为实际的包名

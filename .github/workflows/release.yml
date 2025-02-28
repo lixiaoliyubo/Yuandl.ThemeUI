@@ -1,0 +1,23 @@
+name: Create Release
+on:
+  push:
+    branches:
+      - main  # 可以根据实际情况修改为目标分支
+
+jobs:
+  create_release:
+    runs-on: ubuntu - latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        id: create_release
+        uses: softprops/action - github - release@v1
+        with:
+          tag_name: v${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          body: |
+            This is an automated release.
+            Commit SHA: ${{ github.sha }}
+          draft: false
+          prerelease: false
