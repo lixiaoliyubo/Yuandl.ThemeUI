@@ -3,6 +3,7 @@ name: Auto Production Releasex
 on:  # 触发正式发布的场景 [^6]
   push:
     tags: ['v*']  # 仅打标签时触发正式发布
+    branches: ['master']
 
 jobs:
   publish-release:
