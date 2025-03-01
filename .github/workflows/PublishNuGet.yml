@@ -1,4 +1,5 @@
-name: Multi-TFM Build & Release
+name: Multi-TFM Valid Build
+
 on:
   push:
     tags: ['v*']
@@ -7,61 +8,28 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    strategy:  # 启用框架矩阵构建 [^1]
+    strategy:  # 显式配置多框架构建策略 [^3]
       matrix:
-        frameworks: ['net462', 'net48','net8.0-windows']
-    env:
-      OUTPUT_PATH: ./artifacts/${{ matrix.frameworks }}
-    
+        frameworks: ['net462','net48','net8.0-windows']
+        
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET SDKs
         uses: actions/setup-dotnet@v3
-        with:
+        with:  # 修复非法版本格式问题 [^1]
           dotnet-version: | 
-            8.0.204  # 覆盖多框架版本需求 [^2]
+            8.0.204   # .NET8 SDK
+            6.0.426   # 支持旧框架的SDK [^3]
 
-      - name: Build ${{ matrix.frameworks }}
+      - name: Restore & Build ${{ matrix.frameworks }}
         run: |
           dotnet restore
           dotnet publish -f ${{ matrix.frameworks }} \
                          -c Release \
-                         -o ${{ env.OUTPUT_PATH }} \
-                         --nologo --verbosity minimal
+                         -o ./artifacts/${{ matrix.frameworks }}
 
-      - name: Archive Binaries
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: binaries-${{ matrix.frameworks }}
-          path: ${{ env.OUTPUT_PATH }}
-
-  create-release:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-    
-    steps:
-      - name: Download All Artifacts  # 收集所有框架构建产物 [^3]
-        uses: actions/download-artifact@v4
-        with:
-          path: ./aggregated-artifacts
-
-      - name: Extract Version
-        id: version
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref }}
-          name: "Release ${{ steps.version.outputs.version }}"
-          body: '多框架支持版本包含：net462/net48/net8.0-windows'
-          files: | 
-            aggregated-artifacts/**/*.exe
-            aggregated-artifacts/**/*.dll
+          name: output-${{ matrix.frameworks }}
+          path: artifacts/${{ matrix.frameworks }}
