@@ -1,79 +1,50 @@
-name: WPF Multi-Target Release
+name: Auto Release Build
 
 on:
   push:
-    branches: [ master ]
-  workflow_dispatch:
-
-env:
-  BUILD_CONFIGURATION: 'Release'
-  SAMPLE_PROJECT: 'src/YuandlThemeUI.Sample/YuandlThemeUI.Sample.csproj'
-  UI_LIB_PROJECT: 'src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj'
-
-permissions:
-  contents: write
-  packages: write  # 启用包写入权限[^1]
+    tags: 
+      - 'v*'  # 当打版时触发 [^1]
+    branches: 
+      - master  # 主分支推送触发测试版构建
 
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows']
-    
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
-
+        
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: |
-            6.0.x
-            8.0.x  # 指定目标框架对应SDK版本[^2]
-
-      - name: Install .NET Framework Targets
-        if: contains(matrix.target_framework, 'net4')
-        run: choco install netfx-4.8-devpack -y
-        shell: powershell
+          dotnet-version: 8.0.204
 
       - name: Clean workspace
-        run: Remove-Item -Recurse -Force src/Yuandl.ThemeUI/obj, src/Yuandl.ThemeUI/bin -ErrorAction SilentlyContinue
+        run: Remove-Item -Recurse -Force src/**/bin, src/**/obj -ErrorAction SilentlyContinue
         shell: powershell
 
-      - name: Build library
-        run: dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
+      - name: Build Solution
+        run: dotnet publish -c Release -p:PublishSingleFile=true --self-contained
 
-  pack:
-    runs-on: windows-latest
+  create-release:
     needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许创建Release[^2]
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x  # 使用稳定版SDK打包[^3]
-
-      - name: Get version
+      - name: Get Version
         id: get_version
-        shell: powershell
         run: |
-          $xml = [xml](Get-Content ${{ env.UI_LIB_PROJECT }})
-          $version = $xml.Project.PropertyGroup.AssemblyVersion
-          echo "version=$version" >> $env:GITHUB_OUTPUT
-
-      - name: Create NuGet package
-        run: |
-          dotnet pack ${{ env.UI_LIB_PROJECT }} \
-            --configuration ${{ env.BUILD_CONFIGURATION }} \
-            --output ./nupkg \
-            -p:PackageVersion=${{ steps.get_version.outputs.version }} \
-            --include-symbols  # 包含符号文件[^4]
-
-      - name: Publish package
-        uses: actions/upload-artifact@v4
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "version=${TAG/v/}" >> $GITHUB_OUTPUT
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: nuget-package
-          path: ./nupkg/*.nupkg
+          tag_name: ${{ github.ref }}
+          name: Release ${{ steps.get_version.outputs.version }}
+          body: '[自动化构建版本]'
+          assets: |
+            src/*/bin/Release/**/*.exe
+            src/*/bin/Release/**/*.zip
