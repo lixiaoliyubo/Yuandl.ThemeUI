@@ -12,106 +12,68 @@ env:
 
 permissions:
   contents: write
-  packages: write
+  packages: write  # 启用包写入权限[^1]
 
 jobs:
-  build-components:
+  build:
     runs-on: windows-latest
     strategy:
       matrix:
-        target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows', 'net9.0-windows']
-
+        target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows']
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
-            6.0.428
-            8.0.301
+            6.0.x
+            8.0.x  # 指定目标框架对应SDK版本[^2]
 
       - name: Install .NET Framework Targets
-        run: |
-          choco install netfx-4.8-devpack -y
-        shell: powershell
         if: contains(matrix.target_framework, 'net4')
-
-      - name: Check .NET Versions
-        run: dotnet --list-sdks
-
-      - name: Get Library Version
-        id: get_version
+        run: choco install netfx-4.8-devpack -y
         shell: powershell
-        run: |
-          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<AssemblyVersion>(.*?)</AssemblyVersion>').Matches.Groups[1].Value
-          echo "version=$version" >> $env:GITHUB_OUTPUT
 
-      - name: Build UI Library
-        shell: pwsh
-        run: |
-          dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
+      - name: Clean workspace
+        run: Remove-Item -Recurse -Force src/Yuandl.ThemeUI/obj, src/Yuandl.ThemeUI/bin -ErrorAction SilentlyContinue
+        shell: powershell
 
-      - name: Pack NuGet
-        if: matrix.target_framework == 'net8.0-windows'
-        run: |
-          dotnet pack ${{ env.UI_LIB_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ./nupkg  -p:PackageVersion=${{ steps.get_version.outputs.version }}
+      - name: Build library
+        run: dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
 
-  publish-sample:
+  pack:
     runs-on: windows-latest
-    needs: build-components
+    needs: build
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.301
+          dotnet-version: 8.0.x  # 使用稳定版SDK打包[^3]
 
-      - name: Restore Dependencies
-        run: dotnet restore ${{ env.SAMPLE_PROJECT }}
-
-      - name: Publish Sample App
-        run: |
-          dotnet publish ${{ env.SAMPLE_PROJECT }} \
-            --configuration ${{ env.BUILD_CONFIGURATION }} \
-            --output ./artifacts \
-            --runtime win-x64 \
-            --self-contained true \
-            -p:PublishSingleFile=true \
-            -p:TargetFramework=net8.0-windows \
-            -p:IncludeAllContentForSelfExtract=true
-
-      - name: Create Install Package
+      - name: Get version
+        id: get_version
         shell: powershell
         run: |
-          $packageName = "ThemeUISample_${{ steps.get_version.outputs.version }}.zip"
-          Compress-Archive -Path ./artifacts/* -DestinationPath $packageName
-          echo "SAMPLE_PACKAGE=$packageName" >> $env:GITHUB_ENV
+          $xml = [xml](Get-Content ${{ env.UI_LIB_PROJECT }})
+          $version = $xml.Project.PropertyGroup.AssemblyVersion
+          echo "version=$version" >> $env:GITHUB_OUTPUT
 
-      - name: Generate Release Notes
-        id: changelog
+      - name: Create NuGet package
         run: |
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
-          git log --since="$(git log -1 --merges --pretty=format:%cd --date=iso)" \
-            --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" \
-            --date=format-local:'%Y-%m-%d %H:%M' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          dotnet pack ${{ env.UI_LIB_PROJECT }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --output ./nupkg \
+            -p:PackageVersion=${{ steps.get_version.outputs.version }} \
+            --include-symbols  # 包含符号文件[^4]
 
-      # 修改重点：仅保留自动生成的Source code压缩包
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Publish package
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          name: Theme UI v${{ steps.get_version.outputs.version }}
-          draft: true
-          generate_release_notes: true
-          body: |
-            ${{ steps.changelog.outputs.RELEASE_NOTES }}
-
-            **安装包包含以下内容**：
-            - 主程序文件: `YuandlThemeUl.Sample.exe`
-            - 支持从 Windows XP 到 Windows 11 的兼容组件
-            - 自动运行环境检查工具
+          name: nuget-package
+          path: ./nupkg/*.nupkg
