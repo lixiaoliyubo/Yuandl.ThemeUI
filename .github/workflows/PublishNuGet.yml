@@ -1,19 +1,19 @@
-name: Auto Build & Release
+name: Multi-TFM Build & Release
 
 on:
   push:
-    tags: 
-      - 'v*'  # 语义化版本标签触发正式发布 [^2]
-    branches: 
-      - master  # 主分支推送触发测试构建
+    tags: ['v*']
+    branches: ['master']
 
 jobs:
   build:
     runs-on: windows-latest
-    strategy:  # 使用矩阵策略遍历所有目标框架 [^1]
+    strategy:  # 启用框架矩阵构建 [^1]
       matrix:
-        frameworks: 
-          - 'net8.0-windows'
+        frameworks: ['net462', 'net48','net8.0-windows']
+    env:
+      OUTPUT_PATH: ./artifacts/${{ matrix.frameworks }}
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -21,21 +21,38 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.204
+          dotnet-version: | 
+            8.0.204  # 覆盖多框架版本需求 [^2]
 
-      - name: Build Solution
-        run: dotnet publish -c Release --output ./artifacts
+      - name: Build ${{ matrix.frameworks }}
+        run: |
+          dotnet restore
+          dotnet publish -f ${{ matrix.frameworks }} \
+                         -c Release \
+                         -o ${{ env.OUTPUT_PATH }} \
+                         --nologo --verbosity minimal
+
+      - name: Archive Binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: binaries-${{ matrix.frameworks }}
+          path: ${{ env.OUTPUT_PATH }}
 
   create-release:
-    needs: build  # 依赖构建作业完成
+    needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 需写入权限创建 Release [^1]
-      packages: write  # 发布产物至 GitHub Packages
+      contents: write
+      packages: write
     
     steps:
-      - name: Get Version
-        id: tag_version
+      - name: Download All Artifacts  # 收集所有框架构建产物 [^3]
+        uses: actions/download-artifact@v4
+        with:
+          path: ./aggregated-artifacts
+
+      - name: Extract Version
+        id: version
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
@@ -44,8 +61,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
-          name: Release ${{ steps.tag_version.outputs.version }}
-          body: '[自动化构建版本]'
+          name: "Release ${{ steps.version.outputs.version }}"
+          body: '多框架支持版本包含：net462/net48/net8.0-windows'
           files: | 
-            artifacts/**/*.exe
-            artifacts/**/*.zip
+            aggregated-artifacts/**/*.exe
+            aggregated-artifacts/**/*.dll
