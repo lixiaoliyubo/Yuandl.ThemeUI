@@ -1,11 +1,11 @@
-name: Auto Release Build
+name: Auto Build & Release
 
 on:
   push:
     tags: 
-      - 'v*'  # 当打版时触发 [^1]
+      - 'v*'  # 语义化版本标签触发正式发布 [^2]
     branches: 
-      - master  # 主分支推送触发测试版构建
+      - main  # 主分支推送触发测试构建
 
 jobs:
   build:
@@ -13,38 +13,35 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.204
 
-      - name: Clean workspace
-        run: Remove-Item -Recurse -Force src/**/bin, src/**/obj -ErrorAction SilentlyContinue
-        shell: powershell
-
       - name: Build Solution
-        run: dotnet publish -c Release -p:PublishSingleFile=true --self-contained
+        run: dotnet publish -c Release --output ./artifacts
 
   create-release:
-    needs: build
+    needs: build  # 依赖构建作业完成
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 允许创建Release[^2]
+      contents: write  # 需写入权限创建 Release [^1]
+      packages: write  # 发布产物至 GitHub Packages
     
     steps:
       - name: Get Version
-        id: get_version
+        id: tag_version
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
-          echo "version=${TAG/v/}" >> $GITHUB_OUTPUT
-        
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
-          name: Release ${{ steps.get_version.outputs.version }}
+          name: Release ${{ steps.tag_version.outputs.version }}
           body: '[自动化构建版本]'
-          assets: |
-            src/*/bin/Release/**/*.exe
-            src/*/bin/Release/**/*.zip
+          files: | 
+            artifacts/**/*.exe
+            artifacts/**/*.zip
