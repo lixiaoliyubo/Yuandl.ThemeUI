@@ -8,8 +8,8 @@ on:
 env:
   DOTNET_VERSION: '8.0.x'  # 主项目使用的SDK版本
   BUILD_CONFIGURATION: 'Release'
-  SAMPLE_PROJECT: 'src/YuandlThemeUl.Sample/YuandlThemeUl.Sample.csproj'
-  UI_LIB_PROJECT: 'src/Yuandl.ThemeUl/Yuandl.ThemeUl.csproj'
+  SAMPLE_PROJECT: 'src/YuandlThemeUI.Sample/YuandlThemeUI.Sample.csproj'
+  UI_LIB_PROJECT: 'src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj'
 
 permissions:
   contents: write
