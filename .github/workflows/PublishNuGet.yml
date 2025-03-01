@@ -5,7 +5,7 @@ on:
     tags: 
       - 'v*'  # 语义化版本标签触发正式发布 [^2]
     branches: 
-      - main  # 主分支推送触发测试构建
+      - master  # 主分支推送触发测试构建
 
 jobs:
   build:
