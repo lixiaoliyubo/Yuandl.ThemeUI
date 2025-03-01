@@ -1,35 +1,30 @@
-name: Multi-TFM Valid Build
+name: Auto Draft Release
 
-on:
+on:  # 触发规则 [^1]
   push:
     tags: ['v*']
-    branches: ['master']
+    branches: ['main', 'master']
 
 jobs:
-  build:
-    runs-on: windows-latest
-    strategy:  # 显式配置多框架构建策略 [^3]
-      matrix:
-        frameworks: ['net462','net48','net8.0-windows']
-        
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:  # 必要操作权限 [^2]
+      contents: write
+      id-token: write
+
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup .NET SDKs
-        uses: actions/setup-dotnet@v3
-        with:  # 修复非法版本格式问题 [^1]
-          dotnet-version: | 
-            8.0.204   # .NET8 SDK
-            6.0.426   # 支持旧框架的SDK [^3]
-
-      - name: Restore & Build ${{ matrix.frameworks }}
+      
+      - name: Extract Version
+        id: version
         run: |
-          dotnet restore
-          dotnet publish -f ${{ matrix.frameworks }} \
-                         -c Release \
-                         -o ./artifacts/${{ matrix.frameworks }}
+          VERSION="${GITHUB_REF#refs/tags/}"
+          echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: output-${{ matrix.frameworks }}
-          path: artifacts/${{ matrix.frameworks }}
+      - name: Auto Draft Release
+        uses: softprops/action-gh-release@v2
+        with:  # 自动创建草稿版发行 [^6]
+          tag_name: ${{ github.ref }}
+          name: "Release ${{ steps.version.outputs.version }}"
+          draft: true
+          prerelease: false
