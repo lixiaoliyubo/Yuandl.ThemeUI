@@ -1,0 +1,119 @@
+name: WPF Multi-Target Release
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '8.0.x'  # 主项目使用的SDK版本
+  BUILD_CONFIGURATION: 'Release'
+  SAMPLE_PROJECT: 'src/YuandlThemeUl.Sample/YuandlThemeUl.Sample.csproj'
+  UI_LIB_PROJECT: 'src/Yuandl.ThemeUl/Yuandl.ThemeUl.csproj'
+
+permissions:
+  contents: write
+  packages: write  # 如果需要发布到NuGet则需要
+
+jobs:
+  build-components:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows']  # 排除测试中可能有问题的框架
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
+
+      - name: Build UI Library
+        run: |
+          dotnet build ${{ env.UI_LIB_PROJECT }} \
+            -f ${{ matrix.target_framework }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }}
+
+      - name: Pack NuGet
+        if: matrix.target_framework == 'net8.0-windows'  # 只对主要框架打包
+        run: |
+          dotnet pack ${{ env.UI_LIB_PROJECT }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --output ./nupkg \
+            -p:PackageVersion=${{ steps.get_version.outputs.version }}
+
+  publish-sample:
+    runs-on: windows-latest
+    needs: build-components  # 依赖组件构建
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore Dependencies
+        run: dotnet restore ${{ env.SAMPLE_PROJECT }}
+
+      - name: Get Version Info
+        id: get_version
+        shell: powershell
+        run: |
+          # 从工程文件直接读取版本信息
+          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<Version>(.*?)</Version>' | 
+            ForEach-Object { $_.Matches.Groups[1].Value })
+          Write-Output "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Publish Sample App
+        run: |
+          dotnet publish ${{ env.SAMPLE_PROJECT }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --output ./artifacts \
+            --runtime win-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:TargetFramework=net8.0-windows \
+            -p:IncludeAllContentForSelfExtract=true
+
+      - name: Create Install Package
+        shell: powershell
+        run: |
+          $packageName = "ThemeUISample_${{ steps.get_version.outputs.version }}.zip"
+          Compress-Archive -Path ./artifacts/* -DestinationPath $packageName
+          echo "SAMPLE_PACKAGE=$packageName" >> $env:GITHUB_ENV
+
+      - name: Generate Release Notes
+        id: changelog
+        run: |
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+          git log --since="$(git log -1 --merges --pretty=format:%cd --date=iso)" \
+            --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" \
+            --date=format-local:'%Y-%m-%d %H:%M' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Theme UI v${{ steps.get_version.outputs.version }}
+          draft: true
+          generate_release_notes: true
+          body: |
+            ${{ steps.changelog.outputs.RELEASE_NOTES }}
+
+            **安装包包含以下内容**：
+            - 主程序文件: `YuandlThemeUl.Sample.exe`
+            - 支持从 Windows XP 到 Windows 11 的兼容组件
+            - 自动运行环境检查工具
+
+          files: |
+            ${{ env.SAMPLE_PACKAGE }}
+            ./nupkg/Yuandl.ThemeUl.*.nupkg  # 包含组件库的NuGet包
