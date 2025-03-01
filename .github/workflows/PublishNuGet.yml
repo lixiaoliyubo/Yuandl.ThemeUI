@@ -56,10 +56,7 @@ jobs:
       - name: Pack NuGet
         if: matrix.target_framework == 'net8.0-windows'
         run: |
-          dotnet pack ${{ env.UI_LIB_PROJECT }} \
-            --configuration ${{ env.BUILD_CONFIGURATION }} \
-            --output ./nupkg \
-            -p:PackageVersion=${{ steps.get_version.outputs.version }}
+          dotnet pack ${{ env.UI_LIB_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ./nupkg  -p:PackageVersion=${{ steps.get_version.outputs.version }}
 
   publish-sample:
     runs-on: windows-latest
