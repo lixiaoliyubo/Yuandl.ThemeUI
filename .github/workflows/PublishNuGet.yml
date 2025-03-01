@@ -1,4 +1,4 @@
-name: Auto Production Release
+name: Auto Production Releasex
 
 on:  # 触发正式发布的场景 [^6]
   push:
