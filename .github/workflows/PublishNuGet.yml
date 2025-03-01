@@ -46,7 +46,7 @@ jobs:
         id: get_version
         shell: powershell
         run: |
-          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<Version>(.*?)</Version>').Matches.Groups[1].Value
+          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<AssemblyVersion>(.*?)</AssemblyVersion>').Matches.Groups[1].Value
           echo "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Build UI Library
