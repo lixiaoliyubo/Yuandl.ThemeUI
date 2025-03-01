@@ -52,9 +52,7 @@ jobs:
       - name: Build UI Library
         shell: pwsh
         run: |
-          dotnet build ${{ env.UI_LIB_PROJECT }} `
-            -f ${{ matrix.target_framework }} `
-            --configuration ${{ env.BUILD_CONFIGURATION }}
+          dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
 
       - name: Pack NuGet
         if: matrix.target_framework == 'net8.0-windows'
