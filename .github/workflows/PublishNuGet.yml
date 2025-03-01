@@ -6,21 +6,20 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '8.0.x'  # 主项目使用的SDK版本
   BUILD_CONFIGURATION: 'Release'
   SAMPLE_PROJECT: 'src/YuandlThemeUI.Sample/YuandlThemeUI.Sample.csproj'
   UI_LIB_PROJECT: 'src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj'
 
 permissions:
   contents: write
-  packages: write  # 如果需要发布到NuGet则需要
+  packages: write
 
 jobs:
   build-components:
     runs-on: windows-latest
     strategy:
       matrix:
-        target_framework: ['net462', 'net48', 'net6.0-windows','net7.0-windows', 'net8.0-windows']  # 排除测试中可能有问题的框架
+        target_framework: ['net462', 'net48', 'net6.0-windows','net7.0-windows', 'net8.0-windows']
 
     steps:
       - name: Checkout
@@ -30,18 +29,35 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
-            6.0.x
-            7.0.x
-            8.0.x
+            6.0.428
+            7.0.117
+            8.0.301
+
+      - name: Install .NET Framework Targets
+        run: |
+          choco install netfx-4.8-devpack -y
+        shell: powershell
+        if: contains(matrix.target_framework, 'net4')
+
+      - name: Check .NET Versions
+        run: dotnet --list-sdks
+
+      - name: Get Library Version
+        id: get_version
+        shell: powershell
+        run: |
+          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<Version>(.*?)</Version>').Matches.Groups[1].Value
+          echo "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Build UI Library
+        shell: pwsh
         run: |
-          dotnet build ${{ env.UI_LIB_PROJECT }} \
-            -f ${{ matrix.target_framework }} \
+          dotnet build ${{ env.UI_LIB_PROJECT }} `
+            -f ${{ matrix.target_framework }} `
             --configuration ${{ env.BUILD_CONFIGURATION }}
 
       - name: Pack NuGet
-        if: matrix.target_framework == 'net8.0-windows'  # 只对主要框架打包
+        if: matrix.target_framework == 'net8.0-windows'
         run: |
           dotnet pack ${{ env.UI_LIB_PROJECT }} \
             --configuration ${{ env.BUILD_CONFIGURATION }} \
@@ -50,7 +66,7 @@ jobs:
 
   publish-sample:
     runs-on: windows-latest
-    needs: build-components  # 依赖组件构建
+    needs: build-components
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,19 +74,10 @@ jobs:
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: 8.0.301
 
       - name: Restore Dependencies
         run: dotnet restore ${{ env.SAMPLE_PROJECT }}
-
-      - name: Get Version Info
-        id: get_version
-        shell: powershell
-        run: |
-          # 从工程文件直接读取版本信息
-          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<Version>(.*?)</Version>' | 
-            ForEach-Object { $_.Matches.Groups[1].Value })
-          Write-Output "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Publish Sample App
         run: |
@@ -99,6 +106,7 @@ jobs:
             --date=format-local:'%Y-%m-%d %H:%M' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      # 修改重点：仅保留自动生成的Source code压缩包
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -113,7 +121,3 @@ jobs:
             - 主程序文件: `YuandlThemeUl.Sample.exe`
             - 支持从 Windows XP 到 Windows 11 的兼容组件
             - 自动运行环境检查工具
-
-          files: |
-            ${{ env.SAMPLE_PACKAGE }}
-            ./nupkg/Yuandl.ThemeUl.*.nupkg  # 包含组件库的NuGet包
