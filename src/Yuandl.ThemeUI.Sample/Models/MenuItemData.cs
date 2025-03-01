@@ -10,11 +10,11 @@ namespace Yuandl.ThemeUI.Sample.Models;
 
 public class MenuItemData : ObservableObject
 {
-    public IconElement Icon { get; set; }
+    public IconElement? Icon { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public ICommand Command { get; set; }
+    public ICommand? Command { get; set; }
 
     public ObservableCollection<MenuItemData> SubItems { get; set; } = new ObservableCollection<MenuItemData>();
 }

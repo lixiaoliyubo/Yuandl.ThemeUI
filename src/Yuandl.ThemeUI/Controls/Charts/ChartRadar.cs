@@ -12,10 +12,11 @@ namespace Yuandl.ThemeUI.Controls;
 /// </summary>
 public class ChartRadar : ChartBase
 {
-    private PointCollection _points;
+    private PointCollection? _points;
     private double _h;
     private double _w;
-    private Pen _penXAxis;
+
+    private Pen? _penXAxis;
 
     static ChartRadar()
     {
@@ -115,8 +116,7 @@ public class ChartRadar : ChartBase
         drawingContext.DrawGeometry(null, _penXAxis, streamGeometry);
     }
 
-    private PointCollection GetPolygonPoint(Point center, double r,
-        DrawingContext drawingContext = null)
+    private PointCollection GetPolygonPoint(Point center, double r, DrawingContext? drawingContext = null)
     {
         double g = 18;
         double perangle = 360 / Datas.Count();

@@ -9,36 +9,6 @@ namespace Yuandl.ThemeUI.Helpers;
 
 public static class ControlsHelper
 {
-    /// <summary>
-    /// 窗口抖动
-    /// </summary>
-    /// <param name="window"></param>
-    public static void WindowShake(Window window = null)
-    {
-        if (window == null)
-        {
-            if (Application.Current.Windows.Count > 0)
-            {
-                window = Application.Current.Windows.OfType<Window>().FirstOrDefault(o => o.IsActive);
-            }
-        }
-
-        var doubleAnimation = new DoubleAnimation
-        {
-            From = window.Left,
-            To = window.Left + 15,
-            Duration = TimeSpan.FromMilliseconds(50),
-            AutoReverse = true,
-            RepeatBehavior = new RepeatBehavior(3),
-            FillBehavior = FillBehavior.Stop
-        };
-        window.BeginAnimation(Window.LeftProperty, doubleAnimation);
-        var wavUri = new Uri(@"pack://application:,,,/Yuandl.ThemeUI;component/Resources/Audio/shake.wav");
-        System.Windows.Resources.StreamResourceInfo streamResource = Application.GetResourceStream(wavUri);
-        var player1 = new SoundPlayer(streamResource.Stream);
-        player1.Play();
-    }
-
     public static AdornerLayer GetAdornerLayer(Visual visual)
     {
         var decorator = visual as AdornerDecorator;

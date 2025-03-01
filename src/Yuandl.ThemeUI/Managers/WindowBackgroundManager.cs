@@ -24,7 +24,7 @@ public static class WindowBackgroundManager
             _ = NativeMethodsExtension.ApplyWindowDarkMode(window);
         }
 
-        window.Loaded += (sender, _) => NativeMethodsExtension.ApplyWindowDarkMode(sender as Window);
+        window.Loaded += (sender, _) => NativeMethodsExtension.ApplyWindowDarkMode((Window)sender);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public static class WindowBackgroundManager
             _ = NativeMethodsExtension.RemoveWindowDarkMode(window);
         }
 
-        window.Loaded += (sender, _) => NativeMethodsExtension.RemoveWindowDarkMode(sender as Window);
+        window.Loaded += (sender, _) => NativeMethodsExtension.RemoveWindowDarkMode((Window)sender);
     }
 
     /// <summary>

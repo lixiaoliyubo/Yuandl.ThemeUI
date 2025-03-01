@@ -10,13 +10,13 @@ namespace Yuandl.ThemeUI;
 /// </summary>
 public class UiApplication
 {
-    private static UiApplication _uiApplication;
+    private static UiApplication? _uiApplication;
 
-    private readonly Application _application;
+    private readonly Application? _application;
 
-    private ResourceDictionary _resources;
+    private ResourceDictionary? _resources;
 
-    private Window _mainWindow;
+    private Window? _mainWindow;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UiApplication"/> class.
