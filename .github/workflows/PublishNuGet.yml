@@ -10,6 +10,12 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    strategy:  # 使用矩阵策略遍历所有目标框架 [^1]
+      matrix:
+        frameworks: 
+          - 'net462'
+          - 'net48' 
+          - 'net8.0-windows'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
