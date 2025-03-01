@@ -33,7 +33,10 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
 
     protected override void OnMouseWheel(MouseWheelEventArgs e)
     {
-        if (!CanMouseWheel) return;
+        if (!CanMouseWheel)
+        {
+            return;
+        }
 
         if (!IsInertiaEnabled)
         {
@@ -44,9 +47,9 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
             else
             {
                 _totalHorizontalOffset = HorizontalOffset;
-                CurrentHorizontalOffset = HorizontalOffset;
+                SetCurrentValue(CurrentHorizontalOffsetProperty, HorizontalOffset);
                 _totalHorizontalOffset = Math.Min(Math.Max(0, _totalHorizontalOffset - e.Delta), ScrollableWidth);
-                CurrentHorizontalOffset = _totalHorizontalOffset;
+                SetCurrentValue(CurrentHorizontalOffsetProperty, _totalHorizontalOffset);
             }
 
             return;
@@ -59,7 +62,7 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
             if (!_isRunning)
             {
                 _totalVerticalOffset = VerticalOffset;
-                CurrentVerticalOffset = VerticalOffset;
+                SetCurrentValue(CurrentVerticalOffsetProperty, VerticalOffset);
             }
 
             _totalVerticalOffset = Math.Min(Math.Max(0, _totalVerticalOffset - e.Delta), ScrollableHeight);
@@ -70,7 +73,7 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
             if (!_isRunning)
             {
                 _totalHorizontalOffset = HorizontalOffset;
-                CurrentHorizontalOffset = HorizontalOffset;
+                SetCurrentValue(CurrentHorizontalOffsetProperty, HorizontalOffset);
             }
 
             _totalHorizontalOffset = Math.Min(Math.Max(0, _totalHorizontalOffset - e.Delta), ScrollableWidth);
@@ -83,7 +86,7 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
         if (!_isRunning)
         {
             _totalVerticalOffset = VerticalOffset;
-            CurrentVerticalOffset = VerticalOffset;
+            SetCurrentValue(CurrentVerticalOffsetProperty, VerticalOffset);
         }
 
         ScrollToVerticalOffsetWithAnimation(0, milliseconds);
@@ -99,7 +102,7 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
 
         animation.Completed += (s, e1) =>
         {
-            CurrentVerticalOffset = offset;
+            SetCurrentValue(CurrentVerticalOffsetProperty, offset);
             _isRunning = false;
         };
         _isRunning = true;
@@ -117,7 +120,7 @@ public class ScrollViewer : System.Windows.Controls.ScrollViewer
 
         animation.Completed += (s, e1) =>
         {
-            CurrentHorizontalOffset = offset;
+            SetCurrentValue(CurrentHorizontalOffsetProperty, offset);
             _isRunning = false;
         };
         _isRunning = true;

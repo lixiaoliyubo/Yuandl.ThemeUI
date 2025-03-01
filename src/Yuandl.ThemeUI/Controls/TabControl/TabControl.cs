@@ -28,28 +28,35 @@ public class TabControl : System.Windows.Controls.TabControl
     private const string ScrollBorder = "PART_ScrollBorder";
 
     // 私有字段
-    private ScrollViewer _scrollViewerOverflow; // 滚动视图
-    private ButtonBase _buttonScrollLeft; // 左滚动按钮
-    private ButtonBase _buttonScrollRight; // 右滚动按钮
-    private Border _headerBorder; // 头部边框
+    private ScrollViewer? _scrollViewerOverflow; // 滚动视图
+    private ButtonBase? _buttonScrollLeft; // 左滚动按钮
+    private ButtonBase? _buttonScrollRight; // 右滚动按钮
+    private Border? _headerBorder; // 头部边框
 
     /// <summary>
-    /// 获取或设置 TabPanel 头部面板。
+    /// Gets 获取或设置 TabPanel 头部面板。
     /// </summary>
-    internal TabPanel HeaderPanel { get; private set; }
+    internal TabPanel? HeaderPanel { get; private set; }
 
     /// <summary>
-    /// 获取或设置滚动边框。
+    /// Gets 获取或设置滚动边框。
     /// </summary>
-    internal Border BorderScroll { get; private set; }
+    internal Border? BorderScroll { get; private set; }
 
     /// <summary>
     /// 当应用模板时调用，初始化模板部件。
     /// </summary>
     public override void OnApplyTemplate()
     {
-        if (_buttonScrollLeft != null) _buttonScrollLeft.Click -= ButtonScrollLeft_Click;
-        if (_buttonScrollRight != null) _buttonScrollRight.Click -= ButtonScrollRight_Click;
+        if (_buttonScrollLeft != null)
+        {
+            _buttonScrollLeft.Click -= ButtonScrollLeft_Click;
+        }
+
+        if (_buttonScrollRight != null)
+        {
+            _buttonScrollRight.Click -= ButtonScrollRight_Click;
+        }
 
         base.OnApplyTemplate();
         BorderScroll = GetTemplateChild(ScrollBorder) as Border;
@@ -59,8 +66,15 @@ public class TabControl : System.Windows.Controls.TabControl
         _buttonScrollLeft = GetTemplateChild(ScrollButtonLeft) as ButtonBase;
         _buttonScrollRight = GetTemplateChild(ScrollButtonRight) as ButtonBase;
 
-        if (_buttonScrollLeft != null) _buttonScrollLeft.Click += ButtonScrollLeft_Click;
-        if (_buttonScrollRight != null) _buttonScrollRight.Click += ButtonScrollRight_Click;
+        if (_buttonScrollLeft != null)
+        {
+            _buttonScrollLeft.Click += ButtonScrollLeft_Click;
+        }
+
+        if (_buttonScrollRight != null)
+        {
+            _buttonScrollRight.Click += ButtonScrollRight_Click;
+        }
     }
 
     /// <summary>
@@ -105,7 +119,7 @@ public class TabControl : System.Windows.Controls.TabControl
 
 
     /// <summary>
-    /// 获取或设置是否允许拖动。
+    /// Gets or sets a value indicating whether 获取或设置是否允许拖动。
     /// </summary>
     public bool AllowDrag
     {
@@ -136,7 +150,7 @@ public class TabControl : System.Windows.Controls.TabControl
         => (bool)element.GetValue(ShowContextMenuProperty);
 
     /// <summary>
-    /// 是否显示上下文菜单
+    /// Gets or sets a value indicating whether 是否显示上下文菜单
     /// </summary>
     public bool ShowContextMenu
     {
@@ -166,7 +180,7 @@ public class TabControl : System.Windows.Controls.TabControl
         nameof(ItemHeight), typeof(double), typeof(TabControl), new PropertyMetadata(35.0));
 
     /// <summary>
-    /// 标签高度
+    /// Gets or sets 标签高度
     /// </summary>
     public double ItemHeight
     {
@@ -257,7 +271,11 @@ public class TabControl : System.Windows.Controls.TabControl
     /// <param name="e">事件参数。</param>
     private void ButtonScrollLeft_Click(object sender, RoutedEventArgs e)
     {
-        if (_scrollViewerOverflow == null) return;
+        if (_scrollViewerOverflow == null)
+        {
+            return;
+        }
+
         if (TabStripPlacement == Dock.Left || TabStripPlacement == Dock.Right)
         {
             var offsetHeight = Math.Max(_scrollViewerOverflow.ContentVerticalOffset - ItemHeight, 0);
@@ -388,7 +406,11 @@ public class TabControl : System.Windows.Controls.TabControl
         {
             for (var i = 0; i < Items.Count; i++)
             {
-                if (ItemContainerGenerator.ContainerFromIndex(i) is not TabItem item) return;
+                if (ItemContainerGenerator.ContainerFromIndex(i) is not TabItem item)
+                {
+                    return;
+                }
+
                 item.CurrentIndex = i;
                 item.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             }

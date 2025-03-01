@@ -24,9 +24,9 @@ public partial class UniformGrid
     /// </summary>
     /// <param name="element"><see cref="FrameworkElement"/></param>
     /// <param name="value">A true value indicates this item should be automatically arranged.</param>
-    public static void SetAutoLayout(FrameworkElement element, bool? value)
+    public static void SetAutoLayout(FrameworkElement? element, bool? value)
     {
-        element.SetValue(AutoLayoutProperty, value);
+        element?.SetValue(AutoLayoutProperty, value);
     }
 
     /// <summary>
@@ -34,9 +34,9 @@ public partial class UniformGrid
     /// </summary>
     /// <param name="element"><see cref="FrameworkElement"/></param>
     /// <returns>A true value indicates this item should be automatically arranged.</returns>
-    public static bool? GetAutoLayout(FrameworkElement element)
+    public static bool? GetAutoLayout(FrameworkElement? element)
     {
-        return (bool?)element.GetValue(AutoLayoutProperty);
+        return (bool?)element?.GetValue(AutoLayoutProperty);
     }
 
     /// <summary>

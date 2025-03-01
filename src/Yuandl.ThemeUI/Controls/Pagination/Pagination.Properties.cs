@@ -97,50 +97,50 @@ public partial class Pagination
     public static readonly DependencyProperty LastButtonVisibilityProperty =
         DependencyProperty.Register(nameof(LastButtonVisibility), typeof(PaginationButtonVisibility), typeof(Pagination), new PropertyMetadata(PaginationButtonVisibility.Visible, OnPropertyChanged));
 
-    public ICommand FirstButtonCommand
+    public ICommand? FirstButtonCommand
     {
-        get { return (ICommand)GetValue(FirstButtonCommandProperty); }
+        get { return (ICommand?)GetValue(FirstButtonCommandProperty); }
         set { SetValue(FirstButtonCommandProperty, value); }
     }
 
     public static readonly DependencyProperty FirstButtonCommandProperty = DependencyProperty.Register(nameof(FirstButtonCommand), typeof(ICommand), typeof(Pagination), new PropertyMetadata(null));
 
-    public ICommand PreviousButtonCommand
+    public ICommand? PreviousButtonCommand
     {
-        get { return (ICommand)GetValue(PreviousButtonCommandProperty); }
+        get { return (ICommand?)GetValue(PreviousButtonCommandProperty); }
         set { SetValue(PreviousButtonCommandProperty, value); }
     }
 
     public static readonly DependencyProperty PreviousButtonCommandProperty = DependencyProperty.Register(nameof(PreviousButtonCommand), typeof(ICommand), typeof(Pagination), new PropertyMetadata(null));
 
-    public ICommand NextButtonCommand
+    public ICommand? NextButtonCommand
     {
-        get { return (ICommand)GetValue(NextButtonCommandProperty); }
+        get { return (ICommand?)GetValue(NextButtonCommandProperty); }
         set { SetValue(NextButtonCommandProperty, value); }
     }
 
     public static readonly DependencyProperty NextButtonCommandProperty = DependencyProperty.Register(nameof(NextButtonCommand), typeof(ICommand), typeof(Pagination), new PropertyMetadata(null));
 
-    public ICommand LastButtonCommand
+    public ICommand? LastButtonCommand
     {
-        get { return (ICommand)GetValue(LastButtonCommandProperty); }
+        get { return (ICommand?)GetValue(LastButtonCommandProperty); }
         set { SetValue(LastButtonCommandProperty, value); }
     }
 
     public static readonly DependencyProperty LastButtonCommandProperty = DependencyProperty.Register(nameof(LastButtonCommand), typeof(ICommand), typeof(Pagination), new PropertyMetadata(null));
 
-    public string PrefixText
+    public string? PrefixText
     {
-        get { return (string)GetValue(PrefixTextProperty); }
+        get { return (string?)GetValue(PrefixTextProperty); }
         set { SetValue(PrefixTextProperty, value); }
     }
 
     public static readonly DependencyProperty PrefixTextProperty =
         DependencyProperty.Register(nameof(PrefixText), typeof(string), typeof(Pagination), new PropertyMetadata(null));
 
-    public string SuffixText
+    public string? SuffixText
     {
-        get { return (string)GetValue(SuffixTextProperty); }
+        get { return (string?)GetValue(SuffixTextProperty); }
         set { SetValue(SuffixTextProperty, value); }
     }
 

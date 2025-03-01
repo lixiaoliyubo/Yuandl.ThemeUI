@@ -25,7 +25,6 @@ public partial class App : Application
 
     public App()
     {
-        Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
     }
 
     // The.NET Generic Host provides dependency injection, configuration, logging, and other services.

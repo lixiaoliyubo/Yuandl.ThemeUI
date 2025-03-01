@@ -87,7 +87,7 @@ public partial class UniformGrid : Grid
 
         // Set Grid Row/Col for every child with autolayout = true
         // Backwards with FlowDirection
-        IEnumerator<(int row, int column)> freespots = GetFreeSpot(spotref, FirstColumn, Orientation == Orientation.Vertical).GetEnumerator();
+        IEnumerator<(int Row, int Column)> freespots = GetFreeSpot(spotref, FirstColumn, Orientation == Orientation.Vertical).GetEnumerator();
         foreach (FrameworkElement? child in visible)
         {
             // Set location if we're in charge
@@ -97,7 +97,7 @@ public partial class UniformGrid : Grid
                 {
 #pragma warning disable SA1009 // Closing parenthesis must be followed by a space.
 #pragma warning disable SA1008 // Opening parenthesis must be spaced correctly
-                    var (row, column) = freespots.Current;
+                    (int row, int column) = freespots.Current;
 #pragma warning restore SA1008 // Opening parenthesis must be spaced correctly
 #pragma warning restore SA1009 // Closing parenthesis must be followed by a space.
 
