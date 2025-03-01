@@ -20,7 +20,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows']  # 排除测试中可能有问题的框架
+        target_framework: ['net462', 'net48', 'net6.0-windows','net7.0-windows', 'net8.0-windows']  # 排除测试中可能有问题的框架
 
     steps:
       - name: Checkout
