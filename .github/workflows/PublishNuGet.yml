@@ -1,30 +1,28 @@
-name: Auto Draft Release
+name: Auto Production Release
 
-on:  # 触发规则 [^1]
+on:  # 触发正式发布的场景 [^6]
   push:
-    tags: ['v*']
-    branches: ['main', 'master']
+    tags: ['v*']  # 仅打标签时触发正式发布
 
 jobs:
-  create-release:
+  publish-release:
     runs-on: ubuntu-latest
-    permissions:  # 必要操作权限 [^2]
+    permissions:  # 发布正规版本所需权限 [^6]
       contents: write
-      id-token: write
 
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Extract Version
+
+      - name: Generate Version
         id: version
         run: |
           VERSION="${GITHUB_REF#refs/tags/}"
           echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
 
-      - name: Auto Draft Release
+      - name: Create Release
         uses: softprops/action-gh-release@v2
-        with:  # 自动创建草稿版发行 [^6]
+        with:
           tag_name: ${{ github.ref }}
-          name: "Release ${{ steps.version.outputs.version }}"
-          draft: true
-          prerelease: false
+          name: "Release ${{ steps.version.outputs.version }}"  # 发布版本标题自动生成 [^4]
+          draft: false  # 禁用草稿模式为正式发布 [^1]
+          generate_release_notes: true  # 启用自动生成发行说明 [^6]
