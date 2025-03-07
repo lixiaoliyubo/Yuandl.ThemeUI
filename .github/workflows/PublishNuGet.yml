@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - master
-    tags:
-      - 'v*'
 
 jobs:
   create-release:
@@ -18,11 +16,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version from tag
-        id: get_version
+      - name: Get latest version and bump
+        id: version
         run: |
-          $version = "${{ github.ref }}".Replace('refs/tags/v', '')
-          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          $latest = git describe --tags --abbrev=0 2>$null
+          if (-not $latest) {
+            $version = "2.0.0"
+          } else {
+            $latest = $latest -replace 'v',''
+            $parts = $latest.Split('.')
+            $parts[2] = [int]$parts[2] + 1
+            $version = $parts -join '.'
+          }
+          echo "NEW_VERSION=$version" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a v${{ steps.version.outputs.NEW_VERSION }} -m "Release v${{ steps.version.outputs.NEW_VERSION }}"
+          git push origin v${{ steps.version.outputs.NEW_VERSION }}
         shell: pwsh
 
       - name: Get commit messages
@@ -38,7 +52,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          name: Create stable version for v${{ steps.get_version.outputs.VERSION }}
-          draft: true
+          tag_name: v${{ steps.version.outputs.NEW_VERSION }}
+          name: Create stable version for v${{ steps.version.outputs.NEW_VERSION }}
+          draft: false
           body: ${{ steps.get_commits.outputs.COMMIT_MESSAGES }}
           token: ${{ secrets.GITHUB_TOKEN }}
