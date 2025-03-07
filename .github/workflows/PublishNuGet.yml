@@ -6,25 +6,16 @@ on:
     tags: [ "v*" ]
 
 jobs:
-  build-push:
-    runs-on: windows-latest  # Windows 环境依赖 [^1]
-    permissions:
-      contents: read
-      packages: write  # NuGet 包发布权限 [^3]
-      
+  multi-target:
+    strategy:
+      matrix:
+        framework: [ 'net462', 'net48', 'net8.0-windows', 'net9.0-windows' ]  # 覆蓋關鍵框架
+    runs-on: windows-2022
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v3
         with:
-          fetch-depth: 0  # 全历史记录用于版本推导 [^6]
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: |
-            6.0.x
-            8.0.x
-            9.0.*  # 覆盖项目最高框架 [^1]
+          dotnet-version: | 
+            ${{ contains(matrix.framework, 'net4') && '6.0.434' || '9.0' }}
 
       # 多项目矩阵构建策略 [^1]
       - name: Build Solution
