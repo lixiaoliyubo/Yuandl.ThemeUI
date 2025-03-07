@@ -17,6 +17,8 @@ permissions:
 jobs:
   build-components:
     runs-on: windows-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}  # 添加
     strategy:
       matrix:
         target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows', 'net9.0-windows']
@@ -83,7 +85,7 @@ jobs:
       - name: Create Install Package
         shell: powershell
         run: |
-          $packageName = "ThemeUISample_${{ steps.get_version.outputs.version }}.zip"
+          $packageName = "ThemeUISample_${{ needs.build-components.outputs.version }}.zip"
           Compress-Archive -Path ./artifacts/* -DestinationPath $packageName
           echo "SAMPLE_PACKAGE=$packageName" >> $env:GITHUB_ENV
 
@@ -104,8 +106,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          name: Theme UI v${{ steps.get_version.outputs.version }}
+          tag_name: v${{ needs.build-components.outputs.version }}
+          name: Theme UI v${{ needs.build-components.outputs.version }}
           draft: true
           generate_release_notes: true
           body: |
