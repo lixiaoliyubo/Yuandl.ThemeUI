@@ -24,7 +24,7 @@ jobs:
           dotnet-version: |
             6.0.x
             8.0.x
-            9.0.x  # 覆盖项目最高框架 [^1]
+            9.0.*  # 覆盖项目最高框架 [^1]
 
       # 多项目矩阵构建策略 [^1]
       - name: Build Solution
