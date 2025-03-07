@@ -1,78 +1,117 @@
-name: WPF Auto Release
+name: WPF Multi-Target Release
 
 on:
   push:
-    branches: [ "master" ]
-  workflow_dispatch:  # 允许手动触发
+    branches: [ master ]
+  workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '8.x'  # 根据项目调整 .NET 版本
   BUILD_CONFIGURATION: 'Release'
+  SAMPLE_PROJECT: 'src/YuandlThemeUI.Sample/YuandlThemeUI.Sample.csproj'
+  UI_LIB_PROJECT: 'src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj'
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
-  build-and-release:
-    runs-on: windows-latest  # WPF必须使用Windows环境
+  build-components:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows', 'net9.0-windows']
 
     steps:
-      # Step 1 - 检出代码
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Step 2 - 设置 .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: |
+            6.0.x
+            8.0.x
 
-      # Step 3 - 构建并发布WPF应用
-      - name: Build WPF Project
+      - name: Install .NET Framework Targets
         run: |
-          dotnet restore ./Yuandl.ThemeUI.sln
-          dotnet build ./Yuandl.ThemeUI.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
-          dotnet publish ./Yuandl.ThemeUI/src/Yuandl.ThemeUI.csproj \
-            --configuration ${{ env.BUILD_CONFIGURATION }} \
-            --output ./publish \
-            --runtime win-x64 \             # 指定目标运行时
-            --self-contained true \         # 包含完整运行时
-            -p:PublishSingleFile=true       # 生成单文件
+          choco install netfx-4.8-devpack -y
+        shell: powershell
+        if: contains(matrix.target_framework, 'net4')
 
-      # Step 4 - 将产物打包为ZIP
-      - name: Create Release Package
+      - name: Check .NET Versions
+        run: dotnet --list-sdks
+
+      - name: Get Library Version
+        id: get_version
         shell: powershell
         run: |
-          $version = (Get-Item ./YourWpfProject/bin/${{ env.BUILD_CONFIGURATION }}/net7.0-windows/YourWpfProject.exe).VersionInfo.FileVersion
-          Compress-Archive -Path ./publish/* -DestinationPath "./Yuandl.ThemeUI_${version}.zip"
-          echo "BUILD_VERSION=$version" >> $env:GITHUB_ENV
+          $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<AssemblyVersion>(.*?)</AssemblyVersion>').Matches.Groups[1].Value
+          echo "version=$version" >> $env:GITHUB_OUTPUT
 
-      # Step 5 - 生成变更日志
-      - name: Generate Changelog
+      - name: Build UI Library
+        shell: pwsh
+        run: |
+          dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
+
+      - name: Pack NuGet
+        if: matrix.target_framework == 'net8.0-windows'
+        run: |
+          dotnet pack ${{ env.UI_LIB_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ./nupkg  -p:PackageVersion=${{ steps.get_version.outputs.version }}
+
+  publish-sample:
+    runs-on: windows-latest
+    needs: build-components
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore ${{ env.SAMPLE_PROJECT }}
+
+      - name: Publish Sample App
+        run: |
+          dotnet publish ${{ env.SAMPLE_PROJECT }} \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --output ./artifacts \
+            --runtime win-x64 \
+            --self-contained true \
+            -p:PublishSingleFile=true \
+            -p:TargetFramework=net8.0-windows \
+            -p:IncludeAllContentForSelfExtract=true
+
+      - name: Create Install Package
+        shell: powershell
+        run: |
+          $packageName = "ThemeUISample_${{ steps.get_version.outputs.version }}.zip"
+          Compress-Archive -Path ./artifacts/* -DestinationPath $packageName
+          echo "SAMPLE_PACKAGE=$packageName" >> $env:GITHUB_ENV
+
+      - name: Generate Release Notes
         id: changelog
         run: |
-          git fetch --prune --unshallow  # 确保获取完整历史
-          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
-          git log --since="3 days ago" --pretty=format:"- [%h] %s (%an, %ad)" --date=short >> $GITHUB_OUTPUT
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+          git log --since="$(git log -1 --merges --pretty=format:%cd --date=iso)" \
+            --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" \
+            --date=format-local:'%Y-%m-%d %H:%M' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      # Step 6 - 创建Release并上传二进制
-      - name: Create Draft Release
+      # 修改重点：仅保留自动生成的Source code压缩包
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ env.BUILD_VERSION }}  # 使用文件版本作为标签
-          name: YourApp ${{ env.BUILD_VERSION }}
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Theme UI v${{ steps.get_version.outputs.version }}
           draft: true
-          prerelease: false
+          generate_release_notes: true
           body: |
-            ### 📦 新功能 & 修复
-            ${{ steps.changelog.outputs.CHANGELOG }}
+            ${{ steps.changelog.outputs.RELEASE_NOTES }}
 
-            ### 版本信息
-            - 编译时间: ${{ steps.generate_date.outputs.DATE }}
-            - 提交点: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-
-          files: |
-            YourWpfProject_${{ env.BUILD_VERSION }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            **安装包包含以下内容**：
+            - 主程序文件: `YuandlThemeUl.Sample.exe`
+            - 支持从 Windows XP 到 Windows 11 的兼容组件
+            - 自动运行环境检查工具
