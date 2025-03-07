@@ -71,13 +71,13 @@ jobs:
 
       - name: Publish Sample App
         run: |
-          dotnet publish ${{ env.SAMPLE_PROJECT }} \
-            --configuration ${{ env.BUILD_CONFIGURATION }} \
-            --output ./artifacts \
-            --runtime win-x64 \
-            --self-contained true \
-            -p:PublishSingleFile=true \
-            -p:TargetFramework=net8.0-windows \
+          dotnet publish ${{ env.SAMPLE_PROJECT }} `
+            --configuration ${{ env.BUILD_CONFIGURATION }} `
+            --output ./artifacts `
+            --runtime win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:TargetFramework=net8.0-windows `
             -p:IncludeAllContentForSelfExtract=true
 
       - name: Create Install Package
