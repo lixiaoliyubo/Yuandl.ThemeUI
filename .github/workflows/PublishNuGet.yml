@@ -1,52 +1,54 @@
-name: NuGet Publish
+
+name: Auto Build & Release
 
 on:
   push:
-    branches: [ "master" ]
-    tags: [ "v*" ]
+    tags: 
+      - 'v*'  # 语义化版本标签触发正式发布 [^2]
+    branches: 
+      - master  # 主分支推送触发测试构建
 
 jobs:
-  multi-target:
-    strategy:
+  build:
+    runs-on: windows-latest
+    strategy:  # 使用矩阵策略遍历所有目标框架 [^1]
       matrix:
-        framework: [ 'net462', 'net48', 'net8.0-windows', 'net9.0-windows' ]  # 覆蓋關鍵框架
-    runs-on: windows-2022
+        frameworks: 
+          - 'net462'
+          - 'net48' 
+          - 'net8.0-windows'
     steps:
-      - uses: actions/setup-dotnet@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: | 
-            ${{ contains(matrix.framework, 'net4') && '6.0.428' || '9.0' }}
+          dotnet-version: 8.0.204
 
-      # 多项目矩阵构建策略 [^1]
       - name: Build Solution
-        run: dotnet build Yuandl.ThemeUl.sln --configuration Release
+        run: dotnet publish -c Release --output ./artifacts
 
-      - name: Generate NuGet Version
-        id: version
+  create-release:
+    needs: build  # 依赖构建作业完成
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 需写入权限创建 Release [^1]
+      packages: write  # 发布产物至 GitHub Packages
+    
+    steps:
+      - name: Get Version
+        id: tag_version
         run: |
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/v}
-          else
-            VERSION=$(date +'%Y%m%d')-beta
-          fi
-          echo "nuget_version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
 
-      - name: Pack Libraries
-        run: |
-          dotnet pack src/Yuandl.ThemeUI \
-            -p:PackageVersion=${{ steps.version.outputs.nuget_version }} \
-            --configuration Release \
-            --output nupkgs  # 多框架自动合并包 [^1]
-
-      - name: Publish to GitHub Packages
-        run: dotnet nuget push ./nupkgs/*.nupkg \
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-          --api-key ${{ secrets.GITHUB_TOKEN }}
-
-      # 动态生成 Release Notes (按需启用) [^2]
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref }}
-          generate_release_notes: true
-          files: nupkgs/*.nupkg
+          name: Release ${{ steps.tag_version.outputs.version }}
+          body: '[自动化构建版本]'
+          files: | 
+            artifacts/**/*.exe
+            artifacts/**/*.zip
