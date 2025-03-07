@@ -1,54 +1,34 @@
-
-name: Auto Build & Release
+name: Auto Release
 
 on:
   push:
-    tags: 
-      - 'v*'  # 语义化版本标签触发正式发布 [^2]
-    branches: 
-      - master  # 主分支推送触发测试构建
+    tags:
+      - 'v*'
 
 jobs:
-  build:
-    runs-on: windows-latest
-    strategy:  # 使用矩阵策略遍历所有目标框架 [^1]
-      matrix:
-        frameworks: 
-          - 'net462'
-          - 'net48' 
-          - 'net8.0-windows'
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.204
-
-      - name: Build Solution
-        run: dotnet publish -c Release --output ./artifacts
-
   create-release:
-    needs: build  # 依赖构建作业完成
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
-      contents: write  # 需写入权限创建 Release [^1]
-      packages: write  # 发布产物至 GitHub Packages
-    
+      contents: write
     steps:
-      - name: Get Version
-        id: tag_version
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get commit messages
+        id: get_commits
         run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "version=${VERSION/v/}" >> $GITHUB_OUTPUT
+          $messages = git log --format=%B $(git describe --tags --abbrev=0 HEAD^)..HEAD
+          $messages = $messages -join "`n"
+          echo "COMMIT_MESSAGES<<EOF" >> $env:GITHUB_OUTPUT
+          echo "$messages" >> $env:GITHUB_OUTPUT
+          echo "EOF" >> $env:GITHUB_OUTPUT
+        shell: pwsh
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          name: Release ${{ steps.tag_version.outputs.version }}
-          body: '[自动化构建版本]'
-          files: | 
-            artifacts/**/*.exe
-            artifacts/**/*.zip
+          draft: true
+          body: ${{ steps.get_commits.outputs.COMMIT_MESSAGES }}
+          token: ${{ secrets.GITHUB_TOKEN }}
