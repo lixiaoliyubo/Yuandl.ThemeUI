@@ -1,59 +1,78 @@
-name: Auto Release
+name: WPF Auto Release
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "master" ]
+  workflow_dispatch:  # 允许手动触发
+
+env:
+  DOTNET_VERSION: '9.x'  # 根据项目调整 .NET 版本
+  BUILD_CONFIGURATION: 'Release'
+
+permissions:
+  contents: write
 
 jobs:
-  create-release:
-    runs-on: windows-latest
-    permissions:
-      contents: write
+  build-and-release:
+    runs-on: windows-latest  # WPF必须使用Windows环境
+
     steps:
+      # Step 1 - 检出代码
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      # Step 2 - 设置 .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          fetch-depth: 0
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Get latest version and bump
-        id: version
+      # Step 3 - 构建并发布WPF应用
+      - name: Build WPF Project
         run: |
-          $latest = git describe --tags --abbrev=0 2>$null
-          if (-not $latest) {
-            $version = "2.0.0"
-          } else {
-            $latest = $latest -replace 'v',''
-            $parts = $latest.Split('.')
-            $parts[2] = [int]$parts[2] + 1
-            $version = $parts -join '.'
-          }
-          echo "NEW_VERSION=$version" >> $env:GITHUB_OUTPUT
-        shell: pwsh
+          dotnet restore ./Yuandl.ThemeUI.sln
+          dotnet build ./Yuandl.ThemeUI.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+          dotnet publish ./Yuandl.ThemeUI/src/Yuandl.ThemeUI.csproj \
+            --configuration ${{ env.BUILD_CONFIGURATION }} \
+            --output ./publish \
+            --runtime win-x64 \             # 指定目标运行时
+            --self-contained true \         # 包含完整运行时
+            -p:PublishSingleFile=true       # 生成单文件
 
-      - name: Create tag
+      # Step 4 - 将产物打包为ZIP
+      - name: Create Release Package
+        shell: powershell
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a v${{ steps.version.outputs.NEW_VERSION }} -m "Release v${{ steps.version.outputs.NEW_VERSION }}"
-          git push origin v${{ steps.version.outputs.NEW_VERSION }}
-        shell: pwsh
+          $version = (Get-Item ./YourWpfProject/bin/${{ env.BUILD_CONFIGURATION }}/net7.0-windows/YourWpfProject.exe).VersionInfo.FileVersion
+          Compress-Archive -Path ./publish/* -DestinationPath "./Yuandl.ThemeUI_${version}.zip"
+          echo "BUILD_VERSION=$version" >> $env:GITHUB_ENV
 
-      - name: Get commit messages
-        id: get_commits
+      # Step 5 - 生成变更日志
+      - name: Generate Changelog
+        id: changelog
         run: |
-          $messages = git log --format="- %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD
-          $messages = $messages -join "`n"
-          echo "COMMIT_MESSAGES<<EOF" >> $env:GITHUB_OUTPUT
-          echo "$messages" >> $env:GITHUB_OUTPUT
-          echo "EOF" >> $env:GITHUB_OUTPUT
-        shell: pwsh
+          git fetch --prune --unshallow  # 确保获取完整历史
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          git log --since="3 days ago" --pretty=format:"- [%h] %s (%an, %ad)" --date=short >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Create Release
+      # Step 6 - 创建Release并上传二进制
+      - name: Create Draft Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.version.outputs.NEW_VERSION }}
-          name: Create stable version for v${{ steps.version.outputs.NEW_VERSION }}
-          draft: false
-          body: ${{ steps.get_commits.outputs.COMMIT_MESSAGES }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: v${{ env.BUILD_VERSION }}  # 使用文件版本作为标签
+          name: YourApp ${{ env.BUILD_VERSION }}
+          draft: true
+          prerelease: false
+          body: |
+            ### 📦 新功能 & 修复
+            ${{ steps.changelog.outputs.CHANGELOG }}
+
+            ### 版本信息
+            - 编译时间: ${{ steps.generate_date.outputs.DATE }}
+            - 提交点: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+
+          files: |
+            YourWpfProject_${{ env.BUILD_VERSION }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
