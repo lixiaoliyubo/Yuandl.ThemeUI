@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: | 
-            ${{ contains(matrix.framework, 'net4') && '6.0.434' || '9.0' }}
+            ${{ contains(matrix.framework, 'net4') && '6.0.428' || '9.0' }}
 
       # 多项目矩阵构建策略 [^1]
       - name: Build Solution
