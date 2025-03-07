@@ -2,8 +2,10 @@ name: Auto Release
 
 on:
   push:
-    tags: ['v*']
-    branches: ['master']
+    branches:
+      - master
+    tags:
+      - 'v*'
 
 jobs:
   create-release:
@@ -16,10 +18,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get version from tag
+        id: get_version
+        run: |
+          $version = "${{ github.ref }}".Replace('refs/tags/v', '')
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
       - name: Get commit messages
         id: get_commits
         run: |
-          $messages = git log --format=%B $(git describe --tags --abbrev=0 HEAD^)..HEAD
+          $messages = git log --format="- %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD
           $messages = $messages -join "`n"
           echo "COMMIT_MESSAGES<<EOF" >> $env:GITHUB_OUTPUT
           echo "$messages" >> $env:GITHUB_OUTPUT
@@ -29,6 +38,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
+          name: Create stable version for v${{ steps.get_version.outputs.VERSION }}
           draft: true
           body: ${{ steps.get_commits.outputs.COMMIT_MESSAGES }}
           token: ${{ secrets.GITHUB_TOKEN }}
