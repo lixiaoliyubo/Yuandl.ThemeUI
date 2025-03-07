@@ -34,6 +34,7 @@ jobs:
 
       - name: Install .NET Framework Targets
         run: |
+          choco install netfx-4.6.2-devpack -y
           choco install netfx-4.8-devpack -y
         shell: powershell
         if: contains(matrix.target_framework, 'net4')
