@@ -89,12 +89,16 @@ jobs:
 
       - name: Generate Release Notes
         id: changelog
+        shell: pwsh
         run: |
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
-          git log --since="$(git log -1 --merges --pretty=format:%cd --date=iso)" \
-            --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" \
-            --date=format-local:'%Y-%m-%d %H:%M' >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          $lastMergeDate = git log -1 --merges --pretty=format:'%cd' --date=iso
+          $commitLogs = git log --since="$lastMergeDate" `
+            --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" `
+            --date=format-local:'%Y-%m-%d %H:%M'
+          
+          "RELEASE_NOTES<<EOF" >> $env:GITHUB_OUTPUT
+          $commitLogs >> $env:GITHUB_OUTPUT
+          "EOF" >> $env:GITHUB_OUTPUT
 
       # 修改重点：仅保留自动生成的Source code压缩包
       - name: Create Release
