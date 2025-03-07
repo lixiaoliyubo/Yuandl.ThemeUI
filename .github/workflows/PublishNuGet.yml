@@ -1,109 +1,142 @@
+# 定义工作流的名称
 name: WPF Multi-Target Release
 
+# 定义工作流触发条件
 on:
   push:
-    branches: [ master ]
-  workflow_dispatch:
+    branches: [ master ]  # 当推送到 master 分支时触发
+  workflow_dispatch:      # 允许手动触发工作流
 
+# 定义环境变量
 env:
-  BUILD_CONFIGURATION: 'Release'
-  SAMPLE_PROJECT: 'src/YuandlThemeUI.Sample/YuandlThemeUI.Sample.csproj'
-  UI_LIB_PROJECT: 'src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj'
+  BUILD_CONFIGURATION: 'Release'  # 设置构建配置为发布模式
+  SAMPLE_PROJECT: 'src/Yuandl.ThemeUI.Sample/Yuandl.ThemeUI.Sample.csproj'  # 示例项目路径
+  UI_LIB_PROJECT: 'src/Yuandl.ThemeUI/Yuandl.ThemeUI.csproj'  # UI库项目路径
 
+# 设置工作流权限
 permissions:
-  contents: write
-  packages: write
+  contents: write  # 允许写入仓库内容
+  packages: write  # 允许写入包
 
+# 定义工作流作业
 jobs:
+  # 构建组件作业
   build-components:
-    runs-on: windows-latest
+    runs-on: windows-latest  # 在 Windows 最新版本上运行
     strategy:
       matrix:
+        # 定义多目标框架构建矩阵
         target_framework: ['net462', 'net48', 'net6.0-windows', 'net8.0-windows', 'net9.0-windows']
 
     steps:
+      # 检出代码
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 设置 .NET 环境
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
-            6.0.x
-            8.0.x
+            6.0.x    # 安装 .NET 6.0
+            8.0.x    # 安装 .NET 8.0
 
+      # 安装 .NET Framework 开发包
       - name: Install .NET Framework Targets
         run: |
-          choco install netfx-4.8-devpack -y
+          choco install netfx-4.8-devpack -y  # 使用 Chocolatey 安装 .NET Framework 4.8 SDK
         shell: powershell
-        if: contains(matrix.target_framework, 'net4')
+        if: contains(matrix.target_framework, 'net4')  # 仅在构建 .NET Framework 目标时执行
 
+      # 检查已安装的 .NET 版本
       - name: Check .NET Versions
         run: dotnet --list-sdks
 
+      # 获取库版本号
       - name: Get Library Version
         id: get_version
         shell: powershell
         run: |
+          # 从项目文件中提取程序集版本号
           $version = (Select-String -Path ${{ env.UI_LIB_PROJECT }} -Pattern '<AssemblyVersion>(.*?)</AssemblyVersion>').Matches.Groups[1].Value
           echo "version=$version" >> $env:GITHUB_OUTPUT
 
+      # 构建 UI 库
       - name: Build UI Library
         shell: pwsh
         run: |
+          # 为每个目标框架构建项目
           dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
 
+      # 打包 NuGet 包
+      - name: Pack NuGet
+        if: matrix.target_framework == 'net8.0-windows'  # 仅在 net8.0-windows 目标时打包
+        run: |
+          # 创建 NuGet 包并输出到 ./nupkg 目录
+          dotnet pack ${{ env.UI_LIB_PROJECT }} --configuration ${{ env.BUILD_CONFIGURATION }} --output ./nupkg  -p:PackageVersion=${{ steps.get_version.outputs.version }}
+
+  # 发布示例应用作业
   publish-sample:
-    runs-on: windows-latest
-    needs: build-components
+    runs-on: windows-latest  # 在 Windows 最新版本上运行
+    needs: build-components  # 依赖于 build-components 作业完成
+
     steps:
+      # 检出代码
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 设置 .NET 8 环境
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
 
+      # 还原项目依赖
       - name: Restore Dependencies
         run: dotnet restore ${{ env.SAMPLE_PROJECT }}
 
+      # 发布示例应用
       - name: Publish Sample App
         run: |
+          # 发布为单文件、自包含的应用程序
           dotnet publish ${{ env.SAMPLE_PROJECT }} \
             --configuration ${{ env.BUILD_CONFIGURATION }} \
-            --output ./artifacts \
-            --runtime win-x64 \
-            --self-contained true \
-            -p:PublishSingleFile=true \
-            -p:TargetFramework=net8.0-windows \
-            -p:IncludeAllContentForSelfExtract=true
+            --output ./artifacts \                      # 输出到 artifacts 目录
+            --runtime win-x64 \                        # 目标运行时为 Windows x64
+            --self-contained true \                    # 包含运行时
+            -p:PublishSingleFile=true \               # 发布为单文件
+            -p:TargetFramework=net8.0-windows \       # 目标框架
+            -p:IncludeAllContentForSelfExtract=true   # 包含所有内容
 
+      # 创建安装包
       - name: Create Install Package
         shell: powershell
         run: |
+          # 创建包含版本号的 ZIP 安装包
           $packageName = "ThemeUISample_${{ steps.get_version.outputs.version }}.zip"
           Compress-Archive -Path ./artifacts/* -DestinationPath $packageName
           echo "SAMPLE_PACKAGE=$packageName" >> $env:GITHUB_ENV
 
+      # 生成发布说明
       - name: Generate Release Notes
         id: changelog
         run: |
+          # 生成包含提交信息的更新日志
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
           git log --since="$(git log -1 --merges --pretty=format:%cd --date=iso)" \
             --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" \
             --date=format-local:'%Y-%m-%d %H:%M' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      # 修改重点：仅保留自动生成的Source code压缩包
+      # 创建 GitHub Release
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          name: Theme UI v${{ steps.get_version.outputs.version }}
-          draft: true
-          generate_release_notes: true
-          body: |
+          tag_name: v${{ steps.get_version.outputs.version }}        # 设置标签名
+          name: Theme UI v${{ steps.get_version.outputs.version }}   # 设置发布名称
+          draft: true                                                # 创建为草稿
+          generate_release_notes: true                               # 生成发布说明
+          body: |                                                    # 发布说明正文
             ${{ steps.changelog.outputs.RELEASE_NOTES }}
 
             **安装包包含以下内容**：
