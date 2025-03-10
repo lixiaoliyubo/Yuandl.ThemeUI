@@ -73,6 +73,16 @@
     <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
   </ItemGroup>
 
+  <!-- 增强调试符号包支持 -->
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- 显式声明输出类型 [^4] -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>
+      $(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml
+    </AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  
   <Choose>
     <When Condition="'$(SourceLinkEnabled)' != 'false'">
       <PropertyGroup>
