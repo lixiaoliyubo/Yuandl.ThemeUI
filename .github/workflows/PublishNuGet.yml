@@ -120,3 +120,34 @@ jobs:
             - 主程序文件: `YuandlThemeUl.Sample.exe`
             - 支持从 Windows XP 到 Windows 11 的兼容组件
             - 自动运行环境检查工具
+
+
+  publish-NuGet:
+    runs-on: windows-latest
+    needs: build-components
+    steps:
+
+      - name: Build UI Library
+        shell: pwsh
+        run: |
+          dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
+
+      - name: Pack NuGet
+        if: matrix.target_framework == 'net8.0-windows'
+        run: |
+          dotnet pack ${{ env.UI_LIB_PROJECT }} `
+            --configuration ${{ env.BUILD_CONFIGURATION }} `
+            --no-build `
+            -p:PackageVersion=${{ steps.get_version.outputs.version }}
+
+      - name: Push to NuGet
+        if: matrix.target_framework == 'net8.0-windows'
+        run: |
+          $packages = Get-ChildItem -Path "nupkg/*.nupkg"
+          foreach ($package in $packages) {
+              dotnet nuget push $package `
+                --api-key ${{ secrets.NUGET_API_KEY }} `
+                --source https://api.nuget.org/v3/index.json `
+                --skip-duplicate
+          }
+        shell: pwsh
