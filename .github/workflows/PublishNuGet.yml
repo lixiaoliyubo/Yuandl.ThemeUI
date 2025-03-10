@@ -56,7 +56,7 @@ jobs:
           dotnet build ${{ env.UI_LIB_PROJECT }} -f ${{ matrix.target_framework }} --configuration ${{ env.BUILD_CONFIGURATION }}
 
 
-  publish-sample:
+  publish-All:
     runs-on: windows-latest
     needs: build-components
     steps:
@@ -69,15 +69,6 @@ jobs:
           dotnet-version: 8.0.x
 
       # NuGet 包发布部分
-      - name: Pack NuGet
-        shell: pwsh
-        run: |
-          dotnet pack ${{ env.UI_LIB_PROJECT }} `
-            --configuration ${{ env.BUILD_CONFIGURATION }} `
-            -p:PackageVersion=${{ needs.build-components.outputs.version }} `
-            -p:IncludeSymbols=true `
-            -p:SymbolPackageFormat=snupkg
-
       - name: Push Packages to NuGet
         shell: pwsh
         run: |
