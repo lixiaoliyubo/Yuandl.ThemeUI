@@ -110,7 +110,8 @@ jobs:
         with:
           tag_name: v${{ needs.build-components.outputs.version }}
           name: Theme UI v${{ needs.build-components.outputs.version }}
-          draft: true
+          draft: false
+          prerelease: false
           generate_release_notes: true
           body: |
             ${{ steps.changelog.outputs.RELEASE_NOTES }}
