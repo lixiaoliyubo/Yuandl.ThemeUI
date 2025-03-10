@@ -93,14 +93,16 @@ jobs:
         id: changelog
         shell: pwsh
         run: |
-          $lastMergeDate = git log -1 --merges --pretty=format:'%cd' --date=iso
-          $commitLogs = git log --since="$lastMergeDate" `
-            --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" `
-            --date=format-local:'%Y-%m-%d %H:%M'
+          Set-Content -Path $env:GITHUB_OUTPUT -Value "RELEASE_NOTES<<EOF"
           
-          "RELEASE_NOTES<<EOF" >> $env:GITHUB_OUTPUT
-          $commitLogs >> $env:GITHUB_OUTPUT
-          "EOF" >> $env:GITHUB_OUTPUT
+          $commits = git log --pretty=format:"### %s%n**Author**: %an%n**Date**: %ad%n---%n" --date=format:'%Y-%m-%d %H:%M'
+          if ($commits) {
+              Add-Content -Path $env:GITHUB_OUTPUT -Value $commits
+          } else {
+              Add-Content -Path $env:GITHUB_OUTPUT -Value "No changes in this release."
+          }
+          
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "EOF"
 
       # 修改重点：仅保留自动生成的Source code压缩包
       - name: Create Release
