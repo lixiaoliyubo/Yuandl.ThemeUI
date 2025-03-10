@@ -3,6 +3,7 @@
   <PropertyGroup>
     <RepositoryDirectory>$(MSBuildThisFileDirectory)</RepositoryDirectory>
     <BuildToolsDirectory>$(RepositoryDirectory)build\</BuildToolsDirectory>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -39,6 +40,11 @@
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
+  <Target Name="CleanNuGetPackages" BeforeTargets="Build">
+    <RemoveDir Directories="$(PackageOutputPath)" />
+    <MakeDir Directories="$(PackageOutputPath)" />
+  </Target>
+  
   <PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
