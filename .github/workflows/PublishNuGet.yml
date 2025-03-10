@@ -129,7 +129,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.build-components.outputs.version }}
-          name: Theme UI v${{ needs.build-components.outputs.version }}
+          name: Yuandl Theme UI v${{ needs.build-components.outputs.version }}
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -137,6 +137,6 @@ jobs:
             ${{ steps.changelog.outputs.RELEASE_NOTES }}
 
             **安装包包含以下内容**：
-            - 主程序文件: `YuandlThemeUl.Sample.exe`
+            - 主程序文件: `Yuandl.ThemeUl.Sample.exe`
             - 支持从 Windows XP 到 Windows 11 的兼容组件
             - 自动运行环境检查工具
