@@ -68,6 +68,35 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      # NuGet 包发布部分
+      - name: Pack NuGet
+        shell: pwsh
+        run: |
+          dotnet pack ${{ env.UI_LIB_PROJECT }} `
+            --configuration ${{ env.BUILD_CONFIGURATION }} `
+            -p:PackageVersion=${{ needs.build-components.outputs.version }} `
+            -p:IncludeSymbols=true `
+            -p:SymbolPackageFormat=snupkg
+
+      - name: Push Packages to NuGet
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "nupkg" -Filter "*.nupkg" | ForEach-Object {
+              dotnet nuget push $_.FullName `
+                --api-key ${{ secrets.NUGET_API_KEY }} `
+                --source https://api.nuget.org/v3/index.json `
+                --skip-duplicate
+          }
+          
+          Get-ChildItem -Path "nupkg" -Filter "*.snupkg" | ForEach-Object {
+              dotnet nuget push $_.FullName `
+                --api-key ${{ secrets.NUGET_API_KEY }} `
+                --source https://api.nuget.org/v3/index.json `
+                --skip-duplicate
+          }
+
+
+      # 示例程序发布部分
       - name: Restore Dependencies
         run: dotnet restore ${{ env.SAMPLE_PROJECT }}
 
