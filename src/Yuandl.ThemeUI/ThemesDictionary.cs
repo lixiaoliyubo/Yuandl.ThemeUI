@@ -47,11 +47,33 @@ public class ThemesDictionary : ResourceDictionary
 
     private void SetTheme()
     {
-        if (Theme is ApplicationTheme baseTheme)
+        try
         {
-            Source = new Uri($"{ApplicationThemeManager.ThemesDictionaryPath}{baseTheme}.xaml", UriKind.Absolute);
+            if (Theme is ApplicationTheme baseTheme)
+            {
+                string path = baseTheme switch
+                {
+                    ApplicationTheme.Dark => "pack://application:,,,/Yuandl.ThemeUI;component/Themes/Dark.xaml",
+                    ApplicationTheme.Light => "pack://application:,,,/Yuandl.ThemeUI;component/Themes/Light.xaml",
+                    _ => $"{ApplicationThemeManager.ThemesDictionaryPath}{baseTheme}.xaml"
+                };
 
-            // ApplicationThemeManager.Apply(baseTheme);
+                var themeUri = new Uri(path, UriKind.Absolute);
+
+                // 应用主题
+                bool themeApplied = ApplicationThemeManager.Apply(baseTheme);
+
+                // 如果设置了颜色，则应用主色调
+                if (themeApplied && Color is Color accentColor)
+                {
+                    ApplicationAccentColorManager.Apply(accentColor, baseTheme);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // 记录错误但不中断程序
+            System.Diagnostics.Debug.WriteLine($"Error setting theme: {ex.Message}");
         }
     }
 }

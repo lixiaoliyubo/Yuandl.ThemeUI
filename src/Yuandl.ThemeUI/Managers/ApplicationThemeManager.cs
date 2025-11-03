@@ -1,16 +1,23 @@
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright(C) Yuandl ThemeUI. All Rights Reserved.
+using System.Windows;
 using Yuandl.ThemeUI.Controls;
 using Yuandl.ThemeUI.Enums;
 
 namespace Yuandl.ThemeUI.Managers;
 
+/// <summary>
+/// 管理应用程序主题的静态类
+/// </summary>
 public static class ApplicationThemeManager
 {
     // 缓存当前应用程序的主题
     private static ApplicationTheme _cachedApplicationTheme = ApplicationTheme.Unknown;
-
+    
+    // 缓存上次使用的主题字典管理器，避免重复创建
+    private static ResourceDictionaryManager _cachedDictionaryManager;
+    
     // 库的命名空间
     internal const string LibraryNamespace = "yuandl.themeui;";
 
@@ -23,84 +30,101 @@ public static class ApplicationThemeManager
     /// <param name="applicationTheme">要设置的主题</param>
     /// <param name="backgroundEffect">是否应用自定义背景效果</param>
     /// <param name="updateAccent">是否更改颜色强调</param>
-    public static void Apply(ApplicationTheme applicationTheme, WindowBackdropType backgroundEffect = WindowBackdropType.Mica, bool updateAccent = false)
+    /// <returns>操作是否成功</returns>
+    public static bool Apply(ApplicationTheme applicationTheme, WindowBackdropType backgroundEffect = WindowBackdropType.Mica, bool updateAccent = false)
     {
-        // 如果要更新强调色
-        if (updateAccent)
-        {
-            Color color = ApplicationAccentColorManager.GetSystemAccent();
-            ApplicationAccentColorManager.Apply(color, applicationTheme);
-        }
-
+        // 验证应用程序实例
+        if (UiApplication.Current is null)
+            return false;
+        
         // 如果主题未知，则不进行操作
         if (applicationTheme == ApplicationTheme.Unknown)
-        {
-            return;
+            return false;
+
+        try
+        {            
+            // 如果要更新强调色
+            if (updateAccent)
+            {
+                try
+                {
+                    Color color = ApplicationAccentColorManager.GetSystemAccent();
+                    ApplicationAccentColorManager.Apply(color, applicationTheme);
+                }
+                catch { }
+            }
+
+            // 获取或创建资源字典管理器
+            var appDictionaries = GetOrCreateDictionaryManager();
+            
+            // 清除缓存以确保加载最新资源
+            appDictionaries.ClearCache();
+
+            // 确定要使用的主题字典名称
+            var themeDictionaryName = applicationTheme == ApplicationTheme.Dark ? "Dark" : "Light";
+
+            // 构建主题URI
+            var themeUri = new Uri($"{ThemesDictionaryPath}{themeDictionaryName}.xaml", UriKind.Absolute);
+            
+            // 更新资源字典
+            bool isUpdated = appDictionaries.UpdateDictionary("theme", themeUri);
+            if (!isUpdated)
+                return false;
+
+            // 更新系统主题缓存
+            SystemThemeManager.UpdateSystemThemeCache();
+
+            // 保存当前应用程序主题
+            _cachedApplicationTheme = applicationTheme;
+
+            // 通知主题已更改（可用于需要响应主题变化的组件）
+            ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(applicationTheme));
+
+            // 如果主窗口存在，更新背景
+            UpdateMainWindowBackground(applicationTheme, backgroundEffect);
+            
+            return true;
         }
-
-        // 管理资源字典
-        var appDictionaries = new ResourceDictionaryManager(LibraryNamespace);
-
-        // 确定要使用的主题字典名称
-        var themeDictionaryName = "Light";
-
-        switch (applicationTheme)
+        catch
         {
-            case ApplicationTheme.Dark:
-                themeDictionaryName = "Dark";
-                break;
-        }
-
-        // 更新资源字典
-        bool isUpdated = appDictionaries.UpdateDictionary("theme", new Uri(ThemesDictionaryPath + themeDictionaryName + ".xaml", UriKind.Absolute));
-        if (!isUpdated)
-        {
-            return;
-        }
-
-        // 更新系统主题缓存
-        SystemThemeManager.UpdateSystemThemeCache();
-
-        // 保存当前应用程序主题
-        _cachedApplicationTheme = applicationTheme;
-
-        // 如果主窗口存在，更新背景
-        if (UiApplication.Current.MainWindow is Window mainWindow)
-        {
-            WindowBackgroundManager.UpdateBackground(mainWindow, applicationTheme, backgroundEffect);
+            return false;
         }
     }
 
     /// <summary>
     /// 应用系统主题
     /// </summary>
-    public static void ApplySystemTheme()
+    /// <returns>操作是否成功</returns>
+    public static bool ApplySystemTheme()
     {
-        ApplySystemTheme(true);
+        return ApplySystemTheme(true);
     }
 
     /// <summary>
     /// 应用系统主题，并可选择是否更新强调色
     /// </summary>
     /// <param name="updateAccent">是否更新强调色</param>
-    public static void ApplySystemTheme(bool updateAccent)
+    /// <returns>操作是否成功</returns>
+    public static bool ApplySystemTheme(bool updateAccent)
     {
-        // 更新系统主题缓存
-        SystemThemeManager.UpdateSystemThemeCache();
+        try
+        {            
+            // 更新系统主题缓存
+            SystemThemeManager.UpdateSystemThemeCache();
 
-        // 获取系统主题
-        SystemTheme systemTheme = GetSystemTheme();
+            // 获取系统主题
+            SystemTheme systemTheme = GetSystemTheme();
 
-        // 确定要设置的应用程序主题
-        ApplicationTheme themeToSet = ApplicationTheme.Light;
+            // 确定要设置的应用程序主题
+            ApplicationTheme themeToSet = systemTheme == SystemTheme.Dark ? ApplicationTheme.Dark : ApplicationTheme.Light;
 
-        if (systemTheme is SystemTheme.Dark)
-        {
-            themeToSet = ApplicationTheme.Dark;
+            // 应用主题
+            return Apply(themeToSet, updateAccent: updateAccent);
         }
-
-        // 应用主题
-        Apply(themeToSet, updateAccent: updateAccent);
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -135,12 +159,18 @@ public static class ApplicationThemeManager
         ApplicationTheme appApplicationTheme = GetAppTheme();
         SystemTheme sysTheme = GetSystemTheme();
 
-        if (appApplicationTheme != ApplicationTheme.Light)
-        {
-            return false;
-        }
+        return appApplicationTheme == ApplicationTheme.Light && sysTheme == SystemTheme.Light;
+    }
+    
+    /// <summary>
+    /// 检查应用程序和操作系统是否当前处于深色主题
+    /// </summary>
+    public static bool IsMatchedDark()
+    {
+        ApplicationTheme appApplicationTheme = GetAppTheme();
+        SystemTheme sysTheme = GetSystemTheme();
 
-        return sysTheme is SystemTheme.Light;
+        return appApplicationTheme == ApplicationTheme.Dark && sysTheme == SystemTheme.Dark;
     }
 
     /// <summary>
@@ -148,24 +178,77 @@ public static class ApplicationThemeManager
     /// </summary>
     private static void FetchApplicationTheme()
     {
-        ResourceDictionaryManager appDictionaries = new(LibraryNamespace);
-        ResourceDictionary themeDictionary = appDictionaries.GetDictionary("themes");
+        try
+        {            
+            var appDictionaries = GetOrCreateDictionaryManager();
+            ResourceDictionary themeDictionary = appDictionaries.GetDictionary("theme");
 
-        if (themeDictionary == null)
-        {
-            return;
+            if (themeDictionary == null || themeDictionary.Source == null)
+                return;
+
+            string themeUri = themeDictionary.Source.ToString().Trim().ToLower();
+
+            // 优先检查更具体的条件
+            if (themeUri.Contains("dark"))
+            {
+                _cachedApplicationTheme = ApplicationTheme.Dark;
+            }
+            else if (themeUri.Contains("light"))
+            {
+                _cachedApplicationTheme = ApplicationTheme.Light;
+            }
         }
-
-        string themeUri = themeDictionary.Source.ToString().Trim().ToLower();
-
-        if (themeUri.Contains("light"))
+        catch
         {
-            _cachedApplicationTheme = ApplicationTheme.Light;
+            // 发生错误时保持默认值
         }
-
-        if (themeUri.Contains("dark"))
+    }
+    
+    /// <summary>
+    /// 获取或创建资源字典管理器
+    /// </summary>
+    private static ResourceDictionaryManager GetOrCreateDictionaryManager()
+    {
+        if (_cachedDictionaryManager == null)
         {
-            _cachedApplicationTheme = ApplicationTheme.Dark;
+            _cachedDictionaryManager = new ResourceDictionaryManager(LibraryNamespace);
+        }
+        return _cachedDictionaryManager;
+    }
+    
+    /// <summary>
+    /// 更新主窗口背景
+    /// </summary>
+    private static void UpdateMainWindowBackground(ApplicationTheme theme, WindowBackdropType backdropType)
+    {
+        try
+        {            
+            if (UiApplication.Current?.MainWindow is Window mainWindow)
+            {
+                WindowBackgroundManager.UpdateBackground(mainWindow, theme, backdropType);
+            }
+        }
+        catch { }
+    }
+    
+    /// <summary>
+    /// 主题更改事件
+    /// </summary>
+    public static event EventHandler<ThemeChangedEventArgs> ThemeChanged;
+    
+    /// <summary>
+    /// 主题更改事件参数
+    /// </summary>
+    public class ThemeChangedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// 获取新的主题
+        /// </summary>
+        public ApplicationTheme NewTheme { get; }
+        
+        public ThemeChangedEventArgs(ApplicationTheme newTheme)
+        {
+            NewTheme = newTheme;
         }
     }
 }
